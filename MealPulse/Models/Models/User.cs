@@ -52,4 +52,14 @@ namespace MealPulse.Models.Models
 
         public ICollection<Goal> Goals { get; set; } = new List<Goal>();
     }
+    //public class LoginViewModel
+    //{
+    //    [Required]
+    //    [EmailAddress]
+    //    public string Email { get; set; }
+
+    //    [Required]
+    //    [DataType(DataType.Password)]
+    //    public string Password { get; set; }
+    //}
 }

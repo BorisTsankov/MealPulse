@@ -94,27 +94,36 @@ public class AuthController : Controller
     public IActionResult Login() => View();
 
     [HttpPost]
-    public IActionResult Login(string username, string password)
+    public IActionResult Login(string email, string password)
     {
-        string hash = HashPassword(password);
+        string passwordHash = HashPassword(password);
 
-        using var connection = new SqlConnection(_connectionString);
-        connection.Open();
+        Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                {"@email", email},
+                {"@password", passwordHash}
+            };
 
-        var command = new SqlCommand("SELECT COUNT(*) FROM [User] WHERE Username = @Username AND Password = @Password", connection);
-        command.Parameters.AddWithValue("@Username", username);
-        command.Parameters.AddWithValue("@Password", hash);
+        string sql = @"
+            SELECT COUNT(*) 
+            FROM [User] 
+            WHERE email = @email AND password = @password
+        ";
 
-        int count = (int)command.ExecuteScalar();
+        DataTable dt = _dbHelper.ExecuteQuery(sql, parameters);
 
-        if (count == 1)
+        if (dt.Rows.Count > 0 && (int)dt.Rows[0][0] > 0)
         {
-            TempData["User"] = username;
-            return RedirectToAction("Index", "Home");
+            // Authentication successful
+            // You might want to store some user data in session here
+            return RedirectToAction("Index", "Home"); // Redirect to home page
         }
-
-        ViewBag.Error = "Invalid username or password";
-        return View();
+        else
+        {
+            // Authentication failed
+            ViewBag.Error = "Invalid login attempt.";
+            return View();
+        }
     }
 
 }
