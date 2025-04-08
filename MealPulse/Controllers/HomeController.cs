@@ -1,16 +1,37 @@
-using System.Diagnostics;
 using MealPulse.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
+using System.Diagnostics;  // Add this
+
 
 namespace MealPulse.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly string _connectionString;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IConfiguration configuration)
         {
-            _logger = logger;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
+        }
+
+        public IActionResult TestDbConnection()
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    ViewBag.Message = "Connection to the database was successful!";
+                }
+            }
+            catch (SqlException ex)
+            {
+                ViewBag.Message = "Connection to the database failed: " + ex.Message;
+            }
+
+            return View();
         }
 
         public IActionResult Index()

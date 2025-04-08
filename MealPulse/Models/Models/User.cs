@@ -2,52 +2,48 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-
 namespace MealPulse.Models.Models
 {
     public class User
     {
         [Key]
-        public int UserId { get; set; }
-
-        [Required]
-        public string Auth0Id { get; set; } = null!;
+        public int user_id { get; set; }
 
         [Required]
         [StringLength(FirstnameMaxLength)]
-        public string Firstname { get; set; } = null!;
+        public string FirstName { get; set; } = null!;
 
         [Required]
         [StringLength(LastnameMaxLength)]
-        public string Lastname { get; set; } = null!;
+        public string LastName { get; set; } = null!;
 
         [Required]
         [EmailAddress]
         [StringLength(EmailMaxLength)]
-        public string Email { get; set; } = null!;
+        public string email { get; set; } = null!;
 
         [Required]
-        public string Password { get; set; } = null!;
+        public string password { get; set; } = null!;
 
         [Required]
         [Range(AgeMin, AgeMax)]
-        public int Age { get; set; }
+        public int age { get; set; }
+
+        [Required]
+        public int gender_id { get; set; }
 
         [Required]
         [Range(HeightMin, HeightMax)]
-        public double HeightCm { get; set; }
+        public decimal height_cm { get; set; }
+
+        [Required]
+        public int activityLevel_id { get; set; }
+
+        [Required]
+        public int metric_id { get; set; }
 
         [ForeignKey(nameof(Role))]
-        public int RoleId { get; set; }
-
-        [ForeignKey(nameof(Gender))]
-        public int GenderId { get; set; }
-
-        [ForeignKey(nameof(ActivityLevel))]
-        public int ActivityLevelId { get; set; }
-
-        [ForeignKey(nameof(Metric))]
-        public int MetricId { get; set; }
+        public int role_id { get; set; }
 
         public Role Role { get; set; } = null!;
         public Gender Gender { get; set; } = null!;
@@ -57,5 +53,3 @@ namespace MealPulse.Models.Models
         public ICollection<Goal> Goals { get; set; } = new List<Goal>();
     }
 }
-    
-
