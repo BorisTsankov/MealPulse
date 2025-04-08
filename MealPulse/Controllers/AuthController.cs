@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data.SqlClient;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 public class AuthController : Controller
 {
@@ -22,6 +26,10 @@ public class AuthController : Controller
 
     public IActionResult Register()
     {
+        if (User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Index", "Home"); // Redirect to home page
+        }
         // Pass select list data to the view
         ViewBag.GenderOptions = GetSelectListData("Gender", "gender_id", "gender");
         ViewBag.ActivityLevelOptions = GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
@@ -32,6 +40,20 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Register(string FirstName, string LastName, string email, string password, int age, decimal height_cm, int gender_id, int activityLevel_id, int metric_id)
     {
+
+        // Check if the email already exists
+        Dictionary<string, object> checkParams = new Dictionary<string, object>
+            {
+                {"@email", email}
+            };
+        string checkSql = "SELECT COUNT(*) FROM [User] WHERE email = @email";
+        DataTable dt = _dbHelper.ExecuteQuery(checkSql, checkParams);
+
+        if (dt.Rows.Count > 0 && (int)dt.Rows[0][0] > 0)
+        {
+            ViewBag.ErrorMessage = "An account with this email already exists. Please login.";
+            return RedirectToAction("Login");
+        }
 
         string passwordHash = HashPassword(password);
 
@@ -91,10 +113,17 @@ public class AuthController : Controller
         return selectList;
     }
 
-    public IActionResult Login() => View();
+    public IActionResult Login()
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Index", "Home"); // Redirect to home page
+        }
+        return View();
+    }
 
     [HttpPost]
-    public IActionResult Login(string email, string password)
+    public async Task<IActionResult> Login(string email, string password)
     {
         string passwordHash = HashPassword(password);
 
@@ -105,17 +134,36 @@ public class AuthController : Controller
             };
 
         string sql = @"
-            SELECT COUNT(*) 
+            SELECT user_id, email 
             FROM [User] 
             WHERE email = @email AND password = @password
         ";
 
         DataTable dt = _dbHelper.ExecuteQuery(sql, parameters);
 
-        if (dt.Rows.Count > 0 && (int)dt.Rows[0][0] > 0)
+        if (dt.Rows.Count > 0)
         {
             // Authentication successful
-            // You might want to store some user data in session here
+            var user_id = dt.Rows[0]["user_id"].ToString();
+            var userEmail = dt.Rows[0]["email"].ToString();
+
+            // Create claims
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user_id),
+                new Claim(ClaimTypes.Email, userEmail),
+                // Add other claims as needed (e.g., roles)
+            };
+
+            // Create identity
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Create principal
+            var principal = new ClaimsPrincipal(identity);
+
+            // Sign in
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
             return RedirectToAction("Index", "Home"); // Redirect to home page
         }
         else
@@ -125,5 +173,11 @@ public class AuthController : Controller
             return View();
         }
     }
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Login", "Auth");
+    }
+
 
 }
