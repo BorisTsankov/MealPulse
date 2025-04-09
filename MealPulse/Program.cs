@@ -3,6 +3,8 @@ using MealPulse.Data;
 using MealPulse.Services;
 using MealPulse.Services;
 using MealPulse.Services.Interfaces;
+using MealPulse.Data.Interfaces;
+using MealPulse.Data.Repositories;
 
 public class Program
 {
@@ -27,6 +29,10 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
 
 
         var app = builder.Build();
