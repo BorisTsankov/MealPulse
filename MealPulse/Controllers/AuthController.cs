@@ -1,183 +1,98 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
-using System.Text;
-using MealPulse.Data;
-using MealPulse.Models.Models;
-using System.Collections.Generic;
-using System.Data;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Data.SqlClient;
-using System.Security.Claims;
+﻿using MealPulse.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 
-public class AuthController : Controller
+namespace MealPulse.Controllers
 {
-    private readonly string _connectionString;
-    private readonly DbHelper _dbHelper;
-
-    public AuthController(IConfiguration config, DbHelper dbHelper)
+    public class AuthController : Controller
     {
-        _connectionString = config.GetConnectionString("DefaultConnection");
-        _dbHelper = dbHelper;
-    }
+        private readonly IAuthService _authService;
 
-    public IActionResult Register()
-    {
-        if (User.Identity.IsAuthenticated)
+        public AuthController(IAuthService authService)
         {
-            return RedirectToAction("Index", "Home"); // Redirect to home page
-        }
-        // Pass select list data to the view
-        ViewBag.GenderOptions = GetSelectListData("Gender", "gender_id", "gender");
-        ViewBag.ActivityLevelOptions = GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
-        ViewBag.MetricOptions = GetSelectListData("Metric", "metric_id", "metric");
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult Register(string FirstName, string LastName, string email, string password, int age, decimal height_cm, int gender_id, int activityLevel_id, int metric_id)
-    {
-
-        // Check if the email already exists
-        Dictionary<string, object> checkParams = new Dictionary<string, object>
-            {
-                {"@email", email}
-            };
-        string checkSql = "SELECT COUNT(*) FROM [User] WHERE email = @email";
-        DataTable dt = _dbHelper.ExecuteQuery(checkSql, checkParams);
-
-        if (dt.Rows.Count > 0 && (int)dt.Rows[0][0] > 0)
-        {
-            ViewBag.ErrorMessage = "An account with this email already exists. Please login.";
-            return RedirectToAction("Login");
+            _authService = authService;
         }
 
-        string passwordHash = HashPassword(password);
-
-        Dictionary<string, object> parameters = new Dictionary<string, object>
-            {
-                {"@FirstName", FirstName},
-                {"@LastName", LastName},
-                {"@email", email},
-                {"@password", passwordHash},
-                {"@age", age},
-                {"@height_cm", height_cm},
-                {"@role_id", 1}, // Default User Role.  Consider making this selectable.
-                {"@gender_id", gender_id},
-                {"@activityLevel_id", activityLevel_id},
-                {"@metric_id",metric_id }
-            };
-
-        string sql = @"
-            INSERT INTO [User] (FirstName, LastName, email, password, age, gender_id, height_cm, activityLevel_id, metric_id, role_id)
-            VALUES (@FirstName, @LastName, @email, @password, @age, @gender_id, @height_cm, @activityLevel_id, @metric_id, @role_id)
-        ";
-
-        int rowsAffected = _dbHelper.ExecuteNonQuery(sql, parameters);
-
-        if (rowsAffected > 0)
+        public IActionResult Register()
         {
-            return RedirectToAction("Login"); // Or a "Registration Successful" page
-        }
-        else
-        {
-            ViewBag.ErrorMessage = "Registration failed. Please try again.";
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            ViewBag.GenderOptions = _authService.GetSelectListData("Gender", "gender_id", "gender");
+            ViewBag.ActivityLevelOptions = _authService.GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
+            ViewBag.MetricOptions = _authService.GetSelectListData("Metric", "metric_id", "metric");
+
             return View();
         }
-    }
 
-    private string HashPassword(string password)
-    {
-        using var sha256 = SHA256.Create();
-        var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return Convert.ToBase64String(bytes);
-    }
-
-    private List<SelectListItem> GetSelectListData(string tableName, string valueField, string textField)
-    {
-        string sql = $"SELECT {valueField}, {textField} FROM {tableName}";
-        DataTable dt = _dbHelper.ExecuteQuery(sql);
-
-        List<SelectListItem> selectList = new List<SelectListItem>();
-        foreach (DataRow row in dt.Rows)
+        [HttpPost]
+        public IActionResult Register(string FirstName, string LastName, string email, string password, int age, decimal height_cm, int gender_id, int activityLevel_id, int metric_id)
         {
-            selectList.Add(new SelectListItem
+            if (_authService.UserExists(email))
             {
-                Value = row[valueField].ToString(),
-                Text = row[textField].ToString()
-            });
-        }
-        return selectList;
-    }
+                ViewBag.ErrorMessage = "Email already registered. Please login.";
+                return RedirectToAction("Login");
+            }
 
-    public IActionResult Login()
-    {
-        if (User.Identity.IsAuthenticated)
-        {
-            return RedirectToAction("Index", "Home"); // Redirect to home page
-        }
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Login(string email, string password)
-    {
-        string passwordHash = HashPassword(password);
-
-        Dictionary<string, object> parameters = new Dictionary<string, object>
+            var parameters = new Dictionary<string, object>
             {
-                {"@email", email},
-                {"@password", passwordHash}
+                { "@FirstName", FirstName },
+                { "@LastName", LastName },
+                { "@email", email },
+                { "@password", _authService.HashPassword(password) },
+                { "@age", age },
+                { "@height_cm", height_cm },
+                { "@role_id", 1 },
+                { "@gender_id", gender_id },
+                { "@activityLevel_id", activityLevel_id },
+                { "@metric_id", metric_id }
             };
 
-        string sql = @"
-            SELECT user_id, email 
-            FROM [User] 
-            WHERE email = @email AND password = @password
-        ";
+            if (_authService.RegisterUser(parameters) > 0)
+                return RedirectToAction("Login");
 
-        DataTable dt = _dbHelper.ExecuteQuery(sql, parameters);
-
-        if (dt.Rows.Count > 0)
-        {
-            // Authentication successful
-            var user_id = dt.Rows[0]["user_id"].ToString();
-            var userEmail = dt.Rows[0]["email"].ToString();
-
-            // Create claims
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user_id),
-                new Claim(ClaimTypes.Email, userEmail),
-                // Add other claims as needed (e.g., roles)
-            };
-
-            // Create identity
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Create principal
-            var principal = new ClaimsPrincipal(identity);
-
-            // Sign in
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-            return RedirectToAction("Index", "Home"); // Redirect to home page
+            ViewBag.ErrorMessage = "Registration failed.";
+            return View();
         }
-        else
+
+        public IActionResult Login()
         {
-            // Authentication failed
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            var user = _authService.AuthenticateUser(email, password);
+            if (user.Rows.Count > 0)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Rows[0]["user_id"].ToString()),
+                    new Claim(ClaimTypes.Email, user.Rows[0]["email"].ToString())
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                return RedirectToAction("Index", "Home");
+            }
+
             ViewBag.Error = "Invalid login attempt.";
             return View();
         }
-    }
-    public async Task<IActionResult> Logout()
-    {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction("Login", "Auth");
-    }
 
-
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
+    }
 }

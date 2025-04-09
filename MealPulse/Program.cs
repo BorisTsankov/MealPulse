@@ -1,5 +1,8 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using MealPulse.Data;
+using MealPulse.Services;
+using MealPulse.Services;
+using MealPulse.Services.Interfaces;
 
 public class Program
 {
@@ -14,12 +17,17 @@ public class Program
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/Auth/Login"; // Specify the login page
-                options.AccessDeniedPath = "/Auth/AccessDenied"; // Optional: Specify access denied page
+                options.LoginPath = "/Auth/Login";
+                options.AccessDeniedPath = "/Auth/AccessDenied";
             });
 
+        // 🔧 Dependency Injection Setup
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<DbHelper>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+
 
         var app = builder.Build();
 
@@ -35,8 +43,8 @@ public class Program
 
         app.UseRouting();
 
-        app.UseAuthentication(); // Enable authentication middleware
-        app.UseAuthorization();  // Enable authorization middleware
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapControllerRoute(
             name: "default",
