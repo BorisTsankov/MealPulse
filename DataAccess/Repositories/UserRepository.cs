@@ -52,9 +52,9 @@ namespace MealPulse.Data.Repositories
             return _db.ExecuteNonQuery(sql, parameters) > 0;
         }
 
-        public bool UpdateWeight(int userId, decimal newWeight)
+        public bool UpdateWeight(int userId, decimal newWeight) //changing user_id to goal_id
         {
-            string sql = "UPDATE [User] SET weight_kg = @newWeight WHERE user_id = @user_id";
+            string sql = "INSERT INTO [Goal] SET current_weight_kg = @newWeight WHERE user_id = @user_id";
             var parameters = new Dictionary<string, object>
             {
                 {"@user_id", userId},
