@@ -21,8 +21,8 @@ public class AuthRepository : IAuthRepository
     public int RegisterUser(Dictionary<string, object> parameters)
     {
         string sql = @"
-            INSERT INTO [User] (FirstName, LastName, email, password, age, gender_id, height_cm, activityLevel_id, metric_id, role_id)
-            VALUES (@FirstName, @LastName, @email, @password, @age, @gender_id, @height_cm, @activityLevel_id, @metric_id, @role_id)";
+            INSERT INTO [User] (FirstName, LastName, email, password, date_of_birth, gender_id, height_cm, activityLevel_id, metric_id, role_id)
+            VALUES (@FirstName, @LastName, @email, @password, @date_of_birth, @gender_id, @height_cm, @activityLevel_id, @metric_id, @role_id)";
         return _dbHelper.ExecuteNonQuery(sql, parameters);
     }
 

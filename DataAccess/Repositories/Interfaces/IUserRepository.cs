@@ -6,6 +6,5 @@ namespace MealPulse.Data.Interfaces
     {
         User? GetUserById(int userId);
         bool UpdateHeight(int userId, decimal newHeight);
-        bool UpdateWeight(int userId, decimal newWeight);
     }
 }

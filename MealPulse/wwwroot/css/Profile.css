@@ -1,0 +1,71 @@
+﻿.profile-page {
+    background-color: #f9f7fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2d1b46;
+    padding: 2rem;
+}
+
+    .profile-page h1,
+    .profile-page h2,
+    .profile-page h4 {
+        color: #5f2c82;
+        margin-bottom: 1rem;
+    }
+
+    .profile-page dl {
+        background: #ffffff;
+        border: 1px solid #dedede;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 6px rgba(95, 44, 130, 0.1);
+    }
+
+    .profile-page dt {
+        font-weight: bold;
+        color: #5f2c82;
+    }
+
+    .profile-page dd {
+        margin-bottom: 10px;
+        color: #444;
+    }
+
+    .profile-page form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(95, 44, 130, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .profile-page label {
+        color: #5f2c82;
+        font-weight: 500;
+    }
+
+    .profile-page input[type="number"] {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 8px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .profile-page button,
+    .profile-page a.btn {
+        background-color: #7b4397;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        padding: 10px 18px;
+        margin-top: 10px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+        .profile-page button:hover,
+        .profile-page a.btn:hover {
+            background-color: #4b2e5a;
+        }

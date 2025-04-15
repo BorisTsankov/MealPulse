@@ -23,9 +23,6 @@ namespace MealPulse.Services
             return _userRepository.UpdateHeight(userId, newHeight);
         }
 
-        public bool UpdateWeight(int userId, decimal newWeight)
-        {
-            return _userRepository.UpdateWeight(userId, newWeight);
-        }
+        
     }
 }

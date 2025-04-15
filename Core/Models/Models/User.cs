@@ -27,7 +27,7 @@ namespace MealPulse.Models.Models
 
         [Required]
         [Range(AgeMin, AgeMax)]
-        public int age { get; set; }
+        public DateTime? date_of_birth { get; set; }
 
         [Required]
         public int gender_id { get; set; }

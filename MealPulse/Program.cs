@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using MealPulse.Data;
-using MealPulse.Services;
-using MealPulse.Services;
-using MealPulse.Services.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
+using DataAccess.Repositories;
 using MealPulse.Data.Interfaces;
 using MealPulse.Data.Repositories;
+using MealPulse.Data;
+using MealPulse.Services.Interfaces;
+using MealPulse.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Services.Services.Interfaces;
+using Services.Services;
 
 public class Program
 {
@@ -27,13 +30,12 @@ public class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<DbHelper>();
         builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IAuthService, AuthService>(); // Ensure it's here only once
         builder.Services.AddScoped<IFoodItemService, FoodItemService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-        builder.Services.AddScoped<IAuthService, AuthService>();
-
+        builder.Services.AddScoped<IGoalService, GoalService>();
+        builder.Services.AddScoped<IGoalRepository, GoalRepository>();
 
         var app = builder.Build();
 

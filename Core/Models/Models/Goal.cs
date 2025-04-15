@@ -12,10 +12,10 @@ namespace MealPulse.Models.Models
         public int user_id { get; set; }
 
         [Range(WeightMin, WeightMax)]
-        public double current_weight_kg { get; set; }
+        public decimal current_weight_kg { get; set; }
 
         [Range(WeightMin, WeightMax)]
-        public double target_weight_kg { get; set; }
+        public decimal target_weight_kg { get; set; }
 
         public bool is_active { get; set; }
 

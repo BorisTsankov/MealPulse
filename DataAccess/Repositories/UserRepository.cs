@@ -16,7 +16,7 @@ namespace MealPulse.Data.Repositories
         public User? GetUserById(int userId)
         {
             string sql = @"
-                SELECT user_id, FirstName, LastName, email, age, gender_id, height_cm, activityLevel_id, metric_id
+                SELECT user_id, FirstName, LastName, email, date_of_birth, gender_id, height_cm, activityLevel_id, metric_id
                 FROM [User]
                 WHERE user_id = @user_id";
 
@@ -33,7 +33,7 @@ namespace MealPulse.Data.Repositories
                 FirstName = row["FirstName"].ToString()!,
                 LastName = row["LastName"].ToString()!,
                 email = row["email"].ToString()!,
-                age = (int)row["age"],
+                date_of_birth = (DateTime)row["date_of_birth"],
                 gender_id = (int)row["gender_id"],
                 height_cm = (decimal)row["height_cm"],
                 activityLevel_id = (int)row["activityLevel_id"],
@@ -52,15 +52,7 @@ namespace MealPulse.Data.Repositories
             return _db.ExecuteNonQuery(sql, parameters) > 0;
         }
 
-        public bool UpdateWeight(int userId, decimal newWeight) //changing user_id to goal_id
-        {
-            string sql = "INSERT INTO [Goal] SET current_weight_kg = @newWeight WHERE user_id = @user_id";
-            var parameters = new Dictionary<string, object>
-            {
-                {"@user_id", userId},
-                {"@newWeight", newWeight}
-            };
-            return _db.ExecuteNonQuery(sql, parameters) > 0;
-        }
+        
+
     }
 }

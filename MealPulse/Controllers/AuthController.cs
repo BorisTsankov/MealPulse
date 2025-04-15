@@ -29,8 +29,20 @@ namespace MealPulse.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string FirstName, string LastName, string email, string password, int age, decimal height_cm, int gender_id, int activityLevel_id, int metric_id)
+        public IActionResult Register(string FirstName, string LastName, string email, string password, DateTime date_of_birth, decimal height_cm, int gender_id, int activityLevel_id, int metric_id)
         {
+            // ✅ Validate date_of_birth
+            if (date_of_birth < new DateTime(1753, 1, 1) || date_of_birth > DateTime.Now)
+            {
+                ViewBag.ErrorMessage = "Please select a valid date of birth.";
+
+                ViewBag.GenderOptions = _authService.GetSelectListData("Gender", "gender_id", "gender");
+                ViewBag.ActivityLevelOptions = _authService.GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
+                ViewBag.MetricOptions = _authService.GetSelectListData("Metric", "metric_id", "metric");
+
+                return View();
+            }
+
             if (_authService.UserExists(email))
             {
                 ViewBag.ErrorMessage = "Email already registered. Please login.";
@@ -38,18 +50,18 @@ namespace MealPulse.Controllers
             }
 
             var parameters = new Dictionary<string, object>
-            {
-                { "@FirstName", FirstName },
-                { "@LastName", LastName },
-                { "@email", email },
-                { "@password", _authService.HashPassword(password) },
-                { "@age", age },
-                { "@height_cm", height_cm },
-                { "@role_id", 1 },
-                { "@gender_id", gender_id },
-                { "@activityLevel_id", activityLevel_id },
-                { "@metric_id", metric_id }
-            };
+    {
+        { "@FirstName", FirstName },
+        { "@LastName", LastName },
+        { "@email", email },
+        { "@password", _authService.HashPassword(password) },
+        { "@date_of_birth", date_of_birth },
+        { "@height_cm", height_cm },
+        { "@role_id", 1 },
+        { "@gender_id", gender_id },
+        { "@activityLevel_id", activityLevel_id },
+        { "@metric_id", metric_id }
+    };
 
             if (_authService.RegisterUser(parameters) > 0)
                 return RedirectToAction("Login");

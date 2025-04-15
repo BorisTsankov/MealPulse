@@ -1,4 +1,5 @@
 ﻿using MealPulse.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Security.Cryptography;
@@ -7,10 +8,12 @@ using System.Text;
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthService(IAuthRepository authRepository)
+    public AuthService(IAuthRepository authRepository, IHttpContextAccessor httpContextAccessor)
     {
         _authRepository = authRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public bool UserExists(string email)
@@ -47,4 +50,16 @@ public class AuthService : IAuthService
                  })
                  .ToList();
     }
+    public string GetCurrentUserId()
+    {
+        var context = new HttpContextAccessor().HttpContext;
+        if (context != null && context.User.Identity?.IsAuthenticated == true)
+        {
+            var userId = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            return userId ?? string.Empty;
+        }
+
+        return string.Empty;
+    }
+
 }

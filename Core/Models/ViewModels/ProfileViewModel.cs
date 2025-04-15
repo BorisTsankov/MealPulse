@@ -1,7 +1,10 @@
-﻿public class ProfileViewModel
+﻿using MealPulse.Models.Models;
+
+namespace MealPulse.ViewModels
 {
-    public string FirstName { get; set; }
-    public int Age { get; set; }
-    public decimal Height { get; set; }
-    // Add only what the view needs
+    public class UserProfileViewModel
+    {
+        public User User { get; set; }
+        public Goal? Goal { get; set; } // Optional: show current goal or null
+    }
 }
