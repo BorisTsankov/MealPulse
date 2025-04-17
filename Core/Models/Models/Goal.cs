@@ -1,6 +1,7 @@
 ﻿using static MealPulse.Common.ValidationConstraints.Goal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Core.Models.Enums;
 namespace MealPulse.Models.Models
 {
     public class Goal
@@ -21,6 +22,10 @@ namespace MealPulse.Models.Models
 
         public DateTime start_date { get; set; }
         public DateTime? end_date { get; set; }
+
+        public int goal_intensity { get; set; }
+
+        public GoalIntensity IntensityEnum => (GoalIntensity)goal_intensity;
 
         public User User { get; set; } = null!;
         public ICollection<FoodDiaryItem> FoodDiaryItems { get; set; } = new List<FoodDiaryItem>();

@@ -6,5 +6,6 @@ namespace Services.Services.Interfaces
     {
         Goal? GetMostRecentGoalByUserId(int userId);
         bool UpdateWeight(int userId, decimal newWeight);
+        Goal? CreateNewGoal(int userId);
     }
 }

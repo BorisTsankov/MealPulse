@@ -22,5 +22,10 @@ namespace Services.Services
         {
             return _goalRepository.UpdateWeight(userId, newWeight);
         }
+
+        public Goal? CreateNewGoal(int userId)
+        {
+            return _goalRepository.CreateNewGoal(userId);
+        }
     }
 }

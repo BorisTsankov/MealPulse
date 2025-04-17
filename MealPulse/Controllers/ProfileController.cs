@@ -53,4 +53,6 @@ public class ProfileController : Controller
         return RedirectToAction("Index");
     }
 
+    //public IActionResult CreateGoal(int user_id);
+
 }
