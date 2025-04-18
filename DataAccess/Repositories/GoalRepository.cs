@@ -76,30 +76,29 @@ namespace DataAccess.Repositories
             return _db.ExecuteNonQuery(insertSql, insertParameters) > 0;
         }
 
-        public Goal? CreateNewGoal(int userId)
+        public bool CreateGoal(Goal goal)
         {
             var parameters = new Dictionary<string, object>
-            {
-                { "@user_id", userId },
-                { "@current_weight", 70.0m }, // example default
-                { "@target_weight", 65.0m },  // example default
-                { "@goal_intensity", (int)GoalIntensity.LoseHalfKgPerWeek }
-            };
+    {
+        { "@user_id", goal.user_id },
+        { "@current_weight", goal.current_weight_kg },
+        { "@target_weight", goal.target_weight_kg },
+        { "@goal_intensity", (int)goal.goal_intensity }
+    };
 
             string deactivateSql = @"
-                UPDATE [Goal]
-                SET is_active = 0, end_date = GETDATE()
-                WHERE user_id = @user_id AND is_active = 1";
+        UPDATE [Goal]
+        SET is_active = 0, end_date = GETDATE()
+        WHERE user_id = @user_id AND is_active = 1";
 
             _db.ExecuteNonQuery(deactivateSql, parameters);
 
             string insertSql = @"
-                INSERT INTO [Goal] (user_id, current_weight_kg, target_weight_kg, start_date, is_active, goal_intensity)
-                VALUES (@user_id, @current_weight, @target_weight, GETDATE(), 1, @goal_intensity)";
+        INSERT INTO [Goal] (user_id, current_weight_kg, target_weight_kg, start_date, is_active, goal_intensity)
+        VALUES (@user_id, @current_weight, @target_weight, GETDATE(), 1, @goal_intensity)";
 
-            int result = _db.ExecuteNonQuery(insertSql, parameters);
-
-            return result > 0 ? GetMostRecentGoalByUserId(userId) : null;
+            return _db.ExecuteNonQuery(insertSql, parameters) > 0;
         }
+
     }
 }

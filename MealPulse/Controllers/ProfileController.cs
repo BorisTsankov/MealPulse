@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Interfaces;
 using System.Security.Claims;
+using MealPulse.Models.Models;
+using Core.Models.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 // other usings...
 
 [Authorize]
@@ -18,7 +21,6 @@ public class ProfileController : Controller
         _goalService = goalService;
     }
 
-
     public IActionResult Index()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -30,13 +32,29 @@ public class ProfileController : Controller
 
         var goal = _goalService.GetMostRecentGoalByUserId(user.user_id);
 
+        // Provide intensity options to the view
+        ViewBag.IntensityOptions = Enum.GetValues(typeof(GoalIntensity))
+            .Cast<GoalIntensity>()
+            .Select(g => new SelectListItem
+            {
+                Value = ((int)g).ToString(),
+                Text = SplitCamelCase(g.ToString())
+            }).ToList();
+
         var viewModel = new UserProfileViewModel
         {
             User = user,
-            Goal = goal
+            Goal = goal,
+            GoalIntensityDisplay = goal != null ? SplitCamelCase(((GoalIntensity)goal.goal_intensity).ToString()) : ""
         };
 
+
         return View(viewModel);
+    }
+
+    public string SplitCamelCase(string input)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(input, "(\\B[A-Z])", " $1");
     }
 
     [HttpPost]
@@ -53,6 +71,32 @@ public class ProfileController : Controller
         return RedirectToAction("Index");
     }
 
-    //public IActionResult CreateGoal(int user_id);
+    [HttpPost]
+    public IActionResult CreateGoal(int user_id, decimal currentWeight, decimal targetWeight, string intensity)
+    {
+        var user = _userService.GetUserById(user_id);
+        if (user == null)
+        {
+            return View("Error");
+        }
+
+        var newGoal = new Goal
+        {
+            user_id = user_id,
+            current_weight_kg = currentWeight,
+            target_weight_kg = targetWeight,
+            start_date = DateTime.Today,
+            goal_intensity = (int)Enum.Parse<GoalIntensity>(intensity)
+        };
+
+        var success = _goalService.CreateGoal(newGoal);
+        if (!success)
+        {
+            return View("Error");
+        }
+
+        return RedirectToAction("Index");
+    }
+
 
 }

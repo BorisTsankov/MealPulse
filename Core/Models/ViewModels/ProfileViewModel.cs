@@ -6,5 +6,7 @@ namespace MealPulse.ViewModels
     {
         public User User { get; set; }
         public Goal? Goal { get; set; } // Optional: show current goal or null
+        public string GoalIntensityDisplay { get; set; }
+
     }
 }
