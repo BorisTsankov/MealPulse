@@ -7,6 +7,7 @@ using System.Security.Claims;
 using MealPulse.Models.Models;
 using Core.Models.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static MealPulse.Common.ValidationConstraints;
 // other usings...
 
 [Authorize]
@@ -14,11 +15,22 @@ public class ProfileController : Controller
 {
     private readonly IUserService _userService;
     private readonly IGoalService _goalService;
+    private readonly IGenderService _genderService;
+    private readonly IActivityLevelService _activityLevelService;
+    private readonly IMetricService _metricService;
 
-    public ProfileController(IUserService userService, IGoalService goalService)
+    public ProfileController(
+        IUserService userService,
+        IGoalService goalService,
+        IGenderService genderService,
+        IActivityLevelService activityLevelService,
+        IMetricService metricService)
     {
         _userService = userService;
         _goalService = goalService;
+        _genderService = genderService;
+        _activityLevelService = activityLevelService;
+        _metricService = metricService;
     }
 
     public IActionResult Index()
@@ -41,11 +53,27 @@ public class ProfileController : Controller
                 Text = SplitCamelCase(g.ToString())
             }).ToList();
 
+        var gender = _genderService.GetGenderName(user.gender_id);
+        var activityLevel = _activityLevelService.GetActivityLevelName(user.activityLevel_id);
+        var metric = _metricService.GetMetricNameById(user.metric_id);
+
+
+
+
+
+
         var viewModel = new UserProfileViewModel
         {
             User = user,
             Goal = goal,
-            GoalIntensityDisplay = goal != null ? SplitCamelCase(((GoalIntensity)goal.goal_intensity).ToString()) : ""
+            GoalIntensityDisplay = goal != null ? SplitCamelCase(((GoalIntensity)goal.goal_intensity).ToString()) : "",
+            GenderName = gender?.ToString()?.Trim() ?? "Not set",
+            ActivityLevelName = activityLevel?.ToString()?.Trim() ?? "Not set",
+            MetricName = metric?.ToString()?.Trim() ?? "Not set",
+
+
+
+
         };
 
 
@@ -80,7 +108,7 @@ public class ProfileController : Controller
             return View("Error");
         }
 
-        var newGoal = new Goal
+        var newGoal = new MealPulse.Models.Models.Goal
         {
             user_id = user_id,
             current_weight_kg = currentWeight,

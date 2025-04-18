@@ -26,20 +26,30 @@ public class Program
                 options.AccessDeniedPath = "/Auth/AccessDenied";
             });
 
-        // 🔧 Dependency Injection Setup
+        // Dependency Injection
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<DbHelper>();
+
+        // Services
         builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<IAuthService, AuthService>(); // Ensure it's here only once
+        builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+        builder.Services.AddScoped<IGoalService, GoalService>();
+        builder.Services.AddScoped<IActivityLevelService, ActivityLevelService>();
+        builder.Services.AddScoped<IMetricService, MetricService>();
+        builder.Services.AddScoped<IGenderService, GenderService>();
+
+        // Repositories
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-        builder.Services.AddScoped<IGoalService, GoalService>();
         builder.Services.AddScoped<IGoalRepository, GoalRepository>();
+        builder.Services.AddScoped<IActivityLevelRepository, ActivityLevelRepository>();
+        builder.Services.AddScoped<IMetricRepository, MetricRepository>();
+        builder.Services.AddScoped<IGenderRepository, GenderRepository>();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        // Configure middleware
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
