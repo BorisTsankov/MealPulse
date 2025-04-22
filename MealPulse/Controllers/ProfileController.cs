@@ -52,16 +52,17 @@ public class ProfileController : Controller
                 Value = ((int)g).ToString(),
                 Text = SplitCamelCase(g.ToString())
             }).ToList();
+        ViewBag.ActivityLevelOptions = _activityLevelService.GetAll()
+    .Select(a => new SelectListItem
+    {
+        Value = a.ActivityLevelId.ToString(),
+        Text = a.ActivityLevelName
+    }).ToList();
+
 
         var gender = _genderService.GetGenderName(user.gender_id);
         var activityLevel = _activityLevelService.GetActivityLevelName(user.activityLevel_id);
         var metric = _metricService.GetMetricNameById(user.metric_id);
-
-
-
-
-
-
         var viewModel = new UserProfileViewModel
         {
             User = user,
@@ -70,10 +71,6 @@ public class ProfileController : Controller
             GenderName = gender?.ToString()?.Trim() ?? "Not set",
             ActivityLevelName = activityLevel?.ToString()?.Trim() ?? "Not set",
             MetricName = metric?.ToString()?.Trim() ?? "Not set",
-
-
-
-
         };
 
 
@@ -125,6 +122,14 @@ public class ProfileController : Controller
 
         return RedirectToAction("Index");
     }
+
+    [HttpPost]
+    public IActionResult UpdateActivityLevel(int user_id, int newActivityLevelId)
+    {
+        _userService.UpdateActivityLevel(user_id, newActivityLevelId);
+        return RedirectToAction("Index");
+    }
+
 
 
 }

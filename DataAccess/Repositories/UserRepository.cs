@@ -52,7 +52,19 @@ namespace MealPulse.Data.Repositories
             return _db.ExecuteNonQuery(sql, parameters) > 0;
         }
 
-        
+        public void UpdateActivityLevel(int userId, int activityLevelId)
+        {
+            string query = "UPDATE [User] SET activityLevel_id = @ActivityLevelId WHERE user_id = @UserId";
+            var parameters = new Dictionary<string, object>
+    {
+        {"@ActivityLevelId", activityLevelId},
+        {"@UserId", userId}
+    };
+            _db.ExecuteNonQuery(query, parameters);
+        }
+
+
+
 
     }
 }

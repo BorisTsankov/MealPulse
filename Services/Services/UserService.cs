@@ -22,7 +22,12 @@ namespace MealPulse.Services
         {
             return _userRepository.UpdateHeight(userId, newHeight);
         }
+        public void UpdateActivityLevel(int userId, int activityLevelId)
+        {
+            _userRepository.UpdateActivityLevel(userId, activityLevelId);
+        }
 
-        
+
+
     }
 }
