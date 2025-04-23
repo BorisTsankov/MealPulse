@@ -73,6 +73,45 @@ namespace DataAccess.Repositories
 
             return _dbHelper.ExecuteNonQuery(query, parameters) > 0;
         }
+        public List<FoodDiaryItem> GetItemsByGoalIdAndDate(int goalId, DateTime date)
+        {
+            string query = @"
+          SELECT fdi.*, fi.name AS FoodItemName, fi.calories, fi.unit
+        FROM FoodDiaryItem fdi
+        JOIN FoodItem fi ON fi.foodItemId = fdi.food_id
+        WHERE fdi.goal_id = @GoalId
+        AND CAST(fdi.date_time AS DATE) = @Date";
+
+            var parameters = new Dictionary<string, object>
+    {
+        { "@GoalId", goalId },
+        { "@Date", date.Date }
+    };
+
+            var dt = _dbHelper.ExecuteQuery(query, parameters);
+            var items = new List<FoodDiaryItem>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                items.Add(new FoodDiaryItem
+                {
+                    FoodDiaryItemId = (int)row["FoodDiaryItem_id"],
+                    MealTypeId = (int)row["mealType_id"],
+                    GoalId = (int)row["goal_id"],
+                    FoodId = (int)row["food_id"],
+                    Quantity = (double)(decimal)row["quantity"],
+                    DateTime = (DateTime)row["date_time"],
+                    FoodItem = new FoodItem
+                    {
+                        Name = row["FoodItemName"].ToString()!,
+                        Calories = Convert.ToDecimal(row["calories"]),
+                        Unit = row["unit"].ToString()!
+                    }
+                });
+            }
+
+            return items;
+        }
 
 
     }

@@ -5,6 +5,7 @@ using Core.Models;
 using MealPulse.Services;
 using MealPulse.Services.Interfaces;
 using MealPulse.Models.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Web.Controllers
 {
@@ -28,7 +29,7 @@ namespace Web.Controllers
              _foodItemService = foodItemService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime? date)
         {
             var userId = HttpContext.Session.GetInt32("user_id");
 
@@ -38,8 +39,9 @@ namespace Web.Controllers
             var goal = _goalService.GetMostRecentGoalByUserId(userId.Value);
             if (goal == null)
                 return View("Error");
+            DateTime selectedDate = date?.Date ?? DateTime.Today;
+            var foodItems = _foodDiaryService.GetItemsForGoalAndDate(goal.goal_id, selectedDate);
 
-            var foodItems = _foodDiaryService.GetItemsForGoal(goal.goal_id);
             var mealTypes = _mealTypeService.GetAll();
 
             var sections = mealTypes.Select(m => new FoodDiarySectionViewModel
@@ -71,10 +73,16 @@ namespace Web.Controllers
                 Sections = sections
             };
 
+         
+
+          
+            ViewBag.SelectedDate = selectedDate; 
+
+
             return View(viewModel);
         }
         [HttpPost]
-        public IActionResult AddItem(int MealTypeId, int FoodItemId, decimal Quantity)
+        public IActionResult AddItem(int MealTypeId, int FoodItemId, decimal Quantity, DateTime date)
         {
             var userId = HttpContext.Session.GetInt32("user_id");
             if (userId == null)
@@ -98,7 +106,7 @@ namespace Web.Controllers
                 TempData["Error"] = "Something went wrong while adding the food item.";
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { date = date.ToString("yyyy-MM-dd") });
         }
 
 

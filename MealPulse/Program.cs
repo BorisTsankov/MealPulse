@@ -21,7 +21,7 @@ public class Program
         builder.Services.AddDistributedMemoryCache(); // Required for session storage
         builder.Services.AddSession(options =>
         {
-            options.IdleTimeout = TimeSpan.FromMinutes(30); // You can adjust this
+            options.IdleTimeout = TimeSpan.FromMinutes(30);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
         });

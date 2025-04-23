@@ -23,5 +23,10 @@ namespace Services.Services
         {
             return _foodDiaryRepository.Add(item);
         }
+
+        public List<FoodDiaryItem> GetItemsForGoalAndDate(int goalId, DateTime date)
+        {
+            return _foodDiaryRepository.GetItemsByGoalIdAndDate(goalId, date);
+        }
     }
 }
