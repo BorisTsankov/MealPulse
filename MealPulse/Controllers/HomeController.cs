@@ -1,7 +1,7 @@
 using MealPulse.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
-using System.Diagnostics;  // Add this
+using System.Diagnostics;
 
 
 namespace MealPulse.Controllers

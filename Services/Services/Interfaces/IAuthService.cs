@@ -10,7 +10,7 @@ namespace MealPulse.Services.Interfaces
         int RegisterUser(Dictionary<string, object> parameters);
         DataTable AuthenticateUser(string email, string password);
         List<SelectListItem> GetSelectListData(string tableName, string valueField, string textField);
-        string GetCurrentUserId(); // <- changed from object to string
+        string GetCurrentUserId();
 
     }
 }

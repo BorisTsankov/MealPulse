@@ -8,7 +8,7 @@ using MealPulse.Models.Models;
 using Core.Models.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static MealPulse.Common.ValidationConstraints;
-// other usings...
+
 
 [Authorize]
 public class ProfileController : Controller

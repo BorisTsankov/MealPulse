@@ -9,7 +9,7 @@ namespace Services.Services
     public class GoalService : IGoalService
     {
         private readonly IGoalRepository _goalRepository;
-        private readonly DbHelper _dbHelper; // Assuming _dbHelper is injected
+        private readonly DbHelper _dbHelper;
 
         public GoalService(IGoalRepository goalRepository, DbHelper dbHelper)
         {

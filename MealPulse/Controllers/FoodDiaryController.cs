@@ -1,6 +1,6 @@
 ﻿using Core.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Services.Services.Interfaces; // <-- Make sure this is the correct namespace
+using Services.Services.Interfaces;
 using Core.Models;
 using MealPulse.Services;
 using MealPulse.Services.Interfaces;

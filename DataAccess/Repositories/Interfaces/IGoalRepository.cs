@@ -11,7 +11,7 @@ namespace DataAccess.Repositories.Interfaces
     {
         Goal? GetMostRecentGoalByUserId(int userId);
         bool UpdateWeight(int userId, decimal newWeight);
-        bool CreateGoal(Goal goal); // Replace CreateNewGoal
+        bool CreateGoal(Goal goal);
 
     }
 }

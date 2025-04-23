@@ -10,6 +10,6 @@ namespace DataAccess.Repositories.Interfaces
     public interface IFoodDiaryRepository
     {
         List<FoodDiaryItem> GetItemsByGoalId(int goalId);
-        bool Add(FoodDiaryItem item); // ✅ change return type to bool
+        bool Add(FoodDiaryItem item);
     }
 }

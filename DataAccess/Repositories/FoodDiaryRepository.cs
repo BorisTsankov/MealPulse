@@ -42,7 +42,7 @@ namespace DataAccess.Repositories
                     Quantity = (double)(decimal)row["quantity"],
                     DateTime = (DateTime)row["date_time"],
 
-                    FoodItem = new FoodItem // ✅ This is the missing part
+                    FoodItem = new FoodItem
                     {
                         Name = row["FoodItemName"].ToString()!,
                         Calories = Convert.ToDecimal(row["calories"]),
