@@ -7,6 +7,8 @@ namespace MealPulse.ViewModels
         public User User { get; set; }
         public Goal? Goal { get; set; }
         public string GoalIntensityDisplay { get; set; }
+        public int? DailyCalories { get; set; }
+
 
         // NEW: Display names
         public string GenderName { get; set; }

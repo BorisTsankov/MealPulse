@@ -1,5 +1,7 @@
 ﻿using MealPulse.Data;
+using MealPulse.Models.Models;
 using MealPulse.Services.Interfaces;
+using System.Data;
 
 namespace MealPulse.Services
 {
@@ -32,6 +34,34 @@ namespace MealPulse.Services
             };
 
             return _dbHelper.ExecuteNonQuery(query, parameters);
+        }
+        public List<FoodItem> GetAll()
+        {
+            var query = "SELECT * FROM FoodItem";
+            var dt = _dbHelper.ExecuteQuery(query);
+
+            var items = new List<FoodItem>();
+            foreach (DataRow row in dt.Rows)
+            {
+                items.Add(new FoodItem
+                {
+                    FoodItemId = Convert.ToInt32(row["FoodItemId"]),
+                    Name = row["Name"].ToString()!,
+                    Calories = Convert.ToDecimal(row["Calories"]),
+                    Protein = Convert.ToDecimal(row["Protein"]),
+                    Fat = Convert.ToDecimal(row["Fat"]),
+                    Carbohydrates = Convert.ToDecimal(row["Carbohydrates"]),
+                    Sugars = Convert.ToDecimal(row["Sugars"]),
+                    Fiber = Convert.ToDecimal(row["Fiber"]),
+                    Sodium = row["Sodium"] == DBNull.Value ? null : Convert.ToDecimal(row["Sodium"]),
+                    Potassium = row["Potassium"] == DBNull.Value ? null : Convert.ToDecimal(row["Potassium"]),
+                    Iron = row["Iron"] == DBNull.Value ? null : Convert.ToDecimal(row["Iron"]),
+                    Calcium = row["Calcium"] == DBNull.Value ? null : Convert.ToDecimal(row["Calcium"]),
+                    Unit = row["Unit"].ToString() ?? "g"
+                });
+            }
+
+            return items;
         }
     }
 }

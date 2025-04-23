@@ -44,6 +44,13 @@
             public const double ProteinMin = 0;
             public const double FatsMin = 0;
             public const double CarbsMin = 0;
+            public const double FiberMin = 0;
+            public const double SugarsMin = 0;
+            public const double SodiumMin = 0;
+            public const double PotassiumMin = 0;
+            public const double IronMin = 0;
+            public const double CalciumMin = 0;
+
         }
 
         public static class Goal

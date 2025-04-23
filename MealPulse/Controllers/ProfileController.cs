@@ -59,10 +59,55 @@ public class ProfileController : Controller
         Text = a.ActivityLevelName
     }).ToList();
 
-
+        // Basic input
+        var height = user.height_cm;
+        var weight = goal?.current_weight_kg;
+        var birthdate = user.date_of_birth;
         var gender = _genderService.GetGenderName(user.gender_id);
         var activityLevel = _activityLevelService.GetActivityLevelName(user.activityLevel_id);
         var metric = _metricService.GetMetricNameById(user.metric_id);
+        var goalIntensity = goal != null ? (GoalIntensity)goal.goal_intensity : GoalIntensity.Maintain;
+
+        // Skip if anything is missing
+        int? dailyCalories = null;
+        if (height != null && weight != null && birthdate != null && gender != null && activityLevel != null)
+        {
+            int age = DateTime.Today.Year - birthdate.Value.Year;
+            if (birthdate > DateTime.Today.AddYears(-age)) age--;
+
+            // BMR (Mifflin-St Jeor)
+            double bmr = (10 * (double)weight) + (6.25 * (double)height) - (5 * age) + (gender?.Trim().ToLower() == "male" ? 5 : -161);
+
+
+            // Activity level multiplier
+            var multiplier = activityLevel.ToLower() switch
+            {
+                "not active" => 1.2,
+                "slightly active" => 1.375,
+                "average" => 1.55,
+                "above average" => 1.725,
+                "very active" => 1.9,
+                _ => 1.2
+            };
+
+            double tdee = bmr * multiplier;
+
+            // Goal adjustment
+            var adjustment = goalIntensity switch
+            {
+                GoalIntensity.LoseQuarterKgPerWeek => -250,
+                GoalIntensity.LoseHalfKgPerWeek => -500,
+                GoalIntensity.LoseOneKgPerWeek => -1000,
+                GoalIntensity.GainQuarterKgPerWeek => 250,
+                GoalIntensity.GainHalfKgPerWeek => 500,
+                GoalIntensity.GainOneKgPerWeek => 1000,
+                _ => 0
+            };
+
+            dailyCalories = (int)Math.Round(tdee + adjustment);
+        }
+
+       
         var viewModel = new UserProfileViewModel
         {
             User = user,
@@ -71,7 +116,11 @@ public class ProfileController : Controller
             GenderName = gender?.ToString()?.Trim() ?? "Not set",
             ActivityLevelName = activityLevel?.ToString()?.Trim() ?? "Not set",
             MetricName = metric?.ToString()?.Trim() ?? "Not set",
+            DailyCalories = dailyCalories
         };
+
+      
+
 
 
         return View(viewModel);

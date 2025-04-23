@@ -1,6 +1,6 @@
-﻿using static MealPulse.Common.ValidationConstraints.FoodItem;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+
 namespace MealPulse.Models.Models
 {
     public class FoodItem
@@ -9,29 +9,38 @@ namespace MealPulse.Models.Models
         public int FoodItemId { get; set; }
 
         [Required]
-        [StringLength(FoodItemNameMaxLenght)]
-        public string FoodItemName { get; set; } = null!;
+        [StringLength(50)]
+        public string Name { get; set; } = null!;
 
-        [StringLength(BrandMaxLength)]
-        public string? Brand { get; set; }
+        [Required]
+        public decimal Calories { get; set; }
 
-        [Range(DefaultServingQuantityMin, DefaultServingQuantityMax)]
-        public int ServingG {  get; set; }
+        [Required]
+        public decimal Protein { get; set; }
 
-        [Range(CaloriesMin, double.MaxValue)]
-        public double CaloriesPer100g { get; set; }
+        [Required]
+        public decimal Fat { get; set; }
 
-        [Range(CaloriesMin, double.MaxValue)]
-        public double CaloriesPer100ml { get; set; }
+        [Required]
+        public decimal Carbohydrates { get; set; }
 
-        [Range(ProteinMin, double.MaxValue)]
-        public double Protein_g { get; set; }
+        [Required]
+        public decimal Sugars { get; set; }
 
-        [Range(FatsMin, double.MaxValue)]
-        public double Fats_g { get; set; }
+        [Required]
+        public decimal Fiber { get; set; }
 
-        [Range(CarbsMin, double.MaxValue)]
-        public double Carbs_g { get; set; }
+        public decimal? Sodium { get; set; }
+
+        public decimal? Potassium { get; set; }
+
+        public decimal? Iron { get; set; }
+
+        public decimal? Calcium { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Unit { get; set; } = "g";  // g, ml, piece etc.
 
         public ICollection<FoodDiaryItem> FoodDiaryItems { get; set; } = new List<FoodDiaryItem>();
     }

@@ -84,16 +84,22 @@ namespace MealPulse.Controllers
             var user = _authService.AuthenticateUser(email, password);
             if (user.Rows.Count > 0)
             {
+                var userId = Convert.ToInt32(user.Rows[0]["user_id"]);
+
                 var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Rows[0]["user_id"].ToString()),
-                    new Claim(ClaimTypes.Email, user.Rows[0]["email"].ToString())
-                };
+        {
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            new Claim(ClaimTypes.Email, user.Rows[0]["email"].ToString())
+        };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                // ✅ Store user_id in session
+                HttpContext.Session.SetInt32("user_id", userId);
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -101,8 +107,10 @@ namespace MealPulse.Controllers
             return View();
         }
 
+
         public async Task<IActionResult> Logout()
         {
+            HttpContext.Session.Clear(); //  optional, clean slate
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }

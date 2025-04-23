@@ -61,6 +61,11 @@
 
             @if (Model.Goal != null)
             {
+                <dt class="col-sm-3">Recommended Daily Calories</dt>
+                <dd class="col-sm-9">
+                    @(Model.DailyCalories?.ToString("N0") ?? "Unavailable")
+                </dd>
+
                 <dl class="row">
                     <dt class="col-sm-3">Current Weight</dt>
                     <dd class="col-sm-9">@Model.Goal.current_weight_kg</dd>

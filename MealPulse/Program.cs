@@ -18,6 +18,15 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
+        builder.Services.AddDistributedMemoryCache(); // Required for session storage
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30); // You can adjust this
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
+
+
         // Add authentication services
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -46,6 +55,11 @@ public class Program
         builder.Services.AddScoped<IActivityLevelRepository, ActivityLevelRepository>();
         builder.Services.AddScoped<IMetricRepository, MetricRepository>();
         builder.Services.AddScoped<IGenderRepository, GenderRepository>();
+        builder.Services.AddScoped<IFoodDiaryRepository, FoodDiaryRepository>();
+        builder.Services.AddScoped<IFoodDiaryService, FoodDiaryService>();
+        builder.Services.AddScoped<IMealTypeRepository, MealTypeRepository>();
+        builder.Services.AddScoped<IMealTypeService, MealTypeService>();
+
 
         var app = builder.Build();
 
@@ -60,6 +74,9 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+
+        app.UseSession();
+
 
         app.UseAuthentication();
         app.UseAuthorization();
