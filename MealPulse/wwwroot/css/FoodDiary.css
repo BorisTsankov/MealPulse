@@ -1,0 +1,154 @@
+﻿.food-diary-page {
+    background-color: #f8f4fd;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2d1b46;
+    padding: 2rem 1rem;
+}
+
+    .food-diary-page h2 {
+        color: #6f42c1;
+        font-weight: 700;
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .food-diary-page h4 {
+        color: #6f42c1;
+        font-size: 1.2rem;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .food-diary-page .summary-section {
+        background: #f2e9fc;
+        padding: 1.5rem 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(111, 66, 193, 0.05);
+    }
+
+    .food-diary-page .card {
+        background-color: white;
+        border: 1px solid #e3d7f1;
+        border-radius: 18px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 6px rgba(111, 66, 193, 0.1);
+    }
+
+    .food-diary-page .custom-card-header {
+        background-color: #6f42c1;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 18px 18px 0 0;
+        padding: 0.8rem 1.2rem;
+    }
+
+    .food-diary-page .card-body {
+        padding: 1rem 1.5rem;
+        background-color: #fff;
+        border-radius: 0 0 18px 18px;
+    }
+
+    .food-diary-page .list-group-item {
+        border: 1px solid #e0d6f6;
+        background: #fdfaff;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #2d1b46;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+    }
+
+    .food-diary-page form {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e3d7f1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: flex-end;
+    }
+
+        .food-diary-page form select,
+        .food-diary-page form input {
+            max-width: 220px;
+            border-radius: 10px;
+            border: 1px solid #cdb9e9;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            background-color: #fefaff;
+            color: #2d1b46;
+        }
+
+            .food-diary-page form select:focus,
+            .food-diary-page form input:focus {
+                outline: none;
+                border-color: #6f42c1;
+                box-shadow: 0 0 0 0.15rem rgba(111, 66, 193, 0.25);
+            }
+
+        .food-diary-page form button {
+            background-color: #6f42c1;
+            color: white;
+            border-radius: 10px;
+            font-weight: 500;
+            padding: 8px 20px;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+            .food-diary-page form button:hover:not(:disabled) {
+                background-color: #5e2b91;
+            }
+
+            .food-diary-page form button:disabled {
+                background-color: #ccc;
+                color: #666;
+                cursor: not-allowed;
+            }
+
+.badge-consumed {
+    background-color: #8c5edc;
+    color: #fff;
+}
+
+.badge-goal {
+    background-color: #d6c7f0;
+    color: #2d1b46;
+}
+
+.badge-remaining {
+    background-color: #a084ca;
+    color: #fff;
+}
+
+.badge-exceeded {
+    background-color: #b23acf;
+    color: #fff;
+}
+
+.badge-exceeded-msg {
+    background-color: #fbe0ed;
+    color: #a31354;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+}
+
+.badge-meal-total {
+    background-color: #ede2ff;
+    color: #5e2b91;
+    font-weight: 500;
+}
+
+.badge-item-calories {
+    background-color: #b49ae0;
+    color: white;
+}
