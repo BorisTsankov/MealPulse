@@ -113,6 +113,13 @@ namespace DataAccess.Repositories
             return items;
         }
 
+        public bool Delete(int foodDiaryItemId)
+        {
+            string query = "DELETE FROM FoodDiaryItem WHERE FoodDiaryItem_id = @Id";
+            var parameters = new Dictionary<string, object> { { "@Id", foodDiaryItemId } };
+            return _dbHelper.ExecuteNonQuery(query, parameters) > 0;
+        }
+
 
     }
 }

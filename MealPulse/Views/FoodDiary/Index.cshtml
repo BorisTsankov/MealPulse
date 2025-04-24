@@ -14,16 +14,16 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a class="btn btn-outline-secondary"
-           asp-action="Index"
-           asp-route-date="@selectedDate.AddDays(-1).ToString("yyyy-MM-dd")">
+        asp-action="Index"
+        asp-route-date="@selectedDate.AddDays(-1).ToString("yyyy-MM-dd")">
             ← Previous
         </a>
 
         <h4 class="mb-0">Diary for @selectedDate.ToString("D")</h4>
 
         <a class="btn btn-outline-secondary"
-           asp-action="Index"
-           asp-route-date="@selectedDate.AddDays(1).ToString("yyyy-MM-dd")">
+        asp-action="Index"
+        asp-route-date="@selectedDate.AddDays(1).ToString("yyyy-MM-dd")">
             Next →
         </a>
     </div>
@@ -68,9 +68,30 @@
                         @foreach (var item in meal.Items)
                         {
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>@item.FoodName (@item.Quantity @item.Unit)</span>
-                                <span class="badge badge-item-calories">@item.Calories.ToString("N0") kcal</span>
+                                <form asp-action="DeleteItem"
+                                      method="post"
+                                      class="d-flex justify-content-between align-items-center w-100"
+                                      style="margin: 0;">
+                                    <input type="hidden" name="id" value="@item.FoodDiaryItemId" />
+                                    <input type="hidden" name="date" value="@selectedDate.ToString("yyyy-MM-dd")" />
+
+                                    <span>@item.FoodName (@item.Quantity @item.Unit)</span>
+
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="badge badge-item-calories">@item.Calories.ToString("N0") kcal</span>
+
+                                        <button type="submit"
+                                                class="btn p-0 border-0 bg-transparent"
+                                                style="width: 28px; height: 28px; cursor: pointer;"
+                                                title="Delete">
+                                            <img src="~/images/bin_image.png"
+                                                 alt="Delete"
+                                                 style="width: 100%; height: 100%; object-fit: contain;" />
+                                        </button>
+                                    </div>
+                                </form>
                             </li>
+
                         }
                     </ul>
                 }
@@ -111,7 +132,10 @@
                 width: '100%'
             });
 
-            $('form').each(function () {
+                    $('form').filter(function () {
+            return $(this).attr('action')?.toLowerCase().includes('additem');
+        }).each(function () {
+
                 const form = $(this);
                 const select = form.find('select[name="FoodItemId"]');
                 const input = form.find('input[name="Quantity"]');

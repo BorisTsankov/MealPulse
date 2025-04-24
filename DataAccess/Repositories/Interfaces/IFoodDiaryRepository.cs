@@ -12,6 +12,6 @@ namespace DataAccess.Repositories.Interfaces
         List<FoodDiaryItem> GetItemsByGoalId(int goalId);
         bool Add(FoodDiaryItem item);
         List<FoodDiaryItem> GetItemsByGoalIdAndDate(int goalId, DateTime date);
-
+        bool Delete(int foodDiaryItemId);
     }
 }

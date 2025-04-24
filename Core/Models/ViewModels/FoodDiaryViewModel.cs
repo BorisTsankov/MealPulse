@@ -18,6 +18,7 @@ namespace Core.Models.ViewModels
 
     public class FoodDiaryItemViewModel
     {
+        public int FoodDiaryItemId { get; set; }
         public string FoodName { get; set; } = null!;
         public decimal Quantity { get; set; }
         public string Unit { get; set; } = "g";

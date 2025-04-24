@@ -8,7 +8,7 @@ namespace Services.Services.Interfaces
         List<FoodDiaryItem> GetItemsForGoal(int goalId);
         bool AddFoodDiaryItem(FoodDiaryItem item);
         List<FoodDiaryItem> GetItemsForGoalAndDate(int goalId, DateTime date);
-
+        bool DeleteFoodDiaryItem(int foodDiaryItemId);
 
     }
 }

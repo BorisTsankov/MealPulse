@@ -7,9 +7,11 @@ using MealPulse.Services.Interfaces;
 using MealPulse.Models.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static MealPulse.Common.ValidationConstraints;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class FoodDiaryController : Controller
     {
         private readonly IGoalService _goalService;
@@ -56,6 +58,7 @@ namespace Web.Controllers
                     .Where(f => f.MealTypeId == m.MealTypeId)
                     .Select(f => new FoodDiaryItemViewModel
                     {
+                        FoodDiaryItemId = f.FoodDiaryItemId,
                         FoodName = f.FoodItem?.Name ?? "[Unknown]",
                         Quantity = (decimal)f.Quantity,
                         Unit = f.FoodItem?.Unit ?? "-",
@@ -102,12 +105,24 @@ namespace Web.Controllers
                 FoodId = FoodItemId,
                 MealTypeId = MealTypeId,
                 Quantity = (double)Quantity,
-                DateTime = DateTime.Now
+                DateTime = date.Date
             });
 
             if (!success)
             {
                 TempData["Error"] = "Something went wrong while adding the food item.";
+            }
+
+            return RedirectToAction("Index", new { date = date.ToString("yyyy-MM-dd") });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteItem(int id, DateTime date)
+        {
+            var success = _foodDiaryService.DeleteFoodDiaryItem(id);
+            if (!success)
+            {
+                TempData["Error"] = "Something went wrong while deleting the food item.";
             }
 
             return RedirectToAction("Index", new { date = date.ToString("yyyy-MM-dd") });

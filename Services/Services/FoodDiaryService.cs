@@ -28,5 +28,10 @@ namespace Services.Services
         {
             return _foodDiaryRepository.GetItemsByGoalIdAndDate(goalId, date);
         }
+
+        public bool DeleteFoodDiaryItem(int foodDiaryItemId)
+        {
+            return _foodDiaryRepository.Delete(foodDiaryItemId);
+        }
     }
 }

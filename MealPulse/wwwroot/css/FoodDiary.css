@@ -152,3 +152,19 @@
     background-color: #b49ae0;
     color: white;
 }
+
+.food-diary-page button[title="Delete"]:hover img {
+    filter: brightness(0.85);
+    transform: scale(1.1);
+    transition: 0.2s ease;
+}
+
+
+.food-diary-page button[title="Delete"] {
+    padding: 0;
+    border: none;
+    background: transparent;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
