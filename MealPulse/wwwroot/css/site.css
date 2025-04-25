@@ -1,22 +1,104 @@
+/* Typography and Base Styles */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    scroll-behavior: smooth;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2d1b46;
+    background-color: #f9f6fc;
+    margin-bottom: 60px;
 }
+
+/* Layout Helpers */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(to right, #7b4397, #a76ce8);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 0.5rem 1.2rem;
+    transition: background-color 0.3s ease-in-out;
+}
+
+    .btn-primary:hover {
+        background-color: #5e2b91;
+    }
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(111, 66, 193, 0.5);
+    border-color: #6f42c1;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.05);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #6f42c1 !important;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: #2d1b46 !important;
+    transition: color 0.3s ease-in-out;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #6f42c1 !important;
+    }
+
+/* Footer */
+.footer {
+    background-color: #f2e9fc;
+    color: #5e2b91;
+    border-top: 1px solid #e3d7f1;
+    text-align: center;
+    line-height: 60px;
+    font-size: 0.9rem;
+}
+
+/* Links */
+a {
+    color: #7b4397;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #5e2b91;
+        text-decoration: underline;
+    }
+
+/* Forms */
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #d2c0ea;
+    background-color: #fdfaff;
+    color: #2d1b46;
+    transition: all 0.3s ease;
+}
+
+    .form-control:focus {
+        border-color: #6f42c1;
+        box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+        background-color: #fff;
+    }
