@@ -1,6 +1,6 @@
-﻿using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Models;
+using DataAccess.Repositories.Interfaces;
 using MealPulse.Data;
-using MealPulse.Models.Models;
 using System.Collections.Generic;
 using System.Data;
 

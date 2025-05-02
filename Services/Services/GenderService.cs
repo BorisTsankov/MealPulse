@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MealPulse.Services.Interfaces;
 using Services.Services.Interfaces;
-using MealPulse.Models.Models;
+using DataAccess.Models;
 
 namespace Services.Services
 {

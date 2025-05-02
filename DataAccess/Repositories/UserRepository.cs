@@ -1,5 +1,5 @@
-﻿using MealPulse.Data.Interfaces;
-using MealPulse.Models.Models;
+﻿using DataAccess.Models;
+using MealPulse.Data.Interfaces;
 using System.Data;
 
 namespace MealPulse.Data.Repositories
@@ -16,9 +16,17 @@ namespace MealPulse.Data.Repositories
         public User? GetUserById(int userId)
         {
             string sql = @"
-                SELECT user_id, FirstName, LastName, email, date_of_birth, gender_id, height_cm, activityLevel_id, metric_id
-                FROM [User]
-                WHERE user_id = @user_id";
+                SELECT 
+                    u.user_id, u.FirstName, u.LastName, u.email, u.date_of_birth,
+                    u.gender_id, g.gender AS GenderName,
+                    u.height_cm,
+                    u.activityLevel_id, a.activityLevel AS ActivityLevelName,
+                    u.metric_id, m.metric AS MetricName
+                FROM [User] u
+                JOIN Gender g ON u.gender_id = g.gender_id
+                JOIN ActivityLevel a ON u.activityLevel_id = a.activityLevel_id
+                JOIN Metric m ON u.metric_id = m.metric_id
+                WHERE u.user_id = @user_id";
 
             var parameters = new Dictionary<string, object> { { "@user_id", userId } };
             var dt = _db.ExecuteQuery(sql, parameters);
@@ -27,6 +35,7 @@ namespace MealPulse.Data.Repositories
                 return null;
 
             var row = dt.Rows[0];
+
             return new User
             {
                 user_id = (int)row["user_id"],
@@ -37,7 +46,23 @@ namespace MealPulse.Data.Repositories
                 gender_id = (int)row["gender_id"],
                 height_cm = (decimal)row["height_cm"],
                 activityLevel_id = (int)row["activityLevel_id"],
-                metric_id = (int)row["metric_id"]
+                metric_id = (int)row["metric_id"],
+
+                Gender = new Gender
+                {
+                    GenderId = (int)row["gender_id"],
+                    GenderName = row["GenderName"].ToString()!
+                },
+                ActivityLevel = new ActivityLevel
+                {
+                    ActivityLevelId = (int)row["activityLevel_id"],
+                    ActivityLevelName = row["ActivityLevelName"].ToString()!
+                },
+                Metric = new Metric
+                {
+                    MetricId = (int)row["metric_id"],
+                    MetricName = row["MetricName"].ToString()!
+                }
             };
         }
 
@@ -56,15 +81,11 @@ namespace MealPulse.Data.Repositories
         {
             string query = "UPDATE [User] SET activityLevel_id = @ActivityLevelId WHERE user_id = @UserId";
             var parameters = new Dictionary<string, object>
-    {
-        {"@ActivityLevelId", activityLevelId},
-        {"@UserId", userId}
-    };
+            {
+                {"@ActivityLevelId", activityLevelId},
+                {"@UserId", userId}
+            };
             _db.ExecuteNonQuery(query, parameters);
         }
-
-
-
-
     }
 }

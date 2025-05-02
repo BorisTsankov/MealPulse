@@ -1,7 +1,8 @@
 ﻿using static MealPulse.Common.ValidationConstraints.ActivityLevel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-namespace MealPulse.Models.Models
+
+namespace DataAccess.Models
 {
     public class ActivityLevel
     {

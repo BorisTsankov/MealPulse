@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MealPulse.Models
+namespace DataAccess.Models
 {
     public class LoginViewModel
     {

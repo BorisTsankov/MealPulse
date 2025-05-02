@@ -2,13 +2,12 @@
 using MealPulse.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Models;
 using Services.Services.Interfaces;
 using System.Security.Claims;
-using MealPulse.Models.Models;
 using Core.Models.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static MealPulse.Common.ValidationConstraints;
-
 
 [Authorize]
 public class ProfileController : Controller
@@ -42,9 +41,9 @@ public class ProfileController : Controller
         var user = _userService.GetUserById(userId);
         if (user == null) return View("Error");
 
-        var goal = _goalService.GetMostRecentGoalByUserId(user.user_id);
+        var goal = _goalService.GetMostRecentGoalByUserId(user.UserId);
 
-        // Provide intensity options to the view
+        // Intensity dropdown
         ViewBag.IntensityOptions = Enum.GetValues(typeof(GoalIntensity))
             .Cast<GoalIntensity>()
             .Select(g => new SelectListItem
@@ -52,83 +51,30 @@ public class ProfileController : Controller
                 Value = ((int)g).ToString(),
                 Text = SplitCamelCase(g.ToString())
             }).ToList();
+
         ViewBag.ActivityLevelOptions = _activityLevelService.GetAll()
-    .Select(a => new SelectListItem
-    {
-        Value = a.ActivityLevelId.ToString(),
-        Text = a.ActivityLevelName
-    }).ToList();
-
-        // Basic input
-        var height = user.height_cm;
-        var weight = goal?.current_weight_kg;
-        var birthdate = user.date_of_birth;
-        var gender = _genderService.GetGenderName(user.gender_id);
-        var activityLevel = _activityLevelService.GetActivityLevelName(user.activityLevel_id);
-        var metric = _metricService.GetMetricNameById(user.metric_id);
-        var goalIntensity = goal != null ? (GoalIntensity)goal.goal_intensity : GoalIntensity.Maintain;
-
-        // Skip if anything is missing
-        int? dailyCalories = null;
-        if (height != null && weight != null && birthdate != null && gender != null && activityLevel != null)
-        {
-            int age = DateTime.Today.Year - birthdate.Value.Year;
-            if (birthdate > DateTime.Today.AddYears(-age)) age--;
-
-            // BMR (Mifflin-St Jeor)
-            double bmr = (10 * (double)weight) + (6.25 * (double)height) - (5 * age) + (gender?.Trim().ToLower() == "male" ? 5 : -161);
-
-
-            // Activity level multiplier
-            var multiplier = activityLevel.ToLower() switch
+            .Select(a => new SelectListItem
             {
-                "not active" => 1.2,
-                "slightly active" => 1.375,
-                "average" => 1.55,
-                "above average" => 1.725,
-                "very active" => 1.9,
-                _ => 1.2
-            };
+                Value = a.ActivityLevelId.ToString(),
+                Text = a.ActivityLevelName
+            }).ToList();
 
-            double tdee = bmr * multiplier;
+        // Calculate daily calories (optional)
+        int? dailyCalories = (goal != null)
+            ? _goalService.CalculateCalorieGoal(user, goal)
+            : null;
 
-            // Goal adjustment
-            var adjustment = goalIntensity switch
-            {
-                GoalIntensity.LoseQuarterKgPerWeek => -250,
-                GoalIntensity.LoseHalfKgPerWeek => -500,
-                GoalIntensity.LoseOneKgPerWeek => -1000,
-                GoalIntensity.GainQuarterKgPerWeek => 250,
-                GoalIntensity.GainHalfKgPerWeek => 500,
-                GoalIntensity.GainOneKgPerWeek => 1000,
-                _ => 0
-            };
-
-            dailyCalories = (int)Math.Round(tdee + adjustment);
-        }
-
-       
         var viewModel = new UserProfileViewModel
         {
             User = user,
             Goal = goal,
-            GoalIntensityDisplay = goal != null ? SplitCamelCase(((GoalIntensity)goal.goal_intensity).ToString()) : "",
-            GenderName = gender?.ToString()?.Trim() ?? "Not set",
-            ActivityLevelName = activityLevel?.ToString()?.Trim() ?? "Not set",
-            MetricName = metric?.ToString()?.Trim() ?? "Not set",
+            GoalIntensityDisplay = goal != null
+                ? SplitCamelCase(((GoalIntensity)goal.GoalIntensity).ToString())
+                : "",
             DailyCalories = dailyCalories
         };
 
-      
-
-
-
         return View(viewModel);
-    }
-
-    public string SplitCamelCase(string input)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(input, "(\\B[A-Z])", " $1");
     }
 
     [HttpPost]
@@ -149,25 +95,10 @@ public class ProfileController : Controller
     public IActionResult CreateGoal(int user_id, decimal currentWeight, decimal targetWeight, string intensity)
     {
         var user = _userService.GetUserById(user_id);
-        if (user == null)
-        {
-            return View("Error");
-        }
+        if (user == null) return View("Error");
 
-        var newGoal = new MealPulse.Models.Models.Goal
-        {
-            user_id = user_id,
-            current_weight_kg = currentWeight,
-            target_weight_kg = targetWeight,
-            start_date = DateTime.Today,
-            goal_intensity = (int)Enum.Parse<GoalIntensity>(intensity)
-        };
-
-        var success = _goalService.CreateGoal(newGoal);
-        if (!success)
-        {
-            return View("Error");
-        }
+        var success = _goalService.CreateGoal(user_id, currentWeight, targetWeight, intensity);
+        if (!success) return View("Error");
 
         return RedirectToAction("Index");
     }
@@ -179,6 +110,8 @@ public class ProfileController : Controller
         return RedirectToAction("Index");
     }
 
-
-
+    public string SplitCamelCase(string input)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(input, "(\\B[A-Z])", " $1");
+    }
 }

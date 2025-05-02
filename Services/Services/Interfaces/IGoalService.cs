@@ -1,13 +1,14 @@
-﻿using MealPulse.Models.Models;
+﻿using Services.Models;
 
 namespace Services.Services.Interfaces
 {
     public interface IGoalService
     {
-        Goal? GetMostRecentGoalByUserId(int userId);
+        GoalDto? GetMostRecentGoalByUserId(int userId);
         bool UpdateWeight(int userId, decimal newWeight);
-        bool CreateGoal(Goal newGoal); // Return bool to confirm success
-        int? CalculateCalorieGoal(User user, Goal goal);
+        bool CreateGoal(int userId, decimal currentWeight, decimal targetWeight, string intensity);
+        int? CalculateCalorieGoal(UserDto user, GoalDto goal);
+
 
 
     }

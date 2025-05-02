@@ -1,6 +1,8 @@
-﻿using MealPulse.Models.Models;
-using MealPulse.Services.Interfaces;
+﻿using MealPulse.Services.Interfaces;
 using MealPulse.Data.Interfaces;
+using DataAccess.Models;
+using Services.Mappers;
+using Services.Models;
 
 namespace MealPulse.Services
 {
@@ -13,9 +15,10 @@ namespace MealPulse.Services
             _userRepository = userRepository;
         }
 
-        public User? GetUserById(int userId)
+        public UserDto? GetUserById(int userId)
         {
-            return _userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserById(userId);
+            return user != null ? UserMapper.ToDto(user) : null;
         }
 
         public bool UpdateHeight(int userId, decimal newHeight)

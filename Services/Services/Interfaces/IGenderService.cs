@@ -1,4 +1,4 @@
-﻿using MealPulse.Models.Models;
+﻿using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,8 +1,8 @@
-﻿using MealPulse.Models.Models;
-using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
 using MealPulse.Data;
 using System.Collections.Generic;
 using System.Data;
+using DataAccess.Models;
 
 namespace DataAccess.Repositories
 {

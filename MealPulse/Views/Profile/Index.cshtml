@@ -22,11 +22,11 @@
                 <dd class="col-sm-9">@Model.User.LastName</dd>
 
                 <dt class="col-sm-3">Email</dt>
-                <dd class="col-sm-9">@Model.User.email</dd>
+                <dd class="col-sm-9">@Model.User.Email</dd>
 
                 <dt class="col-sm-3">Birthday</dt>
                 <dd class="col-sm-9">
-                    @(Model.User.date_of_birth?.ToString("dd MMM yyyy"))
+                    @(Model.User.DateOfBirth?.ToString("dd MMM yyyy"))
                 </dd>
 
                 <dt class="col-sm-3">Gender</dt>
@@ -34,25 +34,25 @@
 
                 <dt class="col-sm-3">Height (cm)</dt>
                 <dd class="col-sm-9 d-flex align-items-center">
-                    @Model.User.height_cm
+                    @Model.User.HeightCm
                     <img src="~/images/edit_image.png" alt="Edit Height" id="editHeightBtn" class="ms-2" style="cursor:pointer; width: 20px; height: 20px;" />
                 </dd>
 
                 <dt class="col-sm-3">Weight (kg)</dt>
                 <dd class="col-sm-9 d-flex align-items-center">
-                    @(Model.Goal?.current_weight_kg.ToString() ?? "Not set")
+                    @(Model.Goal?.CurrentWeightKg.ToString() ?? "Not set")
                     <img src="~/images/edit_image.png" alt="Edit Weight" id="editWeightBtn" class="ms-2" style="cursor:pointer; width: 20px; height: 20px;" />
                 </dd>
 
                 <dt class="col-sm-3">Activity Level</dt>
                 <dd class="col-sm-9 d-flex align-items-center">
-                    @Model.ActivityLevelName
+                    @Model.User.ActivityLevelName
                     <img src="~/images/edit_image.png" alt="Edit Activity Level" id="editActivityLevelBtn" class="ms-2" style="cursor:pointer; width: 20px; height: 20px;" />
                 </dd>
 
 
                 <dt class="col-sm-3">Metric</dt>
-                <dd class="col-sm-9">@Model.MetricName</dd>
+                <dd class="col-sm-9">@Model.User.MetricName</dd>
             </dl>
         </div>
 
@@ -61,23 +61,25 @@
 
             @if (Model.Goal != null)
             {
+
                 <dt class="col-sm-3">Recommended Daily Calories</dt>
                 <dd class="col-sm-9">
                     @(Model.DailyCalories?.ToString("N0") ?? "Unavailable")
                 </dd>
 
+
                 <dl class="row">
                     <dt class="col-sm-3">Current Weight</dt>
-                    <dd class="col-sm-9">@Model.Goal.current_weight_kg</dd>
+                    <dd class="col-sm-9">@Model.Goal.CurrentWeightKg</dd>
 
                     <dt class="col-sm-3">Target Weight</dt>
-                    <dd class="col-sm-9">@Model.Goal.target_weight_kg</dd>
+                    <dd class="col-sm-9">@Model.Goal.TargetWeightKg</dd>
 
                     <dt class="col-sm-3">Start Date</dt>
-                    <dd class="col-sm-9">@Model.Goal.start_date.ToShortDateString()</dd>
+                    <dd class="col-sm-9">@Model.Goal.StartDate.ToShortDateString()</dd>
 
                     <dt class="col-sm-3">End Date</dt>
-                    <dd class="col-sm-9">@Model.Goal.end_date?.ToShortDateString()</dd>
+                    <dd class="col-sm-9">@Model.Goal.EndDate?.ToShortDateString()</dd>
 
                     <dt class="col-sm-3">Goal Intensity</dt>
                     <dd class="col-sm-9">@Model.GoalIntensityDisplay</dd>
@@ -103,7 +105,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="user_id" value="@Model.User.user_id" />
+                    <input type="hidden" name="user_id" value="@Model.User.UserId" />
                     <div class="form-group">
                         <label for="newHeight">New Height (cm)</label>
                         <input type="number" step="0.1" name="newHeight" class="form-control" required />
@@ -127,7 +129,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="user_id" value="@Model.User.user_id" />
+                    <input type="hidden" name="user_id" value="@Model.User.UserId" />
                     <div class="form-group">
                         <label for="newWeight">New Weight (kg)</label>
                         <input type="number" step="0.1" name="newWeight" class="form-control" required />
@@ -151,11 +153,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="user_id" value="@Model.User.user_id" />
+                    <input type="hidden" name="user_id" value="@Model.User.UserId" />
 
                     <div class="form-group">
                         <label for="currentWeight">Current Weight (kg)</label>
-                        <input type="number" step="0.1" name="currentWeight" class="form-control" value="@Model.Goal?.current_weight_kg" required />
+                        <input type="number" step="0.1" name="currentWeight" class="form-control" value="@Model.Goal?.CurrentWeightKg" required />
                     </div>
 
                     <div class="form-group">
@@ -188,7 +190,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="user_id" value="@Model.User.user_id" />
+                    <input type="hidden" name="user_id" value="@Model.User.UserId" />
                     <div class="form-group">
                         <label for="newActivityLevelId">New Activity Level</label>
                         <select name="newActivityLevelId" class="form-control" asp-items="ViewBag.ActivityLevelOptions" required>

@@ -4,10 +4,10 @@ using Services.Services.Interfaces;
 using Core.Models;
 using MealPulse.Services;
 using MealPulse.Services.Interfaces;
-using MealPulse.Models.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static MealPulse.Common.ValidationConstraints;
 using Microsoft.AspNetCore.Authorization;
+using DataAccess.Models;
 
 namespace Web.Controllers
 {
@@ -47,7 +47,7 @@ namespace Web.Controllers
             var user = _userService.GetUserById(userId.Value);
             DateTime selectedDate = date?.Date ?? DateTime.Today;
 
-            var foodItems = _foodDiaryService.GetItemsForGoalAndDate(goal.goal_id, selectedDate);
+            var foodItems = _foodDiaryService.GetItemsForGoalAndDate(goal.GoalId, selectedDate);
             var mealTypes = _mealTypeService.GetAll();
 
             var sections = mealTypes.Select(m => new FoodDiarySectionViewModel
@@ -101,7 +101,7 @@ namespace Web.Controllers
 
             var success = _foodDiaryService.AddFoodDiaryItem(new FoodDiaryItem
             {
-                GoalId = goal.goal_id,
+                GoalId = goal.GoalId,
                 FoodId = FoodItemId,
                 MealTypeId = MealTypeId,
                 Quantity = (double)Quantity,

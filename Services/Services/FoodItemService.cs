@@ -1,5 +1,5 @@
-﻿using MealPulse.Data;
-using MealPulse.Models.Models;
+﻿using DataAccess.Models;
+using MealPulse.Data;
 using MealPulse.Services.Interfaces;
 using System.Data;
 

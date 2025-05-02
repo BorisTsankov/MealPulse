@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Core.Models.Enums;
-namespace MealPulse.Models.Models
+namespace DataAccess.Models
 {
     public class Goal
     {

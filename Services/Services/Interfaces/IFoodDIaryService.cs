@@ -1,4 +1,4 @@
-﻿using MealPulse.Models.Models;
+﻿using DataAccess.Models;
 using System.Collections.Generic;
 
 namespace Services.Services.Interfaces

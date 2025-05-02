@@ -1,4 +1,5 @@
-﻿@model Core.Models.ViewModels.FoodDiaryViewModel
+﻿@using DataAccess.Models
+@model Core.Models.ViewModels.FoodDiaryViewModel
 
 @section Styles {
     <link rel="stylesheet" href="~/css/FoodDiary.css" asp-append-version="true" />
@@ -109,7 +110,7 @@
 
                     <select name="FoodItemId" class="form-select" required>
                         <option value="">-- Select food --</option>
-                        @foreach (var food in (List<MealPulse.Models.Models.FoodItem>)ViewBag.FoodItems)
+                        @foreach (var food in (List<FoodItem>)ViewBag.FoodItems)
                         {
                             <option value="@food.FoodItemId">@food.Name</option>
                         }
