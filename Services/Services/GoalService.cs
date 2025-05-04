@@ -10,18 +10,15 @@ namespace Services.Services
     public class GoalService : IGoalService
     {
         private readonly IGoalRepository _goalRepository;
-        private readonly DbHelper _dbHelper;
         private readonly IGenderService _genderService;
         private readonly IActivityLevelService _activityLevelService;
 
         public GoalService(
             IGoalRepository goalRepository,
-            DbHelper dbHelper,
             IGenderService genderService,
             IActivityLevelService activityLevelService)
         {
             _goalRepository = goalRepository;
-            _dbHelper = dbHelper;
             _genderService = genderService;
             _activityLevelService = activityLevelService;
         }
