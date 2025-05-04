@@ -76,7 +76,7 @@ namespace Web.Controllers
             var totalCaloriesForDay = sections.Sum(s => s.TotalCalories);
             var calorieGoal = _goalService.CalculateCalorieGoal(user, goal); // Your new shared method
 
-            ViewBag.FoodItems = _foodItemService.GetAll();
+            //ViewBag.FoodItems = _foodItemService.GetAll();
             ViewBag.TotalCaloriesForDay = totalCaloriesForDay;
             ViewBag.CalorieGoal = calorieGoal;
             ViewBag.RemainingCalories = calorieGoal != null ? calorieGoal - totalCaloriesForDay : null;
@@ -127,6 +127,27 @@ namespace Web.Controllers
 
             return RedirectToAction("Index", new { date = date.ToString("yyyy-MM-dd") });
         }
+
+        [HttpGet]
+        public IActionResult SearchFoodItems(string term)
+        {
+            var allItems = _foodItemService.SearchByName(term ?? "");
+
+            var distinctItems = allItems
+                .GroupBy(f => f.Name.Trim().ToLower())
+                .Select(g => g.First()) // pick the first unique name
+                .Take(20) // optional: limit results
+                .ToList();
+
+            var results = distinctItems.Select(f => new
+            {
+                id = f.FoodItemId,
+                text = f.Name
+            });
+
+            return Json(new { results });
+        }
+
 
 
     }

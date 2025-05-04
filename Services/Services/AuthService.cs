@@ -52,7 +52,7 @@ public class AuthService : IAuthService
     }
     public string GetCurrentUserId()
     {
-        var context = new HttpContextAccessor().HttpContext;
+        var context = _httpContextAccessor.HttpContext;
         if (context != null && context.User.Identity?.IsAuthenticated == true)
         {
             var userId = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;

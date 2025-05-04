@@ -59,6 +59,8 @@ public class Program
         builder.Services.AddScoped<IFoodDiaryService, FoodDiaryService>();
         builder.Services.AddScoped<IMealTypeRepository, MealTypeRepository>();
         builder.Services.AddScoped<IMealTypeService, MealTypeService>();
+        builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
+        builder.Services.AddScoped<IFoodItemService, FoodItemService>();
 
 
         var app = builder.Build();

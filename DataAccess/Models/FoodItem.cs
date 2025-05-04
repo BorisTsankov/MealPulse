@@ -9,7 +9,7 @@ namespace DataAccess.Models
         public int FoodItemId { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(255)]
         public string Name { get; set; } = null!;
 
         [Required]
