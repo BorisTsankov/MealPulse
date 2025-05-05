@@ -1,7 +1,7 @@
 ﻿using DataAccess.Models;
-using MealPulse.Data.Interfaces;
-using MealPulse.Services;
+using DataAccess.Repositories.Interfaces;
 using Moq;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

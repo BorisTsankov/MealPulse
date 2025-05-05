@@ -1,7 +1,7 @@
-﻿using static MealPulse.Common.ValidationConstraints.Goal;
+﻿using static DataAccess.Common.ValidationConstraints.Goal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Core.Models.Enums;
+using DataAccess.Enums;
 namespace DataAccess.Models
 {
     public class Goal

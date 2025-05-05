@@ -1,4 +1,4 @@
-namespace MealPulse.Models
+namespace Web.ViewModels
 {
     public class ErrorViewModel
     {

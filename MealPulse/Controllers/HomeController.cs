@@ -1,10 +1,10 @@
-using MealPulse.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using Web.ViewModels;
 
 
-namespace MealPulse.Controllers
+namespace Web.Controllers
 {
     public class HomeController : Controller
     {

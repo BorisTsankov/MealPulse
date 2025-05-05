@@ -1,65 +1,70 @@
-﻿using MealPulse.Services.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Services.Services.Interfaces;
 using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 
-public class AuthService : IAuthService
+
+namespace Services.Services
 {
-    private readonly IAuthRepository _authRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthService(IAuthRepository authRepository, IHttpContextAccessor httpContextAccessor)
+    public class AuthService : IAuthService
     {
-        _authRepository = authRepository;
-        _httpContextAccessor = httpContextAccessor;
-    }
+        private readonly IAuthRepository _authRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public bool UserExists(string email)
-    {
-        return _authRepository.UserExists(email);
-    }
-
-    public string HashPassword(string password)
-    {
-        using var sha256 = SHA256.Create();
-        var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return Convert.ToBase64String(bytes);
-    }
-
-    public int RegisterUser(Dictionary<string, object> parameters)
-    {
-        return _authRepository.RegisterUser(parameters);
-    }
-
-    public DataTable AuthenticateUser(string email, string password)
-    {
-        string hashed = HashPassword(password);
-        return _authRepository.AuthenticateUser(email, hashed);
-    }
-
-    public List<SelectListItem> GetSelectListData(string tableName, string valueField, string textField)
-    {
-        DataTable dt = _authRepository.GetSelectListData(tableName, valueField, textField);
-        return dt.AsEnumerable()
-                 .Select(row => new SelectListItem
-                 {
-                     Value = row[valueField].ToString(),
-                     Text = row[textField].ToString()
-                 })
-                 .ToList();
-    }
-    public string GetCurrentUserId()
-    {
-        var context = _httpContextAccessor.HttpContext;
-        if (context != null && context.User.Identity?.IsAuthenticated == true)
+        public AuthService(IAuthRepository authRepository, IHttpContextAccessor httpContextAccessor)
         {
-            var userId = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            return userId ?? string.Empty;
+            _authRepository = authRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        return string.Empty;
-    }
+        public bool UserExists(string email)
+        {
+            return _authRepository.UserExists(email);
+        }
 
+        public string HashPassword(string password)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return Convert.ToBase64String(bytes);
+        }
+
+        public int RegisterUser(Dictionary<string, object> parameters)
+        {
+            return _authRepository.RegisterUser(parameters);
+        }
+
+        public DataTable AuthenticateUser(string email, string password)
+        {
+            string hashed = HashPassword(password);
+            return _authRepository.AuthenticateUser(email, hashed);
+        }
+
+        public List<SelectListItem> GetSelectListData(string tableName, string valueField, string textField)
+        {
+            DataTable dt = _authRepository.GetSelectListData(tableName, valueField, textField);
+            return dt.AsEnumerable()
+                     .Select(row => new SelectListItem
+                     {
+                         Value = row[valueField].ToString(),
+                         Text = row[textField].ToString()
+                     })
+                     .ToList();
+        }
+        public string GetCurrentUserId()
+        {
+            var context = _httpContextAccessor.HttpContext;
+            if (context != null && context.User.Identity?.IsAuthenticated == true)
+            {
+                var userId = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                return userId ?? string.Empty;
+            }
+
+            return string.Empty;
+        }
+    }
 }

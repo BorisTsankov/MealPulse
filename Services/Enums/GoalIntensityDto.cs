@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Enums
-{
-    public enum GoalIntensity
+namespace Services.Enums{
+    public enum GoalIntensityDto
     {
         Maintain = 0,
         LoseQuarterKgPerWeek = 1,

@@ -1,13 +1,9 @@
 ﻿using DataAccess.Repositories.Interfaces;
 using DataAccess.Repositories;
-using MealPulse.Data.Interfaces;
-using MealPulse.Data.Repositories;
-using MealPulse.Data;
-using MealPulse.Services.Interfaces;
-using MealPulse.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Services.Services.Interfaces;
 using Services.Services;
+using DataAccess.Data;
 
 public class Program
 {

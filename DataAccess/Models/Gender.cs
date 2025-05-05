@@ -1,4 +1,4 @@
-﻿using static MealPulse.Common.ValidationConstraints.Gender;
+﻿using static DataAccess.Common.ValidationConstraints.Gender;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 

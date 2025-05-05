@@ -1,12 +1,11 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories.Interfaces;
-using MealPulse.Data;
-using MealPulse.Services.Interfaces;
 using Services.Mappers;
 using Services.Models;
+using Services.Services.Interfaces;
 using System.Data;
 
-namespace MealPulse.Services
+namespace Services.Services
 {
     public class FoodItemService : IFoodItemService
     {

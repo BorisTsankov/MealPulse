@@ -1,6 +1,6 @@
 ﻿using DataAccess.Models;
 
-namespace MealPulse.Data.Interfaces
+namespace DataAccess.Repositories.Interfaces
 {
     public interface IUserRepository
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Core.Models.ViewModels
+namespace Web.ViewModels
 {
     public class FoodDiaryViewModel
     {

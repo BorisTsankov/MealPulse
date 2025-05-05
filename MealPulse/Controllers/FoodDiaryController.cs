@@ -1,13 +1,9 @@
-﻿using Core.Models.ViewModels;
+﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Interfaces;
-using Core.Models;
-using MealPulse.Services;
-using MealPulse.Services.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static MealPulse.Common.ValidationConstraints;
-using Microsoft.AspNetCore.Authorization;
-using DataAccess.Models;
+using Web.ViewModels;
+using Services.Models;
 
 namespace Web.Controllers
 {
@@ -99,7 +95,7 @@ namespace Web.Controllers
             if (goal == null)
                 return View("Error");
 
-            var success = _foodDiaryService.AddFoodDiaryItem(new FoodDiaryItem
+            var success = _foodDiaryService.AddFoodDiaryItem(new FoodDiaryItemDto
             {
                 GoalId = goal.GoalId,
                 FoodId = FoodItemId,

@@ -1,117 +1,120 @@
-﻿using MealPulse.ViewModels;
-using MealPulse.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Models;
 using Services.Services.Interfaces;
 using System.Security.Claims;
-using Core.Models.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using static MealPulse.Common.ValidationConstraints;
+using Services.Enums;
+using Web.ViewModels;
 
-[Authorize]
-public class ProfileController : Controller
+
+namespace Web.Controllers
 {
-    private readonly IUserService _userService;
-    private readonly IGoalService _goalService;
-    private readonly IGenderService _genderService;
-    private readonly IActivityLevelService _activityLevelService;
-    private readonly IMetricService _metricService;
 
-    public ProfileController(
-        IUserService userService,
-        IGoalService goalService,
-        IGenderService genderService,
-        IActivityLevelService activityLevelService,
-        IMetricService metricService)
+    [Authorize]
+    public class ProfileController : Controller
     {
-        _userService = userService;
-        _goalService = goalService;
-        _genderService = genderService;
-        _activityLevelService = activityLevelService;
-        _metricService = metricService;
-    }
+        private readonly IUserService _userService;
+        private readonly IGoalService _goalService;
+        private readonly IGenderService _genderService;
+        private readonly IActivityLevelService _activityLevelService;
+        private readonly IMetricService _metricService;
 
-    public IActionResult Index()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
-            return View("Error");
-
-        var user = _userService.GetUserById(userId);
-        if (user == null) return View("Error");
-
-        var goal = _goalService.GetMostRecentGoalByUserId(user.UserId);
-
-        // Intensity dropdown
-        ViewBag.IntensityOptions = Enum.GetValues(typeof(GoalIntensity))
-            .Cast<GoalIntensity>()
-            .Select(g => new SelectListItem
-            {
-                Value = ((int)g).ToString(),
-                Text = SplitCamelCase(g.ToString())
-            }).ToList();
-
-        ViewBag.ActivityLevelOptions = _activityLevelService.GetAll()
-            .Select(a => new SelectListItem
-            {
-                Value = a.ActivityLevelId.ToString(),
-                Text = a.ActivityLevelName
-            }).ToList();
-
-        // Calculate daily calories (optional)
-        int? dailyCalories = (goal != null)
-            ? _goalService.CalculateCalorieGoal(user, goal)
-            : null;
-
-        var viewModel = new UserProfileViewModel
+        public ProfileController(
+            IUserService userService,
+            IGoalService goalService,
+            IGenderService genderService,
+            IActivityLevelService activityLevelService,
+            IMetricService metricService)
         {
-            User = user,
-            Goal = goal,
-            GoalIntensityDisplay = goal != null
-                ? SplitCamelCase(((GoalIntensity)goal.GoalIntensity).ToString())
-                : "",
-            DailyCalories = dailyCalories
-        };
+            _userService = userService;
+            _goalService = goalService;
+            _genderService = genderService;
+            _activityLevelService = activityLevelService;
+            _metricService = metricService;
+        }
 
-        return View(viewModel);
-    }
+        public IActionResult Index()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                return View("Error");
 
-    [HttpPost]
-    public IActionResult UpdateHeight(int user_id, decimal newHeight)
-    {
-        _userService.UpdateHeight(user_id, newHeight);
-        return RedirectToAction("Index");
-    }
+            var user = _userService.GetUserById(userId);
+            if (user == null) return View("Error");
 
-    [HttpPost]
-    public IActionResult UpdateWeight(int user_id, decimal newWeight)
-    {
-        _goalService.UpdateWeight(user_id, newWeight);
-        return RedirectToAction("Index");
-    }
+            var goal = _goalService.GetMostRecentGoalByUserId(user.UserId);
 
-    [HttpPost]
-    public IActionResult CreateGoal(int user_id, decimal currentWeight, decimal targetWeight, string intensity)
-    {
-        var user = _userService.GetUserById(user_id);
-        if (user == null) return View("Error");
+            // Intensity dropdown
+            ViewBag.IntensityOptions = Enum.GetValues(typeof(GoalIntensityDto))
 
-        var success = _goalService.CreateGoal(user_id, currentWeight, targetWeight, intensity);
-        if (!success) return View("Error");
+                .Cast<GoalIntensityDto>()
+                .Select(g => new SelectListItem
+                {
+                    Value = ((int)g).ToString(),
+                    Text = SplitCamelCase(g.ToString())
+                }).ToList();
 
-        return RedirectToAction("Index");
-    }
+            ViewBag.ActivityLevelOptions = _activityLevelService.GetAll()
+                .Select(a => new SelectListItem
+                {
+                    Value = a.ActivityLevelId.ToString(),
+                    Text = a.ActivityLevelName
+                }).ToList();
 
-    [HttpPost]
-    public IActionResult UpdateActivityLevel(int user_id, int newActivityLevelId)
-    {
-        _userService.UpdateActivityLevel(user_id, newActivityLevelId);
-        return RedirectToAction("Index");
-    }
+            // Calculate daily calories (optional)
+            int? dailyCalories = (goal != null)
+                ? _goalService.CalculateCalorieGoal(user, goal)
+                : null;
 
-    public string SplitCamelCase(string input)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(input, "(\\B[A-Z])", " $1");
+            var viewModel = new UserProfileViewModel
+            {
+                User = user,
+                Goal = goal,
+                GoalIntensityDisplay = goal != null
+                    ? SplitCamelCase(((GoalIntensityDto)goal.GoalIntensity).ToString())
+                    : "",
+                DailyCalories = dailyCalories
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateHeight(int user_id, decimal newHeight)
+        {
+            _userService.UpdateHeight(user_id, newHeight);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateWeight(int user_id, decimal newWeight)
+        {
+            _goalService.UpdateWeight(user_id, newWeight);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult CreateGoal(int user_id, decimal currentWeight, decimal targetWeight, string intensity)
+        {
+            var user = _userService.GetUserById(user_id);
+            if (user == null) return View("Error");
+
+            var success = _goalService.CreateGoal(user_id, currentWeight, targetWeight, intensity);
+            if (!success) return View("Error");
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateActivityLevel(int user_id, int newActivityLevelId)
+        {
+            _userService.UpdateActivityLevel(user_id, newActivityLevelId);
+            return RedirectToAction("Index");
+        }
+
+        public string SplitCamelCase(string input)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(input, "(\\B[A-Z])", " $1");
+        }
     }
 }

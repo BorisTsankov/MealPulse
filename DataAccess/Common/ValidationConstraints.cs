@@ -1,4 +1,4 @@
-﻿namespace MealPulse.Common
+﻿namespace DataAccess.Common
 {
     public class ValidationConstraints
     {

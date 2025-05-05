@@ -1,6 +1,6 @@
 ﻿using Services.Models;
 
-namespace MealPulse.ViewModels
+namespace Web.ViewModels
 {
     public class UserProfileViewModel
     {

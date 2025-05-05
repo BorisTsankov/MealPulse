@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 
-namespace MealPulse.Services.Interfaces
+namespace Services.Services.Interfaces
 {
     public interface IAuthService
     {

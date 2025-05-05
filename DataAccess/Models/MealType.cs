@@ -1,4 +1,4 @@
-﻿using static MealPulse.Common.ValidationConstraints.MealType;
+﻿using static DataAccess.Common.ValidationConstraints.MealType;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 

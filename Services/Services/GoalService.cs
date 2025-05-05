@@ -1,6 +1,5 @@
-﻿using Core.Models.Enums;
+﻿using DataAccess.Enums;
 using DataAccess.Repositories.Interfaces;
-using MealPulse.Data;
 using Services.Mappers;
 using Services.Models;
 using Services.Services.Interfaces;

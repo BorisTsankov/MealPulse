@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace MealPulse.Data
+namespace DataAccess.Data
 {
     public class DbHelper
     {

@@ -1,7 +1,7 @@
 ﻿using DataAccess.Models;
 using Services.Models;
 
-namespace MealPulse.Services.Interfaces
+namespace Services.Services.Interfaces
 {
     public interface IUserService
     {

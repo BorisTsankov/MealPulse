@@ -1,7 +1,7 @@
-﻿using Core.Models.Enums;
+﻿using DataAccess.Data;
+using DataAccess.Enums;
 using DataAccess.Models;
 using DataAccess.Repositories.Interfaces;
-using MealPulse.Data;
 using System;
 using System.Collections.Generic;
 

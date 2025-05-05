@@ -1,5 +1,4 @@
-﻿using Core.Models.Enums;
-using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
 using MealPulse.Data;
 using Moq;
 using Services.Models;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Models;
+using DataAccess.Enums;
 
 namespace Tests
 {

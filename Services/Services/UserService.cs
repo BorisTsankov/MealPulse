@@ -1,10 +1,10 @@
-﻿using MealPulse.Services.Interfaces;
-using MealPulse.Data.Interfaces;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using Services.Mappers;
 using Services.Models;
+using DataAccess.Repositories.Interfaces;
+using Services.Services.Interfaces;
 
-namespace MealPulse.Services
+namespace Services.Services
 {
     public class UserService : IUserService
     {

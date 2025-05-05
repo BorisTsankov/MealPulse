@@ -1,8 +1,9 @@
-﻿using DataAccess.Models;
-using MealPulse.Data.Interfaces;
+﻿using DataAccess.Data;
+using DataAccess.Models;
+using DataAccess.Repositories.Interfaces;
 using System.Data;
 
-namespace MealPulse.Data.Repositories
+namespace DataAccess.Repositories
 {
     public class UserRepository : IUserRepository
     {

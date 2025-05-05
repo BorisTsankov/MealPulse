@@ -1,5 +1,7 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories.Interfaces;
+using Services.Mappers;
+using Services.Models;
 using Services.Services.Interfaces;
 using System.Collections.Generic;
 
@@ -19,9 +21,10 @@ namespace Services.Services
             return _foodDiaryRepository.GetItemsByGoalId(goalId);
         }
 
-        public bool AddFoodDiaryItem(FoodDiaryItem item)
+        public bool AddFoodDiaryItem(FoodDiaryItemDto dto)
         {
-            return _foodDiaryRepository.Add(item);
+            var entity = FoodDiaryItemMapper.ToEntity(dto);
+            return _foodDiaryRepository.Add(entity);
         }
 
         public List<FoodDiaryItem> GetItemsForGoalAndDate(int goalId, DateTime date)
