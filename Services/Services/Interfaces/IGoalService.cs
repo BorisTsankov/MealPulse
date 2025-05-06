@@ -1,4 +1,4 @@
-﻿using Services.Models;
+﻿using DTOs.DTOs;
 
 namespace Services.Services.Interfaces
 {

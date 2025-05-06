@@ -1,8 +1,7 @@
-﻿using static DataAccess.Common.ValidationConstraints.Metric;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using static Common.ValidationConstraints.Metric;
 
-namespace DataAccess.Models
+namespace Models.Models
 {
     public class Metric
     {

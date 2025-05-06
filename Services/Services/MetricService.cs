@@ -1,11 +1,6 @@
-﻿using DataAccess.Models;
-using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
+using Models.Models;
 using Services.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {

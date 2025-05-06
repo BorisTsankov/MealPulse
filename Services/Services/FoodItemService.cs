@@ -1,7 +1,6 @@
-﻿using DataAccess.Models;
-using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
+using DTOs.DTOs;
 using Services.Mappers;
-using Services.Models;
 using Services.Services.Interfaces;
 using System.Data;
 

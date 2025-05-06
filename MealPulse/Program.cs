@@ -1,9 +1,9 @@
-﻿using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Data;
 using DataAccess.Repositories;
+using DataAccess.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Services.Services.Interfaces;
 using Services.Services;
-using DataAccess.Data;
+using Services.Services.Interfaces;
 
 public class Program
 {

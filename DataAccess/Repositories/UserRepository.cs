@@ -1,7 +1,6 @@
 ﻿using DataAccess.Data;
-using DataAccess.Models;
 using DataAccess.Repositories.Interfaces;
-using System.Data;
+using Models.Models;
 
 namespace DataAccess.Repositories
 {

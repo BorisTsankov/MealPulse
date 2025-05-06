@@ -1,6 +1,5 @@
-﻿using DataAccess.Models;
-using Services.Models;
-using System.Collections.Generic;
+﻿using DTOs.DTOs;
+using Models.Models;
 
 namespace Services.Services.Interfaces
 {
@@ -10,6 +9,7 @@ namespace Services.Services.Interfaces
         bool AddFoodDiaryItem(FoodDiaryItemDto dto);
         List<FoodDiaryItem> GetItemsForGoalAndDate(int goalId, DateTime date);
         bool DeleteFoodDiaryItem(int foodDiaryItemId);
+        List<FoodDiaryItem> GetItemsByUserAndDate(int userId, DateTime date);
 
     }
 }

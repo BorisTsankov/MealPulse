@@ -1,7 +1,7 @@
-﻿using DataAccess.Enums;
+﻿using Common;
 using DataAccess.Repositories.Interfaces;
+using DTOs.DTOs;
 using Services.Mappers;
-using Services.Models;
 using Services.Services.Interfaces;
 
 namespace Services.Services
@@ -35,7 +35,7 @@ namespace Services.Services
 
         public bool CreateGoal(int userId, decimal currentWeight, decimal targetWeight, string intensity)
         {
-            var newGoal = new DataAccess.Models.Goal
+            var newGoal = new Models.Models.Goal
             {
                 user_id = userId,
                 current_weight_kg = currentWeight,

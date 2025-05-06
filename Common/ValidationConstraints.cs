@@ -1,6 +1,6 @@
-﻿namespace DataAccess.Common
+﻿namespace Common
 {
-    public class ValidationConstraints
+    public static class ValidationConstraints
     {
         public static class User
         {
@@ -10,8 +10,8 @@
             public const int Auth0IdMaxLength = 100;
             public const int AgeMin = 0;
             public const int AgeMax = 120;
-            public const double HeightMin = 30.0;   // cm
-            public const double HeightMax = 300.0;  // cm
+            public const double HeightMin = 30.0;   // in cm
+            public const double HeightMax = 300.0;  // in cm
         }
 
         public static class Role
@@ -36,10 +36,12 @@
 
         public static class FoodItem
         {
-            public const int FoodItemNameMaxLenght = 255;
+            public const int FoodItemNameMaxLength = 255; // Fixed typo: 'Lenght' → 'Length'
             public const int BrandMaxLength = 100;
+
             public const int DefaultServingQuantityMin = 1;
             public const int DefaultServingQuantityMax = 1000;
+
             public const double CaloriesMin = 0;
             public const double ProteinMin = 0;
             public const double FatsMin = 0;
@@ -50,7 +52,6 @@
             public const double PotassiumMin = 0;
             public const double IronMin = 0;
             public const double CalciumMin = 0;
-
         }
 
         public static class Goal
@@ -65,4 +66,3 @@
         }
     }
 }
-

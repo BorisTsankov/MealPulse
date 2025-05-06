@@ -1,8 +1,6 @@
 ﻿using DataAccess.Data;
-using DataAccess.Models;
 using DataAccess.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
+using Models.Models;
 using System.Data;
 
 namespace DataAccess.Repositories

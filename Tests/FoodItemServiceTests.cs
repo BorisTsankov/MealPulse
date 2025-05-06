@@ -1,13 +1,8 @@
-﻿using DataAccess.Models;
-using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
+using DTOs.DTOs;
+using Models.Models;
 using Moq;
-using Services.Models;
 using Services.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests
 {

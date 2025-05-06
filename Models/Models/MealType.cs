@@ -1,8 +1,7 @@
-﻿using static DataAccess.Common.ValidationConstraints.MealType;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using static Common.ValidationConstraints.MealType;
 
-namespace DataAccess.Models
+namespace Models.Models
 {
     public class MealType
     {

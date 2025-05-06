@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Interfaces;
-using System.Data;
 using System.Security.Claims;
 
 namespace Web.Controllers
@@ -31,7 +30,7 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult Register(string FirstName, string LastName, string email, string password, DateTime date_of_birth, decimal height_cm, int gender_id, int activityLevel_id, int metric_id)
         {
-      
+
             if (date_of_birth < new DateTime(1753, 1, 1) || date_of_birth > DateTime.Now)
             {
                 ViewBag.ErrorMessage = "Please select a valid date of birth.";

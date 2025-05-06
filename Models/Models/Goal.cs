@@ -1,8 +1,9 @@
-﻿using static DataAccess.Common.ValidationConstraints.Goal;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Common;
 using System.ComponentModel.DataAnnotations;
-using DataAccess.Enums;
-namespace DataAccess.Models
+using System.ComponentModel.DataAnnotations.Schema;
+using static Common.ValidationConstraints.Goal;
+
+namespace Models.Models
 {
     public class Goal
     {

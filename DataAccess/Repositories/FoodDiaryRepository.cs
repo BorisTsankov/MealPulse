@@ -1,8 +1,7 @@
-﻿using DataAccess.Repositories.Interfaces;
-using System.Collections.Generic;
+﻿using DataAccess.Data;
+using DataAccess.Repositories.Interfaces;
+using Models.Models;
 using System.Data;
-using DataAccess.Models;
-using DataAccess.Data;
 
 namespace DataAccess.Repositories
 {
@@ -49,7 +48,7 @@ namespace DataAccess.Repositories
                         Unit = row["unit"].ToString()!
                     }
                 });
-              }
+            }
 
             return items;
         }
@@ -120,6 +119,46 @@ namespace DataAccess.Repositories
             return _dbHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
+        public List<FoodDiaryItem> GetItemsByUserIdAndDate(int userId, DateTime date)
+        {
+            string query = @"
+        SELECT fdi.*, fi.name AS FoodItemName, fi.calories, fi.unit
+        FROM FoodDiaryItem fdi
+        JOIN Goal g ON fdi.goal_id = g.goal_id
+        JOIN FoodItem fi ON fi.foodItemId = fdi.food_id
+        WHERE g.user_id = @UserId
+        AND CAST(fdi.date_time AS DATE) = @Date";
+
+            var parameters = new Dictionary<string, object>
+    {
+        { "@UserId", userId },
+        { "@Date", date.Date }
+    };
+
+            var dt = _dbHelper.ExecuteQuery(query, parameters);
+            var items = new List<FoodDiaryItem>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                items.Add(new FoodDiaryItem
+                {
+                    FoodDiaryItemId = (int)row["FoodDiaryItem_id"],
+                    MealTypeId = (int)row["mealType_id"],
+                    GoalId = (int)row["goal_id"],
+                    FoodId = (int)row["food_id"],
+                    Quantity = (double)(decimal)row["quantity"],
+                    DateTime = (DateTime)row["date_time"],
+                    FoodItem = new FoodItem
+                    {
+                        Name = row["FoodItemName"].ToString()!,
+                        Calories = Convert.ToDecimal(row["calories"]),
+                        Unit = row["unit"].ToString()!
+                    }
+                });
+            }
+
+            return items;
+        }
 
     }
 }

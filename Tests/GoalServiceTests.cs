@@ -1,16 +1,10 @@
-﻿using DataAccess.Repositories.Interfaces;
-using MealPulse.Data;
+﻿using Common;
+using DataAccess.Repositories.Interfaces;
+using DTOs.DTOs;
+using Models.Models;
 using Moq;
-using Services.Models;
-using Services.Services.Interfaces;
 using Services.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataAccess.Models;
-using DataAccess.Enums;
+using Services.Services.Interfaces;
 
 namespace Tests
 {

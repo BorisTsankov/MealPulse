@@ -1,8 +1,7 @@
-﻿using static DataAccess.Common.ValidationConstraints;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
-namespace DataAccess.Models
+namespace Models.Models
 {
     public class FoodDiaryItem
     {

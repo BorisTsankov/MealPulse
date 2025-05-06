@@ -1,9 +1,8 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using DTOs.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Interfaces;
 using Web.ViewModels;
-using Services.Models;
 
 namespace Web.Controllers
 {
@@ -43,7 +42,8 @@ namespace Web.Controllers
             var user = _userService.GetUserById(userId.Value);
             DateTime selectedDate = date?.Date ?? DateTime.Today;
 
-            var foodItems = _foodDiaryService.GetItemsForGoalAndDate(goal.GoalId, selectedDate);
+            var foodItems = _foodDiaryService.GetItemsByUserAndDate(userId.Value, selectedDate);
+
             var mealTypes = _mealTypeService.GetAll();
 
             var sections = mealTypes.Select(m => new FoodDiarySectionViewModel

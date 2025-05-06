@@ -1,137 +1,140 @@
-using Xunit;
-using Moq;
-using MealPulse.Services;
-using MealPulse.Services.Interfaces;
+using DataAccess.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Moq;
+using Services.Services;
+using System.Data;
 
-public class AuthServiceTests
+namespace Tests
 {
-    private readonly Mock<IAuthRepository> _authRepoMock;
-    private readonly Mock<IHttpContextAccessor> _httpContextMock;
-    private readonly AuthService _authService;
 
-    public AuthServiceTests()
+    public class AuthServiceTests
     {
-        _authRepoMock = new Mock<IAuthRepository>();
-        _httpContextMock = new Mock<IHttpContextAccessor>();
-        _authService = new AuthService(_authRepoMock.Object, _httpContextMock.Object);
-    }
+        private readonly Mock<IAuthRepository> _authRepoMock;
+        private readonly Mock<IHttpContextAccessor> _httpContextMock;
+        private readonly AuthService _authService;
 
-    [Fact]
-    public void UserExists_ShouldReturnTrue_WhenUserExists()
-    {
-        _authRepoMock.Setup(r => r.UserExists("test@example.com")).Returns(true);
-        var result = _authService.UserExists("test@example.com");
-        Assert.True(result);
-    }
+        public AuthServiceTests()
+        {
+            _authRepoMock = new Mock<IAuthRepository>();
+            _httpContextMock = new Mock<IHttpContextAccessor>();
+            _authService = new AuthService(_authRepoMock.Object, _httpContextMock.Object);
+        }
 
-    [Fact]
-    public void HashPassword_ShouldReturnValidHash()
-    {
-        var hash = _authService.HashPassword("mypassword");
-        Assert.False(string.IsNullOrEmpty(hash));
-    }
+        [Fact]
+        public void UserExists_ShouldReturnTrue_WhenUserExists()
+        {
+            _authRepoMock.Setup(r => r.UserExists("test@example.com")).Returns(true);
+            var result = _authService.UserExists("test@example.com");
+            Assert.True(result);
+        }
 
-    [Fact]
-    public void RegisterUser_ShouldCallRepositoryAndReturnId()
-    {
-        var fakeParams = new Dictionary<string, object> { { "Email", "test@example.com" } };
-        _authRepoMock.Setup(r => r.RegisterUser(fakeParams)).Returns(42);
+        [Fact]
+        public void HashPassword_ShouldReturnValidHash()
+        {
+            var hash = _authService.HashPassword("mypassword");
+            Assert.False(string.IsNullOrEmpty(hash));
+        }
 
-        var result = _authService.RegisterUser(fakeParams);
+        [Fact]
+        public void RegisterUser_ShouldCallRepositoryAndReturnId()
+        {
+            var fakeParams = new Dictionary<string, object> { { "Email", "test@example.com" } };
+            _authRepoMock.Setup(r => r.RegisterUser(fakeParams)).Returns(42);
 
-        Assert.Equal(42, result);
-    }
+            var result = _authService.RegisterUser(fakeParams);
 
-    [Fact]
-    public void AuthenticateUser_ShouldCallRepositoryWithHashedPassword()
-    {
-        var email = "test@example.com";
-        var password = "secret";
-        var expectedTable = new DataTable();
-        _authRepoMock.Setup(r => r.AuthenticateUser(email, It.IsAny<string>())).Returns(expectedTable);
+            Assert.Equal(42, result);
+        }
 
-        var result = _authService.AuthenticateUser(email, password);
+        [Fact]
+        public void AuthenticateUser_ShouldCallRepositoryWithHashedPassword()
+        {
+            var email = "test@example.com";
+            var password = "secret";
+            var expectedTable = new DataTable();
+            _authRepoMock.Setup(r => r.AuthenticateUser(email, It.IsAny<string>())).Returns(expectedTable);
 
-        Assert.Same(expectedTable, result);
-    }
+            var result = _authService.AuthenticateUser(email, password);
 
-    [Fact]
-    public void GetSelectListData_ShouldMapDataTableToSelectListItems()
-    {
-        var table = new DataTable();
-        table.Columns.Add("Id");
-        table.Columns.Add("Name");
-        table.Rows.Add("1", "Option A");
+            Assert.Same(expectedTable, result);
+        }
 
-        _authRepoMock.Setup(r => r.GetSelectListData("Users", "Id", "Name")).Returns(table);
+        [Fact]
+        public void GetSelectListData_ShouldMapDataTableToSelectListItems()
+        {
+            var table = new DataTable();
+            table.Columns.Add("Id");
+            table.Columns.Add("Name");
+            table.Rows.Add("1", "Option A");
 
-        var list = _authService.GetSelectListData("Users", "Id", "Name");
+            _authRepoMock.Setup(r => r.GetSelectListData("Users", "Id", "Name")).Returns(table);
 
-        Assert.Single(list);
-        Assert.Equal("1", list[0].Value);
-        Assert.Equal("Option A", list[0].Text);
-    }
+            var list = _authService.GetSelectListData("Users", "Id", "Name");
 
-    [Fact]
-    public void GetCurrentUserId_ShouldReturnEmpty_WhenHttpContextIsNull()
-    {
-        _httpContextMock.Setup(h => h.HttpContext).Returns((HttpContext)null);
+            Assert.Single(list);
+            Assert.Equal("1", list[0].Value);
+            Assert.Equal("Option A", list[0].Text);
+        }
 
-        var result = _authService.GetCurrentUserId();
+        [Fact]
+        public void GetCurrentUserId_ShouldReturnEmpty_WhenHttpContextIsNull()
+        {
+            _httpContextMock.Setup(h => h.HttpContext).Returns((HttpContext)null);
 
-        Assert.Equal(string.Empty, result);
-    }
+            var result = _authService.GetCurrentUserId();
 
-    [Fact]
-    public void AuthenticateUser_ShouldHashEmptyPassword_AndReturnFromRepository()
-    {
-        var email = "test@example.com";
-        var password = "";
-        var expectedTable = new DataTable();
-        _authRepoMock.Setup(r => r.AuthenticateUser(email, It.IsAny<string>()))
-                     .Returns(expectedTable);
+            Assert.Equal(string.Empty, result);
+        }
 
-        var result = _authService.AuthenticateUser(email, password);
+        [Fact]
+        public void AuthenticateUser_ShouldHashEmptyPassword_AndReturnFromRepository()
+        {
+            var email = "test@example.com";
+            var password = "";
+            var expectedTable = new DataTable();
+            _authRepoMock.Setup(r => r.AuthenticateUser(email, It.IsAny<string>()))
+                         .Returns(expectedTable);
 
-        Assert.Same(expectedTable, result);
-    }
+            var result = _authService.AuthenticateUser(email, password);
 
-    [Fact]
-    public void GetSelectListData_ShouldReturnEmptyList_WhenNoRows()
-    {
-        var emptyTable = new DataTable();
-        emptyTable.Columns.Add("Id");
-        emptyTable.Columns.Add("Name");
+            Assert.Same(expectedTable, result);
+        }
 
-        _authRepoMock.Setup(r => r.GetSelectListData("AnyTable", "Id", "Name"))
-                     .Returns(emptyTable);
+        [Fact]
+        public void GetSelectListData_ShouldReturnEmptyList_WhenNoRows()
+        {
+            var emptyTable = new DataTable();
+            emptyTable.Columns.Add("Id");
+            emptyTable.Columns.Add("Name");
 
-        var result = _authService.GetSelectListData("AnyTable", "Id", "Name");
+            _authRepoMock.Setup(r => r.GetSelectListData("AnyTable", "Id", "Name"))
+                         .Returns(emptyTable);
 
-        Assert.Empty(result);
-    }
+            var result = _authService.GetSelectListData("AnyTable", "Id", "Name");
 
-    [Fact]
-    public void GetCurrentUserId_ShouldReturnUserId_WhenUserIsAuthenticated()
-    {
-        var userId = "123";
-        var claims = new List<System.Security.Claims.Claim>
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void GetCurrentUserId_ShouldReturnUserId_WhenUserIsAuthenticated()
+        {
+            var userId = "123";
+            var claims = new List<System.Security.Claims.Claim>
     {
         new(System.Security.Claims.ClaimTypes.NameIdentifier, userId)
     };
 
-        var identity = new System.Security.Claims.ClaimsIdentity(claims, "TestAuthType");
-        var principal = new System.Security.Claims.ClaimsPrincipal(identity);
+            var identity = new System.Security.Claims.ClaimsIdentity(claims, "TestAuthType");
+            var principal = new System.Security.Claims.ClaimsPrincipal(identity);
 
-        var httpContext = new DefaultHttpContext { User = principal };
-        _httpContextMock.Setup(h => h.HttpContext).Returns(httpContext);
+            var httpContext = new DefaultHttpContext { User = principal };
+            _httpContextMock.Setup(h => h.HttpContext).Returns(httpContext);
 
-        var result = _authService.GetCurrentUserId();
+            var result = _authService.GetCurrentUserId();
 
-        Assert.Equal("123", result);
+            Assert.Equal("123", result);
+        }
+
     }
-
 }

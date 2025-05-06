@@ -10,54 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1c98624-042c-46e0-97ad-53e14e40cfc3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/DataAccess/Common/ValidationConstraints.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Common/ValidationConstraints.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Data/DbHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Data/DbHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Enums/GoalIntensity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Enums/GoalIntensity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/ActivityLevel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/ActivityLevel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/FoodDiaryItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/FoodDiaryItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/Gender.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/Gender.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/Goal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/Goal.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/MealType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/MealType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/Metric.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/Metric.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/Role.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/Role.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Models/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/ActivityLevelRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/ActivityLevelRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/AuthRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/AuthRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/FoodDiaryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/FoodDiaryRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/FoodItemRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/FoodItemRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/GenderRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/GenderRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/GoalRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/GoalRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/Interfaces/IAuthRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/Interfaces/IAuthRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/Interfaces/IUserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/Interfaces/IUserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/MealTypeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/MealTypeRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/MetricRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/MetricRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccess/Repositories/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccess/Repositories/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Controllers/FoodDiaryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Controllers/FoodDiaryController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Controllers/HomeController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Controllers/ProfileController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Controllers/ProfileController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/ViewModels/ErrorViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/ViewModels/ErrorViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/ViewModels/FoodDiaryViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/ViewModels/FoodDiaryViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/ViewModels/ProfileViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/ViewModels/ProfileViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Views/FoodDiary/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Views/FoodDiary/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Views/Profile/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Views/Profile/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Views/Shared/Error.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Views/Shared/Error.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MealPulse/Views/_ViewImports.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/MealPulse/Views/_ViewImports.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Models/GoalDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Models/GoalDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/AuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/FoodDiaryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/FoodDiaryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/FoodItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/FoodItemService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/GenderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/GenderService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/GoalService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/GoalService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/Interfaces/IAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/Interfaces/IAuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/Interfaces/IFoodDIaryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/Interfaces/IFoodDIaryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/Interfaces/IFoodItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/Interfaces/IFoodItemService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/Interfaces/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/Interfaces/IUserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Services/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/FoodItemServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/FoodItemServiceTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/GoalServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/GoalServiceTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/UserServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/UserServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MealPulse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MealPulse/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,6 +101,7 @@
       <workItem from="1746482207786" duration="173000" />
       <workItem from="1746484432715" duration="386000" />
       <workItem from="1746484836589" duration="146000" />
+      <workItem from="1746485029339" duration="883000" />
     </task>
     <servers />
   </component>

@@ -1,6 +1,6 @@
 ﻿using DataAccess.Data;
-using DataAccess.Models;
 using DataAccess.Repositories.Interfaces;
+using Models.Models;
 using System.Data;
 
 

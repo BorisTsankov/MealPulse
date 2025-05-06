@@ -1,5 +1,4 @@
-﻿using DataAccess.Models;
-using Services.Models;
+﻿using DTOs.DTOs;
 
 namespace Services.Services.Interfaces
 {

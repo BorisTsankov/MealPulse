@@ -1,5 +1,5 @@
-﻿using DataAccess.Models;
-using Services.Models;
+﻿using DTOs.DTOs;
+using Models.Models;
 
 namespace Services.Mappers
 {

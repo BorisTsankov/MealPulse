@@ -1,8 +1,7 @@
-﻿using static DataAccess.Common.ValidationConstraints.Role;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using static Common.ValidationConstraints.Role;
 
-namespace DataAccess.Models
+namespace Models.Models
 {
     public class Role
     {

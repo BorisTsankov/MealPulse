@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Services.Interfaces;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Enums;
+using Services.Services.Interfaces;
+using System.Security.Claims;
 using Web.ViewModels;
 
 

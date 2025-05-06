@@ -1,9 +1,4 @@
-﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Models.Models;
 
 namespace DataAccess.Repositories.Interfaces
 {
@@ -13,5 +8,7 @@ namespace DataAccess.Repositories.Interfaces
         bool Add(FoodDiaryItem item);
         List<FoodDiaryItem> GetItemsByGoalIdAndDate(int goalId, DateTime date);
         bool Delete(int foodDiaryItemId);
+        List<FoodDiaryItem> GetItemsByUserIdAndDate(int userId, DateTime date);
+
     }
 }

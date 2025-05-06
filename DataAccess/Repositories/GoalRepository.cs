@@ -1,9 +1,7 @@
-﻿using DataAccess.Data;
-using DataAccess.Enums;
-using DataAccess.Models;
+﻿using Common;
+using DataAccess.Data;
 using DataAccess.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
+using Models.Models;
 
 namespace DataAccess.Repositories
 {

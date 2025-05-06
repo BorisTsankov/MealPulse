@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Web.ViewModels
+﻿namespace Web.ViewModels
 {
     public class FoodDiaryViewModel
     {

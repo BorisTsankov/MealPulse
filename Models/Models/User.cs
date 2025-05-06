@@ -1,8 +1,9 @@
-﻿using static DataAccess.Common.ValidationConstraints.User;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+using static Common.ValidationConstraints.User;
 
-namespace DataAccess.Models
+
+namespace Models.Models
 {
     public class User
     {

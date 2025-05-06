@@ -1,9 +1,8 @@
-﻿using DataAccess.Models;
-using DataAccess.Repositories.Interfaces;
+﻿using DataAccess.Repositories.Interfaces;
+using DTOs.DTOs;
+using Models.Models;
 using Services.Mappers;
-using Services.Models;
 using Services.Services.Interfaces;
-using System.Collections.Generic;
 
 namespace Services.Services
 {
@@ -36,5 +35,11 @@ namespace Services.Services
         {
             return _foodDiaryRepository.Delete(foodDiaryItemId);
         }
+
+        public List<FoodDiaryItem> GetItemsByUserAndDate(int userId, DateTime date)
+        {
+            return _foodDiaryRepository.GetItemsByUserIdAndDate(userId, date);
+        }
+
     }
 }

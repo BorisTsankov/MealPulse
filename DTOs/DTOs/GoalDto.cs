@@ -1,8 +1,6 @@
-﻿using DataAccess.Enums;
-using Services.Enums;
-using System;
+﻿using Common;
 
-namespace Services.Models
+namespace DTOs.DTOs
 {
     public class GoalDto
     {
@@ -17,7 +15,7 @@ namespace Services.Models
         public DateTime? EndDate { get; set; }
 
         public int GoalIntensity { get; set; }
-        public string GoalIntensityDisplay => ((GoalIntensityDto)GoalIntensity).ToString();
+        public string GoalIntensityDisplay => ((GoalIntensity)GoalIntensity).ToString();
 
     }
 }
