@@ -1,6 +1,7 @@
 ﻿using DTOs.DTOs;
 using Models.Models;
 
+
 namespace Services.Services.Interfaces
 {
     public interface IFoodDiaryService

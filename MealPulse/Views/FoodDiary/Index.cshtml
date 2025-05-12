@@ -127,10 +127,10 @@
                 placeholder: "Search for food...",
                 width: '100%',
                 ajax: {
-                    url: '@Url.Action("SearchFoodItems", "FoodDiary")', // Corrected to your controller
+                    url: '@Url.Action("SearchFoodItems", "FoodDiary")',
                     dataType: 'json',
                     minimumInputLength: 2,
-                    delay: 250,
+                    delay: 4000,
                     data: function (params) {
                         return { term: params.term };
                     },

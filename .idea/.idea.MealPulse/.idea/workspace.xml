@@ -41,6 +41,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.uml&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -102,6 +103,10 @@
       <workItem from="1746484432715" duration="386000" />
       <workItem from="1746484836589" duration="146000" />
       <workItem from="1746485029339" duration="883000" />
+      <workItem from="1746540420976" duration="1550000" />
+      <workItem from="1746542109990" duration="349000" />
+      <workItem from="1746566292997" duration="100000" />
+      <workItem from="1746568618820" duration="255000" />
     </task>
     <servers />
   </component>
@@ -129,5 +134,9 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

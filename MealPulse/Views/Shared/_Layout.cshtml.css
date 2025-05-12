@@ -46,3 +46,18 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.navbar-brand img {
+    height: 100px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.text-purple {
+    color: #6f42c1; /* Bootstrap purple or pick your own */
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    line-height: 1;
+}
