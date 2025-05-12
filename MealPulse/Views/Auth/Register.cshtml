@@ -6,62 +6,71 @@
 }
 
 <div class="auth-page">
-    <div class="auth-card">
-        <h1>Register</h1>
+    <div class="auth-card shadow-lg">
+        <h1 class="mb-4">Create Your Account</h1>
         <form asp-action="Register" method="post">
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="FirstName">First Name</label>
-                    <input type="text" name="FirstName" class="form-control" required />
+                    <div class="form-floating">
+                        <input type="text" name="FirstName" class="form-control" id="FirstName" placeholder="First Name" required />
+                        <label for="FirstName">First Name</label>
+                    </div>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="LastName">Last Name</label>
-                    <input type="text" name="LastName" class="form-control" required />
+                    <div class="form-floating">
+                        <input type="text" name="LastName" class="form-control" id="LastName" placeholder="Last Name" required />
+                        <label for="LastName">Last Name</label>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-3">
+
+            <div class="form-floating mb-3">
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email" required />
                 <label for="email">Email</label>
-                <input type="email" name="email" class="form-control" required />
             </div>
 
-            <div class="mb-3">
+            <div class="form-floating mb-3">
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password" required />
                 <label for="password">Password</label>
-                <input type="password" name="password" class="form-control" required />
             </div>
 
-            <div class="mb-3">
-                <label for="date_of_birth">Date of Birth</label>
-                <input type="date" name="date_of_birth" class="form-control" required />
+            <div class="form-floating mb-3">
+                <input type="date" name="date_of_birth" class="form-control" id="dob" placeholder="Date of Birth" required />
+                <label for="dob">Date of Birth</label>
             </div>
 
-            <div class="mb-3">
-                <label for="height_cm">Height (cm)</label>
-                <input type="number" step="0.1" name="height_cm" class="form-control" required />
+            <div class="form-floating mb-3">
+                <input type="number" step="0.1" name="height_cm" class="form-control" id="height" placeholder="Height (cm)" required />
+                <label for="height">Height (cm)</label>
             </div>
 
-            <div class="mb-3">
-                <label for="gender_id">Gender</label>
-                <select name="gender_id" class="form-control" asp-items="@(new SelectList(ViewBag.GenderOptions, "Value", "Text"))"></select>
+            <div class="form-floating mb-3">
+                <select name="gender_id" class="form-control" id="gender" asp-items="@(new SelectList(ViewBag.GenderOptions, "Value", "Text"))"></select>
+                <label for="gender">Gender</label>
             </div>
 
-            <div class="mb-3">
-                <label for="activityLevel_id">Activity Level</label>
-                <select name="activityLevel_id" class="form-control" asp-items="@(new SelectList(ViewBag.ActivityLevelOptions, "Value", "Text"))"></select>
+            <div class="form-floating mb-3">
+                <select name="activityLevel_id" class="form-control" id="activityLevel" asp-items="@(new SelectList(ViewBag.ActivityLevelOptions, "Value", "Text"))"></select>
+                <label for="activityLevel">Activity Level</label>
             </div>
 
-            <div class="mb-3">
-                <label for="metric_id">Metric</label>
-                <select name="metric_id" class="form-control" asp-items="@(new SelectList(ViewBag.MetricOptions, "Value", "Text"))"></select>
+            <div class="form-floating mb-3">
+                <select name="metric_id" class="form-control" id="metric" asp-items="@(new SelectList(ViewBag.MetricOptions, "Value", "Text"))"></select>
+                <label for="metric">Measurement System</label>
             </div>
 
-            <button type="submit" class="btn btn-primary">Create Account</button>
+            <button type="submit" class="btn btn-gradient-purple w-100">Create Account</button>
 
             @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
             {
-                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+                <div class="alert alert-danger mt-3">@ViewBag.ErrorMessage</div>
             }
+
+            <p class="text-center mt-3 small">
+                Already have an account? <a asp-action="Login">Log in</a>
+            </p>
         </form>
     </div>
 </div>

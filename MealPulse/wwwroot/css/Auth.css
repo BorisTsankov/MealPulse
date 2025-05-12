@@ -85,3 +85,52 @@
             font-size: 2rem;
         }
 }
+
+.btn-gradient-purple {
+    background: linear-gradient(to right, #7b4397, #a76ce8);
+    border: none;
+    padding: 0.75rem;
+    font-weight: 600;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    color: white;
+    width: 100%;
+    transition: background 0.4s ease, color 0.4s ease, transform 0.2s ease;
+    will-change: background, color, transform;
+}
+
+    .btn-gradient-purple:hover {
+        background: #5e2b91; /* no gradient on hover for contrast */
+        color: #fff;
+        transform: scale(1.02);
+    }
+
+/* Floating labels spacing fix */
+.form-floating > .form-control,
+.form-floating > .form-select {
+    height: calc(3.5rem + 2px);
+    padding: 1rem 0.75rem;
+    font-size: 1rem;
+    background-color: #fdfaff;
+}
+
+/* Placeholder color override */
+.form-control::placeholder {
+    color: #aaa;
+    opacity: 1;
+}
+
+/* Smooth transitions */
+input.form-control,
+select.form-control {
+    transition: all 0.3s ease-in-out;
+}
+
+.form-floating .form-control {
+    padding: 1.25rem 1rem 0.5rem; /* top right bottom */
+}
+
+.form-floating label {
+    padding: 0.5rem 1rem;
+}
+
