@@ -25,23 +25,14 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                     <ul class="navbar-nav gap-3">
-                        <li class="nav-item">
-                            <a class="nav-link nav-hover" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-hover" asp-controller="FoodDiary" asp-action="Index">Food Diary</a>
-                        </li>
-                        @if (!User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link nav-hover" asp-controller="Auth" asp-action="Login">Login</a>
+                                <a class="nav-link nav-hover" asp-controller="DashBoard" asp-action="Index">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link nav-hover" asp-controller="Auth" asp-action="Register">Register</a>
+                                <a class="nav-link nav-hover" asp-controller="FoodDiary" asp-action="Index">Food Diary</a>
                             </li>
-                        }
-                        else
-                        {
                             <li class="nav-item">
                                 <a class="nav-link nav-hover" asp-controller="Profile" asp-action="Index">Profile</a>
                             </li>
@@ -50,25 +41,33 @@
                                     <button type="submit" class="btn btn-outline-purple px-3 py-1">Logout</button>
                                 </form>
                             </li>
-
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link nav-hover" asp-controller="Auth" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-hover" asp-controller="Auth" asp-action="Register">Register</a>
+                            </li>
                         }
                     </ul>
                 </div>
             </div>
         </nav>
-
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
 
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - MealPulse - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -77,6 +76,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </body>

@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Welcome to MealPulse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
+}
+
+<section class="hero-banner w-100">
+    <div class="text-center px-4">
+        <h1 class="display-4 fw-bold text-white">
+            Welcome to <span style="font-weight: 800;">MealPulse</span>!
+        </h1>
+
+
+        <p class="lead mt-3">Track your meals. Reach your goals. Feel better.</p>
+        <div class="mt-4">
+            <a class="btn btn-primary btn-lg mx-2" asp-controller="Auth" asp-action="Register">Get Started</a>
+            <a class="btn btn-outline-secondary btn-lg mx-2" asp-controller="Auth" asp-action="Login">Login</a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">What MealPulse Offers</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="display-3">📊</div>
+                    <h5 class="card-title mt-3">Dashboard</h5>
+                    <p class="card-text">A clear overview of your daily calorie intake, progress, and health insights.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="display-3">🔥</div>
+                    <h5 class="card-title mt-3">Calorie Tracking</h5>
+                    <p class="card-text">Easily log and monitor calories throughout the day for each meal.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="display-3">🥦</div>
+                    <h5 class="card-title mt-3">Nutrition Tracking</h5>
+                    <p class="card-text">Track your macros and micronutrients to make informed dietary choices.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="display-3">👤</div>
+                    <h5 class="card-title mt-3">Personal Profile</h5>
+                    <p class="card-text">Keep your height, weight, activity level, and gender up-to-date for accuracy.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="display-3">🎯</div>
+                    <h5 class="card-title mt-3">Goal Settings</h5>
+                    <p class="card-text">Set weight goals and intensity to create a customized nutrition plan.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (ViewBag.Quotes is List<(string Text, string Author)> quoteList && quoteList.Any())
+{
+    <section class="py-5 bg-white text-center">
+        <div class="container">
+            <div id="quoteCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner">
+                    @for (int i = 0; i < quoteList.Count; i++)
+                    {
+                        var quote = quoteList[i];
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <blockquote class="blockquote">
+                                <p class="mb-4">"@quote.Text"</p>
+                                <footer class="blockquote-footer">@quote.Author</footer>
+                            </blockquote>
+                        </div>
+                    }
+                </div>
+
+                <!-- Arrow controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#quoteCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#quoteCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+}
+
+
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h2 class="mb-4">Preview Your Dashboard</h2>
+        <img src="~/images/dashboard-preview.png" class="img-fluid shadow rounded" alt="MealPulse Dashboard Preview" />
+    </div>
+</section>
+
+<section class="bg-purple text-white text-center py-5 w-100">
+    <div class="px-4">
+        <h3 class="mb-3">Ready to take control of your nutrition?</h3>
+        <a class="btn btn-light btn-lg" asp-controller="Auth" asp-action="Register">Create Your Account</a>
+    </div>
+</section>

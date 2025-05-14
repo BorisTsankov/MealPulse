@@ -13,85 +13,86 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4" style="color: #6f42c1;">Your Profile</h1>
 
-        <div class="profile-card">
-            <h4 class="section-header">User Information</h4>
-            <dl class="row">
-                <dt class="col-sm-3">First Name</dt>
-                <dd class="col-sm-9">@Model.User.FirstName</dd>
+        <div class="row">
+            <!-- User Info -->
+            <div class="col-md-6 mb-4">
+                <div class="profile-card h-100">
+                    <h4 class="section-header">User Information</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4">First Name</dt>
+                        <dd class="col-sm-8">@Model.User.FirstName</dd>
 
-                <dt class="col-sm-3">Last Name</dt>
-                <dd class="col-sm-9">@Model.User.LastName</dd>
+                        <dt class="col-sm-4">Last Name</dt>
+                        <dd class="col-sm-8">@Model.User.LastName</dd>
 
-                <dt class="col-sm-3">Email</dt>
-                <dd class="col-sm-9">@Model.User.Email</dd>
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">@Model.User.Email</dd>
 
-                <dt class="col-sm-3">Birthday</dt>
-                <dd class="col-sm-9">
-                    @(Model.User.DateOfBirth?.ToString("dd MMM yyyy"))
-                </dd>
+                        <dt class="col-sm-4">Birthday</dt>
+                        <dd class="col-sm-8">@Model.User.DateOfBirth?.ToString("dd MMM yyyy")</dd>
 
-                <dt class="col-sm-3">Gender</dt>
-                <dd class="col-sm-9">@Model.GenderName</dd>
+                        <dt class="col-sm-4">Gender</dt>
+                        <dd class="col-sm-8">@Model.GenderName</dd>
 
-                <dt class="col-sm-3">Height (cm)</dt>
-                <dd class="col-sm-9 d-flex align-items-center">
-                    @Model.User.HeightCm
-                    <img src="~/images/edit_image.png" alt="Edit Height" id="editHeightBtn" class="ms-2" style="cursor:pointer; width: 20px; height: 20px;" />
-                </dd>
+                        <dt class="col-sm-4">Height (cm)</dt>
+                        <dd class="col-sm-8 d-flex align-items-center">
+                            @Model.User.HeightCm
+                            <img src="~/images/edit_image.png" alt="Edit Height" id="editHeightBtn" class="ms-2 edit-icon" />
+                        </dd>
 
-                <dt class="col-sm-3">Weight (kg)</dt>
-                <dd class="col-sm-9 d-flex align-items-center">
-                    @(Model.Goal?.CurrentWeightKg.ToString() ?? "Not set")
-                    <img src="~/images/edit_image.png" alt="Edit Weight" id="editWeightBtn" class="ms-2" style="cursor:pointer; width: 20px; height: 20px;" />
-                </dd>
+                        <dt class="col-sm-4">Weight (kg)</dt>
+                        <dd class="col-sm-8 d-flex align-items-center">
+                            @(Model.Goal?.CurrentWeightKg.ToString() ?? "Not set")
+                            <img src="~/images/edit_image.png" alt="Edit Weight" id="editWeightBtn" class="ms-2 edit-icon" />
+                        </dd>
 
-                <dt class="col-sm-3">Activity Level</dt>
-                <dd class="col-sm-9 d-flex align-items-center">
-                    @Model.User.ActivityLevelName
-                    <img src="~/images/edit_image.png" alt="Edit Activity Level" id="editActivityLevelBtn" class="ms-2" style="cursor:pointer; width: 20px; height: 20px;" />
-                </dd>
+                        <dt class="col-sm-4">Activity Level</dt>
+                        <dd class="col-sm-8 d-flex align-items-center">
+                            @Model.User.ActivityLevelName
+                            <img src="~/images/edit_image.png" alt="Edit Activity Level" id="editActivityLevelBtn" class="ms-2 edit-icon" />
+                        </dd>
 
+                        <dt class="col-sm-4">Metric</dt>
+                        <dd class="col-sm-8">@Model.User.MetricName</dd>
+                    </dl>
+                </div>
+            </div>
 
-                <dt class="col-sm-3">Metric</dt>
-                <dd class="col-sm-9">@Model.User.MetricName</dd>
-            </dl>
-        </div>
+            <!-- Goal Info -->
+            <div class="col-md-6 mb-4">
+                <div class="profile-card h-100">
+                    <h4 class="section-header">Current Goal</h4>
 
-        <div class="profile-card">
-            <h4 class="section-header">Current Goal</h4>
+                    @if (Model.Goal != null)
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-6">Recommended Daily Calories</dt>
+                            <dd class="col-sm-6">@Model.DailyCalories?.ToString("N0")</dd>
 
-            @if (Model.Goal != null)
-            {
+                            <dt class="col-sm-6">Current Weight</dt>
+                            <dd class="col-sm-6">@Model.Goal.CurrentWeightKg</dd>
 
-                <dt class="col-sm-3">Recommended Daily Calories</dt>
-                <dd class="col-sm-9">
-                    @(Model.DailyCalories?.ToString("N0") ?? "Unavailable")
-                </dd>
+                            <dt class="col-sm-6">Target Weight</dt>
+                            <dd class="col-sm-6">@Model.Goal.TargetWeightKg</dd>
 
+                            <dt class="col-sm-6">Start Date</dt>
+                            <dd class="col-sm-6">@Model.Goal.StartDate.ToShortDateString()</dd>
 
-                <dl class="row">
-                    <dt class="col-sm-3">Current Weight</dt>
-                    <dd class="col-sm-9">@Model.Goal.CurrentWeightKg</dd>
+                            <dt class="col-sm-6">End Date</dt>
+                            <dd class="col-sm-6">@Model.Goal.EndDate?.ToShortDateString()</dd>
 
-                    <dt class="col-sm-3">Target Weight</dt>
-                    <dd class="col-sm-9">@Model.Goal.TargetWeightKg</dd>
+                            <dt class="col-sm-6">Goal Intensity</dt>
+                            <dd class="col-sm-6">@Model.GoalIntensityDisplay</dd>
+                        </dl>
+                    }
+                    else
+                    {
+                        <p><em>You do not have a current goal.</em></p>
+                    }
 
-                    <dt class="col-sm-3">Start Date</dt>
-                    <dd class="col-sm-9">@Model.Goal.StartDate.ToShortDateString()</dd>
-
-                    <dt class="col-sm-3">End Date</dt>
-                    <dd class="col-sm-9">@Model.Goal.EndDate?.ToShortDateString()</dd>
-
-                    <dt class="col-sm-3">Goal Intensity</dt>
-                    <dd class="col-sm-9">@Model.GoalIntensityDisplay</dd>
-                </dl>
-            }
-            else
-            {
-                <p><em>You do not have a current goal.</em></p>
-            }
-
-            <button id="createGoalBtn" class="btn btn-success mt-3">Create New Goal</button>
+                    <button id="createGoalBtn" class="btn btn-success mt-3">Create New Goal</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

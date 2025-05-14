@@ -1,0 +1,151 @@
+﻿/* ---- Landing Page Styles ---- */
+
+:root {
+    --purple: #7F56D9;
+    --purple-hover: #6e48c4;
+    --dark: #212529;
+    --light-gray: #f8f9fa;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.text-purple {
+    color: var(--purple);
+}
+
+.btn-primary {
+    background-color: var(--purple) !important;
+    border: none;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+    .btn-primary:hover {
+        background-color: var(--purple-hover) !important;
+        color: white;
+    }
+
+
+    .btn-primary:hover {
+        background-color: var(--purple-hover);
+        border-color: var(--purple-hover);
+    }
+
+.btn-outline-secondary {
+    border-color: white;
+    color: white;
+    background-color: transparent;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: white;
+        color: var(--purple);
+    }
+
+
+section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.hero-banner {
+    background: linear-gradient(to right, rgba(127, 86, 217, 0.7), rgba(127, 86, 217, 0.4)), url('/images/banner.jpg') center center / cover no-repeat;
+    min-height: 70vh;
+    padding: 4rem 2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+    .hero-banner h1 {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+
+
+.card {
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+.card-title {
+    color: var(--purple);
+    font-weight: 600;
+}
+
+.card-text {
+    color: var(--dark);
+    font-size: 0.95rem;
+}
+
+.bg-purple {
+    background-color: var(--purple);
+    color: #fff;
+}
+
+    .bg-purple a.btn-light {
+        color: var(--purple);
+    }
+
+@media (max-width: 768px) {
+    h1.display-4 {
+        font-size: 2.2rem;
+    }
+
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+}
+
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+/* Custom styles for quote carousel arrows */
+#quoteCarousel .carousel-control-prev,
+#quoteCarousel .carousel-control-next {
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--purple);
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    opacity: 0.9;
+}
+
+    #quoteCarousel .carousel-control-prev:hover,
+    #quoteCarousel .carousel-control-next:hover {
+        background-color: var(--purple-hover);
+    }
+
+#quoteCarousel .carousel-control-prev-icon,
+#quoteCarousel .carousel-control-next-icon {
+    filter: invert(1); /* make the arrows white */
+    width: 1.5rem;
+    height: 1.5rem;
+}
+#quoteCarousel .carousel-control-prev,
+#quoteCarousel .carousel-control-next {
+    box-shadow: 0 0 10px rgba(127, 86, 217, 0.4);
+}
+
+    #quoteCarousel .carousel-control-prev:hover,
+    #quoteCarousel .carousel-control-next:hover {
+        box-shadow: 0 0 15px rgba(127, 86, 217, 0.6);
+    }

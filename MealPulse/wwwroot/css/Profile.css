@@ -132,3 +132,33 @@
         font-size: 1.8rem;
     }
 }
+@media (min-width: 768px) {
+    .profile-page .row > div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-card {
+        flex-grow: 1;
+    }
+}
+
+.profile-card dl dt {
+    min-width: 120px;
+    font-weight: 600;
+}
+
+.profile-card dl dd {
+    color: #444;
+}
+
+.edit-icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+}
+
+    .edit-icon:hover {
+        transform: scale(1.15);
+    }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Text;
 using Web.ViewModels;
 
 
@@ -35,8 +36,32 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            // Load quotes here
+            var quotes = new List<(string Text, string Author)>();
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "data", "quotes.txt");
+            if (System.IO.File.Exists(filePath))
+            {
+                foreach (var line in System.IO.File.ReadAllLines(filePath, Encoding.UTF8))
+
+                {
+                    var parts = line.Split('|');
+                    if (parts.Length == 2)
+                    {
+                        quotes.Add((parts[0].Trim('"'), parts[1]));
+                    }
+                }
+            }
+
+            ViewBag.Quotes = quotes;
+            return View("Landing");
         }
+
+
 
         public IActionResult Privacy()
         {
@@ -48,5 +73,8 @@ namespace Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        
+
     }
 }
