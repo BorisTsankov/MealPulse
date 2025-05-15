@@ -133,4 +133,19 @@ select.form-control {
 .form-floating label {
     padding: 0.5rem 1rem;
 }
+.password-rules ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.password-rules li {
+    font-size: 0.9rem;
+    color: gray;
+    transition: color 0.3s ease;
+}
+
+    .password-rules li.valid {
+        color: #28a745; /* Stronger green */
+        font-weight: 600;
+    }
 

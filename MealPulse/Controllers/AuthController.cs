@@ -27,18 +27,32 @@ namespace Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Register(string FirstName, string LastName, string email, string password, DateTime date_of_birth, decimal height_cm, decimal weight_kg,int gender_id, int activityLevel_id, int metric_id)
+        private bool IsPasswordValid(string password)
         {
+            return password.Length >= 8 &&
+                   password.Any(char.IsUpper) &&
+                   password.Any(char.IsLower) &&
+                   password.Any(char.IsDigit) &&
+                   password.Any(ch => "!@#$%^&*".Contains(ch));
+        }
+
+        [HttpPost]
+        public IActionResult Register(string FirstName, string LastName, string email, string password,
+            DateTime date_of_birth, decimal height_cm, decimal weight_kg, int gender_id, int activityLevel_id, int metric_id)
+        {
+            ViewBag.GenderOptions = _authService.GetSelectListData("Gender", "gender_id", "gender");
+            ViewBag.ActivityLevelOptions = _authService.GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
+            ViewBag.MetricOptions = _authService.GetSelectListData("Metric", "metric_id", "metric");
 
             if (date_of_birth < new DateTime(1753, 1, 1) || date_of_birth > DateTime.Now)
             {
                 ViewBag.ErrorMessage = "Please select a valid date of birth.";
+                return View();
+            }
 
-                ViewBag.GenderOptions = _authService.GetSelectListData("Gender", "gender_id", "gender");
-                ViewBag.ActivityLevelOptions = _authService.GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
-                ViewBag.MetricOptions = _authService.GetSelectListData("Metric", "metric_id", "metric");
-
+            if (!IsPasswordValid(password))
+            {
+                ViewBag.ErrorMessage = "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character (!@#$%^&*).";
                 return View();
             }
 
@@ -69,6 +83,7 @@ namespace Web.Controllers
             ViewBag.ErrorMessage = "Registration failed.";
             return View();
         }
+
 
         public IActionResult Login()
         {
