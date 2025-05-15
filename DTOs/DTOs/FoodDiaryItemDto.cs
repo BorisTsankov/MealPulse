@@ -12,5 +12,7 @@
         // Optional: Names from navigation properties if needed
         public string? FoodName { get; set; }
         public string? MealTypeName { get; set; }
+
+        public FoodItemDto? FoodItem { get; set; }
     }
 }

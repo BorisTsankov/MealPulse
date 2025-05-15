@@ -16,7 +16,9 @@ namespace Services.Mappers
                 DateTime = item.DateTime,
                 Quantity = item.Quantity,
                 FoodName = item.FoodItem?.Name,
-                MealTypeName = item.MealType?.MealTypeName
+                MealTypeName = item.MealType?.MealTypeName,
+
+                FoodItem = item.FoodItem != null ? FoodItemMapper.ToDto(item.FoodItem) : null
             };
         }
 

@@ -17,99 +17,75 @@ namespace DataAccess.Repositories
         public List<FoodDiaryItem> GetItemsByGoalId(int goalId)
         {
             string query = @"
-                SELECT fdi.*, fi.name AS FoodItemName, fi.calories, fi.unit
+                SELECT fdi.*, 
+                       fi.name AS FoodItemName, fi.unit,
+                       fi.calories, fi.protein, fi.fat, fi.carbohydrates,
+                       fi.sugars, fi.fiber, fi.sodium, fi.potassium, fi.iron, fi.calcium
                 FROM FoodDiaryItem fdi
                 JOIN FoodItem fi ON fi.foodItemId = fdi.food_id
                 WHERE fdi.goal_id = @GoalId";
 
+            var parameters = new Dictionary<string, object> { { "@GoalId", goalId } };
+            return MapItems(_dbHelper.ExecuteQuery(query, parameters));
+        }
+
+        public List<FoodDiaryItem> GetItemsByGoalIdAndDate(int goalId, DateTime date)
+        {
+            string query = @"
+                SELECT fdi.*, 
+                       fi.name AS FoodItemName, fi.unit,
+                       fi.calories, fi.protein, fi.fat, fi.carbohydrates,
+                       fi.sugars, fi.fiber, fi.sodium, fi.potassium, fi.iron, fi.calcium
+                FROM FoodDiaryItem fdi
+                JOIN FoodItem fi ON fi.foodItemId = fdi.food_id
+                WHERE fdi.goal_id = @GoalId AND CAST(fdi.date_time AS DATE) = @Date";
+
             var parameters = new Dictionary<string, object>
             {
-                { "@GoalId", goalId }
+                { "@GoalId", goalId },
+                { "@Date", date.Date }
             };
 
-            var dt = _dbHelper.ExecuteQuery(query, parameters);
-            var items = new List<FoodDiaryItem>();
+            return MapItems(_dbHelper.ExecuteQuery(query, parameters));
+        }
 
-            foreach (DataRow row in dt.Rows)
+        public List<FoodDiaryItem> GetItemsByUserIdAndDate(int userId, DateTime date)
+        {
+            string query = @"
+                SELECT fdi.*, 
+                       fi.name AS FoodItemName, fi.unit,
+                       fi.calories, fi.protein, fi.fat, fi.carbohydrates,
+                       fi.sugars, fi.fiber, fi.sodium, fi.potassium, fi.iron, fi.calcium
+                FROM FoodDiaryItem fdi
+                JOIN Goal g ON fdi.goal_id = g.goal_id
+                JOIN FoodItem fi ON fi.foodItemId = fdi.food_id
+                WHERE g.user_id = @UserId AND CAST(fdi.date_time AS DATE) = @Date";
+
+            var parameters = new Dictionary<string, object>
             {
-                items.Add(new FoodDiaryItem
-                {
-                    FoodDiaryItemId = (int)row["FoodDiaryItem_id"],
-                    MealTypeId = (int)row["mealType_id"],
-                    GoalId = (int)row["goal_id"],
-                    FoodId = (int)row["food_id"],
-                    Quantity = (double)(decimal)row["quantity"],
-                    DateTime = (DateTime)row["date_time"],
+                { "@UserId", userId },
+                { "@Date", date.Date }
+            };
 
-                    FoodItem = new FoodItem
-                    {
-                        Name = row["FoodItemName"].ToString()!,
-                        Calories = Convert.ToDecimal(row["calories"]),
-                        Unit = row["unit"].ToString()!
-                    }
-                });
-            }
-
-            return items;
+            return MapItems(_dbHelper.ExecuteQuery(query, parameters));
         }
 
         public bool Add(FoodDiaryItem item)
         {
-            var query = @"
-            INSERT INTO FoodDiaryItem 
-            (goal_id, food_id, mealType_id, date_time, quantity)
-            VALUES 
-            (@GoalId, @FoodId, @MealTypeId, @DateTime, @Quantity)";
+            string query = @"
+                INSERT INTO FoodDiaryItem (goal_id, food_id, mealType_id, date_time, quantity)
+                VALUES (@GoalId, @FoodId, @MealTypeId, @DateTime, @Quantity)";
 
             var parameters = new Dictionary<string, object>
-        {
-            { "@GoalId", item.GoalId },
-            { "@FoodId", item.FoodId },
-            { "@MealTypeId", item.MealTypeId },
-            { "@DateTime", item.DateTime },
-            { "@Quantity", item.Quantity }
-        };
+            {
+                { "@GoalId", item.GoalId },
+                { "@FoodId", item.FoodId },
+                { "@MealTypeId", item.MealTypeId },
+                { "@DateTime", item.DateTime },
+                { "@Quantity", item.Quantity }
+            };
 
             return _dbHelper.ExecuteNonQuery(query, parameters) > 0;
-        }
-        public List<FoodDiaryItem> GetItemsByGoalIdAndDate(int goalId, DateTime date)
-        {
-            string query = @"
-          SELECT fdi.*, fi.name AS FoodItemName, fi.calories, fi.unit
-        FROM FoodDiaryItem fdi
-        JOIN FoodItem fi ON fi.foodItemId = fdi.food_id
-        WHERE fdi.goal_id = @GoalId
-        AND CAST(fdi.date_time AS DATE) = @Date";
-
-            var parameters = new Dictionary<string, object>
-    {
-        { "@GoalId", goalId },
-        { "@Date", date.Date }
-    };
-
-            var dt = _dbHelper.ExecuteQuery(query, parameters);
-            var items = new List<FoodDiaryItem>();
-
-            foreach (DataRow row in dt.Rows)
-            {
-                items.Add(new FoodDiaryItem
-                {
-                    FoodDiaryItemId = (int)row["FoodDiaryItem_id"],
-                    MealTypeId = (int)row["mealType_id"],
-                    GoalId = (int)row["goal_id"],
-                    FoodId = (int)row["food_id"],
-                    Quantity = (double)(decimal)row["quantity"],
-                    DateTime = (DateTime)row["date_time"],
-                    FoodItem = new FoodItem
-                    {
-                        Name = row["FoodItemName"].ToString()!,
-                        Calories = Convert.ToDecimal(row["calories"]),
-                        Unit = row["unit"].ToString()!
-                    }
-                });
-            }
-
-            return items;
         }
 
         public bool Delete(int foodDiaryItemId)
@@ -119,25 +95,9 @@ namespace DataAccess.Repositories
             return _dbHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        public List<FoodDiaryItem> GetItemsByUserIdAndDate(int userId, DateTime date)
+        private List<FoodDiaryItem> MapItems(DataTable dt)
         {
-            string query = @"
-        SELECT fdi.*, fi.name AS FoodItemName, fi.calories, fi.unit
-        FROM FoodDiaryItem fdi
-        JOIN Goal g ON fdi.goal_id = g.goal_id
-        JOIN FoodItem fi ON fi.foodItemId = fdi.food_id
-        WHERE g.user_id = @UserId
-        AND CAST(fdi.date_time AS DATE) = @Date";
-
-            var parameters = new Dictionary<string, object>
-    {
-        { "@UserId", userId },
-        { "@Date", date.Date }
-    };
-
-            var dt = _dbHelper.ExecuteQuery(query, parameters);
             var items = new List<FoodDiaryItem>();
-
             foreach (DataRow row in dt.Rows)
             {
                 items.Add(new FoodDiaryItem
@@ -151,14 +111,21 @@ namespace DataAccess.Repositories
                     FoodItem = new FoodItem
                     {
                         Name = row["FoodItemName"].ToString()!,
-                        Calories = Convert.ToDecimal(row["calories"]),
-                        Unit = row["unit"].ToString()!
+                        Unit = row["unit"].ToString()!,
+                        Calories = (decimal)row["calories"],
+                        Protein = (decimal)row["protein"],
+                        Fat = (decimal)row["fat"],
+                        Carbohydrates = (decimal)row["carbohydrates"],
+                        Sugars = (decimal)row["sugars"],
+                        Fiber = (decimal)row["fiber"],
+                        Sodium = (decimal)row["sodium"],
+                        Potassium = (decimal)row["potassium"],
+                        Iron = (decimal)row["iron"],
+                        Calcium = (decimal)row["calcium"]
                     }
                 });
             }
-
             return items;
         }
-
     }
 }
