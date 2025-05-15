@@ -29,6 +29,32 @@
         </a>
     </div>
 
+    @if (ViewBag.TotalCaloriesForDay != null && ViewBag.CalorieGoal != null && ViewBag.RemainingCalories != null)
+    {
+        <div class="text-center mb-4 summary-section">
+            <h5 class="mb-2">Daily Summary</h5>
+            <div class="d-flex justify-content-center gap-4">
+                <span class="badge badge-consumed fs-6">
+                    Total Consumed: @ViewBag.TotalCaloriesForDay.ToString("N0") kcal
+                </span>
+                <span class="badge badge-goal fs-6">
+                    Goal: @ViewBag.CalorieGoal.ToString("N0") kcal
+                </span>
+                <span class="badge @(ViewBag.RemainingCalories >= 0 ? "badge-remaining" : "badge-exceeded") fs-6">
+                    Remaining: @ViewBag.RemainingCalories.ToString("N0") kcal
+                </span>
+            </div>
+
+            @if ((int)ViewBag.RemainingCalories < 0)
+            {
+                <p class="badge-exceeded-msg text-center mt-2">
+                    🔺 You have exceeded your daily calorie goal.
+                </p>
+            }
+        </div>
+    }
+
+
     <div class="meal-grid">
         @foreach (var meal in Model.Sections)
         {
