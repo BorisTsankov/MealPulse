@@ -91,11 +91,14 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult AddItem(int MealTypeId, int FoodItemId, decimal Quantity, DateTime date)
         {
-            var userId = HttpContext.Session.GetInt32("user_id");
-            if (userId == null)
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+            {
+                Console.WriteLine("❌ user_id claim is missing or invalid.");
                 return RedirectToAction("Login", "Auth");
+            }
 
-            var goal = _goalService.GetMostRecentGoalByUserId(userId.Value);
+            var goal = _goalService.GetMostRecentGoalByUserId(userId);
             if (goal == null)
                 return View("Error");
 
@@ -109,12 +112,12 @@ namespace Web.Controllers
             });
 
             if (!success)
-            {
                 TempData["Error"] = "Something went wrong while adding the food item.";
-            }
 
             return RedirectToAction("Index", new { date = date.ToString("yyyy-MM-dd") });
         }
+
+
 
         [HttpPost]
         public IActionResult DeleteItem(int id, DateTime date)
