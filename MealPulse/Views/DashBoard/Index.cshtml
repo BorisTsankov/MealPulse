@@ -1,8 +1,55 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
+    var consumed = (int?)ViewBag.ConsumedCalories ?? 0;
+    var goal = (int?)ViewBag.CalorieGoal ?? 0;
+    var remaining = (int?)ViewBag.RemainingCalories ?? 0;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/Dashboard.css" asp-append-version="true" />
+}
+
+
+<div class="dashboard-page">
+    <h2 class="text-center mt-4 mb-4">📊 Daily Calorie Overview</h2>
+
+    <div class="card shadow rounded-4 border-0 mx-auto" style="max-width: 400px;">
+        <div class="card-body text-center">
+            <h5 class="mb-4">Calories Consumed vs Goal</h5>
+            <canvas id="calorieChart" style="max-width: 300px; margin: auto;"></canvas>
+            <p class="mt-4">
+                <span class="badge badge-consumed fs-6">Consumed: @consumed kcal</span><br />
+                <span class="badge badge-goal fs-6">Goal: @goal kcal</span><br />
+                <span class="badge @(remaining >= 0 ? "badge-remaining" : "badge-exceeded") fs-6">
+                    Remaining: @(remaining >= 0 ? remaining : 0) kcal
+                </span>
+            </p>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('calorieChart').getContext('2d');
+        const consumed = @consumed;
+        const remaining = @remaining;
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Consumed', 'Remaining'],
+                datasets: [{
+                    data: [consumed, remaining],
+                    backgroundColor: ['#9b59b6', '#ecf0f1']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,31 @@
+﻿.dashboard-page {
+    background-color: #f8f4fd;
+    color: #2d1b46;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem 1rem;
+}
+
+    .dashboard-page h2 {
+        color: #6f42c1;
+        font-weight: 700;
+    }
+
+.badge-consumed {
+    background-color: #8c5edc;
+    color: #fff;
+}
+
+.badge-goal {
+    background-color: #d6c7f0;
+    color: #2d1b46;
+}
+
+.badge-remaining {
+    background-color: #a084ca;
+    color: #fff;
+}
+
+.badge-exceeded {
+    background-color: #b23acf;
+    color: #fff;
+}
