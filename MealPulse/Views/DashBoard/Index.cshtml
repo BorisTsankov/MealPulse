@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/Dashboard.css" asp-append-version="true" />
 }
 
-<h2 class="text-center mt-4 mb-4">Dashboard</h2>
+<h2 class="text-center mt-4 mb-3">DashBoard</h2>
 
 <div class="dashboard-page">
     <div class="chart-row">
@@ -38,9 +38,19 @@
                     <h5 class="mb-4">Macronutrient Intake vs Goal (g)</h5>
                     <div class="chart-wrapper">
                         <canvas id="macroChart"></canvas>
-
                     </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Nutrient Details Bar Chart -->
+        <div class="chart-col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="mb-4">Other Nutrients Consumed Today (per g/mg)</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="nutrientChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,6 +62,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        const defaultPurple = '#6f42c1';
+
+        // Global defaults
+        Chart.defaults.color = defaultPurple;
+        Chart.defaults.plugins.legend.labels.color = defaultPurple;
+        Chart.defaults.plugins.title.color = defaultPurple;
+
         const calorieCtx = document.getElementById('calorieChart').getContext('2d');
         new Chart(calorieCtx, {
             type: 'pie',
@@ -71,7 +88,7 @@
         });
 
         const macroCtx = document.getElementById('macroChart').getContext('2d');
-                new Chart(macroCtx, {
+        new Chart(macroCtx, {
             type: 'bar',
             data: {
                 labels: ['Protein', 'Carbs', 'Fat'],
@@ -98,13 +115,67 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // ✅ this enables height to work
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Grams'
+                            text: 'Grams',
+                            color: defaultPurple
+                        },
+                        ticks: {
+                            color: defaultPurple
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: defaultPurple
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        const nutrientCtx = document.getElementById('nutrientChart').getContext('2d');
+        new Chart(nutrientCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Sugars', 'Fiber', 'Sodium', 'Potassium', 'Iron', 'Calcium'],
+                datasets: [{
+                    label: 'Consumed',
+                    data: [
+        @ViewBag.Sugars,
+        @ViewBag.Fiber,
+        @ViewBag.Sodium,
+        @ViewBag.Potassium,
+        @ViewBag.Iron,
+        @ViewBag.Calcium
+                    ],
+                    backgroundColor: '#9b59b6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount',
+                            color: defaultPurple
+                        },
+                        ticks: {
+                            color: defaultPurple
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: defaultPurple
                         }
                     }
                 },

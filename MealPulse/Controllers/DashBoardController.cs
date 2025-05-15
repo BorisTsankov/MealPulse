@@ -12,7 +12,10 @@ namespace Web.Controllers
         private readonly IGoalService _goalService;
         private readonly IFoodDiaryService _foodDiaryService;
 
-        public DashBoardController(IUserService userService, IGoalService goalService, IFoodDiaryService foodDiaryService)
+        public DashBoardController(
+            IUserService userService,
+            IGoalService goalService,
+            IFoodDiaryService foodDiaryService)
         {
             _userService = userService;
             _goalService = goalService;
@@ -34,6 +37,7 @@ namespace Web.Controllers
 
             decimal totalCalories = 0;
             decimal protein = 0, carbs = 0, fat = 0;
+            decimal sugars = 0, fiber = 0, sodium = 0, potassium = 0, iron = 0, calcium = 0;
 
             foreach (var item in items.Where(i => i.FoodItem != null))
             {
@@ -44,6 +48,13 @@ namespace Web.Controllers
                 protein += food.Protein * factor;
                 carbs += food.Carbohydrates * factor;
                 fat += food.Fat * factor;
+
+                sugars += food.Sugars * factor;
+                fiber += food.Fiber * factor;
+                sodium += (decimal)(food.Sodium * factor);
+                potassium += (decimal)(food.Potassium * factor);
+                iron += (decimal)(food.Iron * factor);
+                calcium += (decimal)(food.Calcium * factor);
             }
 
             var calorieGoal = _goalService.CalculateCalorieGoal(user, goal);
@@ -68,6 +79,14 @@ namespace Web.Controllers
             ViewBag.GoalProtein = Math.Round(goalProtein, 1);
             ViewBag.GoalCarbs = Math.Round(goalCarbs, 1);
             ViewBag.GoalFat = Math.Round(goalFat, 1);
+
+            // ✅ Add micronutrient values to ViewBag
+            ViewBag.Sugars = Math.Round(sugars, 1);
+            ViewBag.Fiber = Math.Round(fiber, 1);
+            ViewBag.Sodium = Math.Round(sodium, 1);
+            ViewBag.Potassium = Math.Round(potassium, 1);
+            ViewBag.Iron = Math.Round(iron, 1);
+            ViewBag.Calcium = Math.Round(calcium, 1);
 
             return View();
         }
