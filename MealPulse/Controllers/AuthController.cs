@@ -111,7 +111,8 @@ namespace Web.Controllers
         {
             HttpContext.Session.Clear(); //  optional, clean slate
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }

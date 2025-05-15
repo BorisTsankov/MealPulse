@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Interfaces;
+using System.Security.Claims;
 using Web.ViewModels;
 
 namespace Web.Controllers
@@ -31,18 +32,21 @@ namespace Web.Controllers
 
         public IActionResult Index(DateTime? date)
         {
-            var userId = HttpContext.Session.GetInt32("user_id");
-            if (userId == null)
-                return RedirectToAction("Login", "Auth");
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return RedirectToAction("Index", "Home"); // sends them to landing page instead
 
-            var goal = _goalService.GetMostRecentGoalByUserId(userId.Value);
+            // use userId from here on
+
+
+            var goal = _goalService.GetMostRecentGoalByUserId(userId);
             if (goal == null)
                 return View("Error");
 
-            var user = _userService.GetUserById(userId.Value);
+            var user = _userService.GetUserById(userId);
             DateTime selectedDate = date?.Date ?? DateTime.Today;
 
-            var foodItems = _foodDiaryService.GetItemsByUserAndDate(userId.Value, selectedDate);
+            var foodItems = _foodDiaryService.GetItemsByUserAndDate(userId, selectedDate);
 
             var mealTypes = _mealTypeService.GetAll();
 
