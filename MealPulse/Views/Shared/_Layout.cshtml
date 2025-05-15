@@ -28,6 +28,9 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
+                                <a class="nav-link nav-hover" asp-controller="Ai" asp-action="AskView">Chat Assistant</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link nav-hover" asp-controller="DashBoard" asp-action="Index">Dashboard</a>
                             </li>
                             <li class="nav-item">

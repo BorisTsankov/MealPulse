@@ -43,6 +43,8 @@ public class Program
         builder.Services.AddScoped<IActivityLevelService, ActivityLevelService>();
         builder.Services.AddScoped<IMetricService, MetricService>();
         builder.Services.AddScoped<IGenderService, GenderService>();
+        builder.Services.AddScoped<AiService>();
+
 
         // Repositories
         builder.Services.AddScoped<IUserRepository, UserRepository>();
