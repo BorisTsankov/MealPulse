@@ -26,10 +26,13 @@ namespace DataAccess.Repositories
         public int RegisterUser(Dictionary<string, object> parameters)
         {
             string sql = @"
-            INSERT INTO [User] (FirstName, LastName, email, password, date_of_birth, gender_id, height_cm, activityLevel_id, metric_id, role_id)
-            VALUES (@FirstName, @LastName, @email, @password, @date_of_birth, @gender_id, @height_cm, @activityLevel_id, @metric_id, @role_id)";
-            return _dbHelper.ExecuteNonQuery(sql, parameters);
+        INSERT INTO [User] (FirstName, LastName, email, password, date_of_birth, gender_id, height_cm, activityLevel_id, metric_id, role_id)
+        VALUES (@FirstName, @LastName, @email, @password, @date_of_birth, @gender_id, @height_cm, @activityLevel_id, @metric_id, @role_id);
+        SELECT CAST(SCOPE_IDENTITY() AS INT);";
+
+            return _dbHelper.ExecuteScalar<int>(sql, parameters);
         }
+
 
         public DataTable AuthenticateUser(string email, string hashedPassword)
         {

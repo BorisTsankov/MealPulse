@@ -11,10 +11,9 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddDistributedMemoryCache(); // Required for session storage
+        builder.Services.AddDistributedMemoryCache(); 
         builder.Services.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -23,7 +22,6 @@ public class Program
         });
 
 
-        // Add authentication services
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
@@ -31,11 +29,9 @@ public class Program
                 options.AccessDeniedPath = "/Auth/AccessDenied";
             });
 
-        // Dependency Injection
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<DbHelper>();
 
-        // Services
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IFoodItemService, FoodItemService>();
@@ -46,7 +42,6 @@ public class Program
         builder.Services.AddScoped<AiService>();
 
 
-        // Repositories
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
         builder.Services.AddScoped<IGoalRepository, GoalRepository>();
@@ -63,7 +58,7 @@ public class Program
 
         var app = builder.Build();
 
-        // Configure middleware
+
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");

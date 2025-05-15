@@ -41,7 +41,6 @@ namespace Web.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            // Load quotes here
             var quotes = new List<(string Text, string Author)>();
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "data", "quotes.txt");
             if (System.IO.File.Exists(filePath))

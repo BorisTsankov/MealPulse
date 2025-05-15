@@ -17,18 +17,18 @@ namespace Services.Services
 
             if (string.IsNullOrWhiteSpace(_apiKey))
             {
-                Console.WriteLine("❌ ERROR: OpenAI API key not loaded from configuration.");
+                Console.WriteLine("OpenAI API key not loaded from configuration.");
             }
             else
             {
-                Console.WriteLine("✅ OpenAI API key loaded successfully.");
+                Console.WriteLine(" OpenAI API key loaded successfully.");
             }
         }
 
         public async Task<string> AskAsync(string prompt)
         {
             if (string.IsNullOrWhiteSpace(prompt))
-                return "⚠️ Please ask a non-empty question.";
+                return "Please ask a non-empty question.";
 
             var client = new RestClient();
             var request = new RestRequest(_apiUrl, Method.Post);
@@ -57,17 +57,17 @@ namespace Services.Services
 
             if (!response.IsSuccessful)
             {
-                return $"❌ API request failed: {response.StatusCode} - {response.ErrorMessage ?? "Unknown error"}";
+                return $"API request failed: {response.StatusCode} - {response.ErrorMessage ?? "Unknown error"}";
             }
 
             try
             {
                 dynamic result = JsonConvert.DeserializeObject(response.Content);
-                return result?.choices[0]?.message?.content ?? "⚠️ No answer returned.";
+                return result?.choices[0]?.message?.content ?? " No answer returned.";
             }
             catch (Exception ex)
             {
-                return $"❌ Error parsing response: {ex.Message}";
+                return $"Error parsing response: {ex.Message}";
             }
         }
 

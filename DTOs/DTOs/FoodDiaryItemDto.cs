@@ -9,7 +9,6 @@
         public DateTime DateTime { get; set; }
         public double Quantity { get; set; }
 
-        // Optional: Names from navigation properties if needed
         public string? FoodName { get; set; }
         public string? MealTypeName { get; set; }
 

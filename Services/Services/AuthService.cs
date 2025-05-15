@@ -1,6 +1,8 @@
-﻿using DataAccess.Repositories.Interfaces;
+﻿using Common;
+using DataAccess.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Models.Models;
 using Services.Services.Interfaces;
 using System.Data;
 using System.Security.Cryptography;
@@ -14,12 +16,18 @@ namespace Services.Services
     {
         private readonly IAuthRepository _authRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IGoalRepository _goalRepository;
 
-        public AuthService(IAuthRepository authRepository, IHttpContextAccessor httpContextAccessor)
+        public AuthService(
+            IAuthRepository authRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IGoalRepository goalRepository)
         {
             _authRepository = authRepository;
             _httpContextAccessor = httpContextAccessor;
+            _goalRepository = goalRepository;
         }
+
 
         public bool UserExists(string email)
         {
@@ -35,8 +43,27 @@ namespace Services.Services
 
         public int RegisterUser(Dictionary<string, object> parameters)
         {
-            return _authRepository.RegisterUser(parameters);
+            int userId = _authRepository.RegisterUser(parameters);
+
+            if (userId > 0)
+            {
+                decimal currentWeight = Convert.ToDecimal(parameters["@weight_kg"]);
+
+                var initialGoal = new Goal
+                {
+                    user_id = userId,
+                    current_weight_kg = currentWeight,
+                    target_weight_kg = currentWeight, 
+                    goal_intensity = (int)GoalIntensity.Maintain
+                };
+
+                _goalRepository.CreateGoal(initialGoal);
+            }
+
+            return userId;
         }
+
+
 
         public DataTable AuthenticateUser(string email, string password)
         {

@@ -28,7 +28,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string FirstName, string LastName, string email, string password, DateTime date_of_birth, decimal height_cm, int gender_id, int activityLevel_id, int metric_id)
+        public IActionResult Register(string FirstName, string LastName, string email, string password, DateTime date_of_birth, decimal height_cm, decimal weight_kg,int gender_id, int activityLevel_id, int metric_id)
         {
 
             if (date_of_birth < new DateTime(1753, 1, 1) || date_of_birth > DateTime.Now)
@@ -56,6 +56,7 @@ namespace Web.Controllers
         { "@password", _authService.HashPassword(password) },
         { "@date_of_birth", date_of_birth },
         { "@height_cm", height_cm },
+        { "@weight_kg", weight_kg },
         { "@role_id", 1 },
         { "@gender_id", gender_id },
         { "@activityLevel_id", activityLevel_id },
@@ -96,7 +97,6 @@ namespace Web.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                // ✅ Store user_id in session
                 HttpContext.Session.SetInt32("user_id", userId);
 
                 return RedirectToAction("Index", "Home");
@@ -109,7 +109,7 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear(); //  optional, clean slate
+            HttpContext.Session.Clear(); 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
 

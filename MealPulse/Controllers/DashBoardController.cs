@@ -60,7 +60,6 @@ namespace Web.Controllers
             var calorieGoal = _goalService.CalculateCalorieGoal(user, goal);
             var remainingCalories = (calorieGoal ?? 0) - totalCalories;
 
-            // Macronutrient goals
             decimal goalProtein = 0, goalCarbs = 0, goalFat = 0;
             if (calorieGoal != null)
             {
@@ -80,7 +79,6 @@ namespace Web.Controllers
             ViewBag.GoalCarbs = Math.Round(goalCarbs, 1);
             ViewBag.GoalFat = Math.Round(goalFat, 1);
 
-            // ✅ Add micronutrient values to ViewBag
             ViewBag.Sugars = Math.Round(sugars, 1);
             ViewBag.Fiber = Math.Round(fiber, 1);
             ViewBag.Sodium = Math.Round(sodium, 1);

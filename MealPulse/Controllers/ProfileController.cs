@@ -44,7 +44,6 @@ namespace Web.Controllers
 
             var goal = _goalService.GetMostRecentGoalByUserId(user.UserId);
 
-            // Intensity dropdown
             ViewBag.IntensityOptions = Enum.GetValues(typeof(GoalIntensityDto))
 
                 .Cast<GoalIntensityDto>()
@@ -61,7 +60,6 @@ namespace Web.Controllers
                     Text = a.ActivityLevelName
                 }).ToList();
 
-            // Calculate daily calories (optional)
             int? dailyCalories = (goal != null)
                 ? _goalService.CalculateCalorieGoal(user, goal)
                 : null;

@@ -36,7 +36,7 @@
 
         public static class FoodItem
         {
-            public const int FoodItemNameMaxLength = 255; // Fixed typo: 'Lenght' → 'Length'
+            public const int FoodItemNameMaxLength = 255; 
             public const int BrandMaxLength = 100;
 
             public const int DefaultServingQuantityMin = 1;

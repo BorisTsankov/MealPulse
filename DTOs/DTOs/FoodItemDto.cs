@@ -6,7 +6,6 @@
         public string Name { get; set; } = string.Empty;
         public string Unit { get; set; } = "g";
 
-        // Nutritional info
         public decimal Calories { get; set; }
         public decimal Protein { get; set; }
         public decimal Fat { get; set; }

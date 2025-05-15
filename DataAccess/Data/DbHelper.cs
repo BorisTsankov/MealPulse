@@ -48,6 +48,24 @@ namespace DataAccess.Data
             return cmd.ExecuteNonQuery();
         }
 
-        // You can also add ExecuteScalar, ExecuteReader, etc.
+        public T ExecuteScalar<T>(string sql, Dictionary<string, object> parameters)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            using var command = new SqlCommand(sql, connection);
+
+            foreach (var param in parameters)
+            {
+                command.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+            }
+
+            connection.Open();
+            object result = command.ExecuteScalar();
+
+            if (result == null || result == DBNull.Value)
+                return default;
+
+            return (T)Convert.ChangeType(result, typeof(T));
+        }
+
     }
 }

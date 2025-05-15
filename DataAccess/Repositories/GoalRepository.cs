@@ -48,14 +48,14 @@ namespace DataAccess.Repositories
                 { "@newWeight", newWeight }
             };
 
-            // Deactivate the current active goal and set end_date
+          
             string deactivateSql = @"
         UPDATE [Goal]
         SET is_active = 0, end_date = GETDATE()
         WHERE user_id = @user_id AND is_active = 1";
             _db.ExecuteNonQuery(deactivateSql, parameters);
 
-            // Create a new goal with the new weight and the same target weight and goal intensity
+            
             Goal? mostRecentGoal = GetMostRecentGoalByUserId(userId);
             if (mostRecentGoal == null) return false;
 
@@ -67,7 +67,7 @@ namespace DataAccess.Repositories
             {
                 { "@user_id", userId },
                 { "@newWeight", newWeight },
-                { "@target_weight", mostRecentGoal.target_weight_kg }, // Keep the same target weight
+                { "@target_weight", mostRecentGoal.target_weight_kg }, // keep the same target weight
                 { "@goal_intensity", mostRecentGoal.goal_intensity }
             };
 

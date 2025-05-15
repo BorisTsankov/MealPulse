@@ -36,7 +36,6 @@ namespace Web.Controllers
             if (!int.TryParse(userIdClaim, out int userId))
                 return RedirectToAction("Index", "Home"); // sends them to landing page instead
 
-            // use userId from here on
 
 
             var goal = _goalService.GetMostRecentGoalByUserId(userId);
@@ -74,7 +73,7 @@ namespace Web.Controllers
             }).ToList();
 
             var totalCaloriesForDay = sections.Sum(s => s.TotalCalories);
-            var calorieGoal = _goalService.CalculateCalorieGoal(user, goal); // Your new shared method
+            var calorieGoal = _goalService.CalculateCalorieGoal(user, goal); 
 
             //ViewBag.FoodItems = _foodItemService.GetAll();
             ViewBag.TotalCaloriesForDay = totalCaloriesForDay;
