@@ -9,43 +9,105 @@
     <link rel="stylesheet" href="~/css/Dashboard.css" asp-append-version="true" />
 }
 
+<h2 class="text-center mt-4 mb-4">Dashboard</h2>
 
 <div class="dashboard-page">
-    <h2 class="text-center mt-4 mb-4">📊 Daily Calorie Overview</h2>
+    <div class="chart-row">
 
-    <div class="card shadow rounded-4 border-0 mx-auto" style="max-width: 400px;">
-        <div class="card-body text-center">
-            <h5 class="mb-4">Calories Consumed vs Goal</h5>
-            <canvas id="calorieChart" style="max-width: 300px; margin: auto;"></canvas>
-            <p class="mt-4">
-                <span class="badge badge-consumed fs-6">Consumed: @consumed kcal</span><br />
-                <span class="badge badge-goal fs-6">Goal: @goal kcal</span><br />
-                <span class="badge @(remaining >= 0 ? "badge-remaining" : "badge-exceeded") fs-6">
-                    Remaining: @(remaining >= 0 ? remaining : 0) kcal
-                </span>
-            </p>
+        <!-- Calorie Pie Chart -->
+        <div class="chart-col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="mb-4">Calories Consumed vs Goal</h5>
+                    <canvas id="calorieChart"></canvas>
+                    <p class="mt-4">
+                        <span class="badge badge-consumed fs-6">Consumed: @consumed kcal</span><br />
+                        <span class="badge badge-goal fs-6">Goal: @goal kcal</span><br />
+                        <span class="badge @(remaining >= 0 ? "badge-remaining" : "badge-exceeded") fs-6">
+                            Remaining: @(remaining >= 0 ? remaining : 0) kcal
+                        </span>
+                    </p>
+                </div>
+            </div>
         </div>
+
+        <!-- Macronutrient Bar Chart -->
+        <div class="chart-col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="mb-4">Macronutrient Intake vs Goal (g)</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="macroChart"></canvas>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('calorieChart').getContext('2d');
-        const consumed = @consumed;
-        const remaining = @remaining;
 
-        new Chart(ctx, {
+    <script>
+        const calorieCtx = document.getElementById('calorieChart').getContext('2d');
+        new Chart(calorieCtx, {
             type: 'pie',
             data: {
                 labels: ['Consumed', 'Remaining'],
                 datasets: [{
-                    data: [consumed, remaining],
+                    data: [@consumed, @remaining],
                     backgroundColor: ['#9b59b6', '#ecf0f1']
                 }]
             },
             options: {
                 responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        const macroCtx = document.getElementById('macroChart').getContext('2d');
+                new Chart(macroCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Protein', 'Carbs', 'Fat'],
+                datasets: [
+                    {
+                        label: 'Consumed',
+                        data: [
+        @ViewBag.ConsumedProtein,
+        @ViewBag.ConsumedCarbs,
+        @ViewBag.ConsumedFat
+                        ],
+                        backgroundColor: '#9b59b6'
+                    },
+                    {
+                        label: 'Goal',
+                        data: [
+        @ViewBag.GoalProtein,
+        @ViewBag.GoalCarbs,
+        @ViewBag.GoalFat
+                        ],
+                        backgroundColor: '#ecf0f1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // ✅ this enables height to work
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Grams'
+                        }
+                    }
+                },
                 plugins: {
                     legend: { position: 'bottom' }
                 }

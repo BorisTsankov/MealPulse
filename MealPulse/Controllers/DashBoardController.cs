@@ -32,16 +32,42 @@ namespace Web.Controllers
 
             var items = _foodDiaryService.GetItemsByUserAndDate(userId, DateTime.Today);
 
-            var totalCalories = items
-                .Where(i => i.FoodItem != null)
-                .Sum(i => (i.FoodItem.Calories * (decimal)i.Quantity) / 100);
+            decimal totalCalories = 0;
+            decimal protein = 0, carbs = 0, fat = 0;
+
+            foreach (var item in items.Where(i => i.FoodItem != null))
+            {
+                var factor = (decimal)item.Quantity / 100;
+                var food = item.FoodItem;
+
+                totalCalories += food.Calories * factor;
+                protein += food.Protein * factor;
+                carbs += food.Carbohydrates * factor;
+                fat += food.Fat * factor;
+            }
 
             var calorieGoal = _goalService.CalculateCalorieGoal(user, goal);
             var remainingCalories = (calorieGoal ?? 0) - totalCalories;
 
+            // Macronutrient goals
+            decimal goalProtein = 0, goalCarbs = 0, goalFat = 0;
+            if (calorieGoal != null)
+            {
+                goalCarbs = calorieGoal.Value * 0.50m / 4;
+                goalProtein = calorieGoal.Value * 0.20m / 4;
+                goalFat = calorieGoal.Value * 0.30m / 9;
+            }
+
             ViewBag.ConsumedCalories = (int)Math.Round(totalCalories);
             ViewBag.CalorieGoal = calorieGoal;
             ViewBag.RemainingCalories = remainingCalories > 0 ? (int)Math.Round(remainingCalories) : 0;
+
+            ViewBag.ConsumedProtein = Math.Round(protein, 1);
+            ViewBag.ConsumedCarbs = Math.Round(carbs, 1);
+            ViewBag.ConsumedFat = Math.Round(fat, 1);
+            ViewBag.GoalProtein = Math.Round(goalProtein, 1);
+            ViewBag.GoalCarbs = Math.Round(goalCarbs, 1);
+            ViewBag.GoalFat = Math.Round(goalFat, 1);
 
             return View();
         }
