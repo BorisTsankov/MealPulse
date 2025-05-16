@@ -11,5 +11,8 @@ namespace DataAccess.Repositories.Interfaces
         DataTable AuthenticateUser(string email, string hashedPassword);
         DataTable GetSelectListData(string tableName, string valueField, string textField);
         bool ConfirmEmail(string token);
+        bool SetPasswordResetToken(string email, string token, DateTime expiry);
+        bool ResetPassword(string token, string hashedPassword);
+
     }
 }

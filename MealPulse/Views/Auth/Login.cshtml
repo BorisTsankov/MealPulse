@@ -13,20 +13,27 @@
                 <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com" required />
                 <label for="email">Email</label>
             </div>
-            <div class="form-floating mb-3">
+
+            <div class="form-floating mb-1">
                 <input type="password" name="password" class="form-control" id="password" placeholder="••••••••" required />
                 <label for="password">Password</label>
             </div>
+
+            <div class="text-end mb-3">
+                <a asp-action="ForgotPassword" class="small text-decoration-none text-purple">Forgot your password?</a>
+            </div>
+
             <button type="submit" class="btn btn-gradient-purple w-100">Log In</button>
 
             @if (!string.IsNullOrEmpty(ViewBag.Error))
             {
-                <div class="alert alert-danger">@ViewBag.Error</div>
+                <div class="alert alert-danger mt-3">@ViewBag.Error</div>
             }
 
             <p class="text-center mt-3 small">
                 Don’t have an account? <a asp-action="Register">Sign up</a>
             </p>
         </form>
+
     </div>
 </div>

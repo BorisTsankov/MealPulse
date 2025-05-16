@@ -139,12 +139,72 @@ namespace Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // ✅ Email confirmation endpoint
         public IActionResult ConfirmEmail(string token)
         {
             bool confirmed = _authService.ConfirmUserEmail(token);
             ViewBag.Confirmed = confirmed;
             return View("ConfirmEmailResult");
         }
+
+        [HttpGet]
+        public IActionResult ForgotPassword() => View();
+
+        [HttpPost]
+        public IActionResult ForgotPassword(string email)
+        {
+            if (_authService.SendResetEmail(email))
+            {
+                TempData["Success"] = "Check your email for reset instructions.";
+            }
+            else
+            {
+                TempData["Error"] = "No user found with that email.";
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                TempData["Error"] = "Invalid or expired reset link.";
+                return RedirectToAction("ForgotPassword");
+            }
+
+            ViewBag.Token = token;
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public IActionResult ResetPassword(string token, string password, string confirmPassword)
+        {
+            if (password != confirmPassword)
+            {
+                ViewBag.Error = "Passwords do not match.";
+                ViewBag.Token = token;
+                return View();
+            }
+
+            if (!IsPasswordValid(password))
+            {
+                ViewBag.Error = "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character (!@#$%^&*).";
+                ViewBag.Token = token;
+                return View();
+            }
+
+            if (_authService.ResetPassword(token, password))
+            {
+                TempData["Success"] = "Password reset successfully.";
+                return RedirectToAction("Login");
+            }
+
+            ViewBag.Error = "Invalid or expired token.";
+            ViewBag.Token = token;
+            return View();
+        }
+
     }
 }

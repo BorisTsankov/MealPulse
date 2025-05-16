@@ -101,6 +101,26 @@ namespace Services.Services
         {
             return _authRepository.ConfirmEmail(token);
         }
+        public bool SendResetEmail(string email)
+        {
+            string token = Guid.NewGuid().ToString();
+            DateTime expiry = DateTime.Now.AddHours(1);
+            if (_authRepository.SetPasswordResetToken(email, token, expiry))
+            {
+                var baseUrl = _httpContextAccessor.HttpContext?.Request?.Host.Value;
+                var scheme = _httpContextAccessor.HttpContext?.Request?.Scheme;
+                string link = $"{scheme}://{baseUrl}/Auth/ResetPassword?token={token}";
+                _emailService.SendPasswordResetEmail(email, link);
+                return true;
+            }
+            return false;
+        }
+
+        public bool ResetPassword(string token, string newPassword)
+        {
+            string hashed = HashPassword(newPassword);
+            return _authRepository.ResetPassword(token, hashed);
+        }
 
     }
 }

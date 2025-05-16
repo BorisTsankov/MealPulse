@@ -61,5 +61,32 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);";
             return _dbHelper.ExecuteNonQuery(sql, parameters) > 0;
         }
 
+        public bool SetPasswordResetToken(string email, string token, DateTime expiry)
+        {
+            string sql = "UPDATE [User] SET PasswordResetToken = @token, PasswordResetExpiry = @expiry WHERE email = @email";
+            var parameters = new Dictionary<string, object>
+    {
+        { "@token", token },
+        { "@expiry", expiry },
+        { "@email", email }
+    };
+            return _dbHelper.ExecuteNonQuery(sql, parameters) > 0;
+        }
+
+        public bool ResetPassword(string token, string hashedPassword)
+        {
+            string sql = @"
+        UPDATE [User]
+        SET password = @password, PasswordResetToken = NULL, PasswordResetExpiry = NULL
+        WHERE PasswordResetToken = @token AND PasswordResetExpiry > GETDATE()";
+            var parameters = new Dictionary<string, object>
+    {
+        { "@password", hashedPassword },
+        { "@token", token }
+    };
+            return _dbHelper.ExecuteNonQuery(sql, parameters) > 0;
+        }
+
+
     }
 }

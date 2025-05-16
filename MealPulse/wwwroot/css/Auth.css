@@ -149,3 +149,20 @@ select.form-control {
         font-weight: 600;
     }
 
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #f8f4fd;
+    padding: 2rem;
+}
+
+.auth-card {
+    background: #fff;
+    padding: 2rem 2.5rem;
+    border-radius: 20px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(111, 66, 193, 0.15);
+}

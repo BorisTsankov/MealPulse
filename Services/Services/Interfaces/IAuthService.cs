@@ -12,5 +12,8 @@ namespace Services.Services.Interfaces
         List<SelectListItem> GetSelectListData(string tableName, string valueField, string textField);
         string GetCurrentUserId();
         bool ConfirmUserEmail(string token);
+        public bool SendResetEmail(string email);
+        public bool ResetPassword(string token, string newPassword);
+
     }
 }
