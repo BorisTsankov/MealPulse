@@ -64,23 +64,22 @@ namespace DataAccess.Repositories
         public List<FoodItem> SearchByName(string name)
         {
             string sql = @"
-        SELECT TOP 50 * FROM FoodItem
-        WHERE name LIKE @term
+        SELECT TOP 20 * FROM FoodItem
+        WHERE 
+            LOWER(name) = LOWER(@term)
+            OR LOWER(name) LIKE LOWER(@term + '%')
         ORDER BY 
             CASE 
-                WHEN LOWER(name) = LOWER(@exact) THEN 1
-                WHEN LOWER(name) LIKE LOWER(@startsWith + '%') THEN 2
-                WHEN LOWER(name) LIKE LOWER('%' + @term + '%') THEN 3
-                ELSE 4
-            END, 
-            LEN(name), 
+                WHEN LOWER(name) = LOWER(@term) THEN 1
+                WHEN LOWER(name) LIKE LOWER(@term + '%') THEN 2
+                ELSE 3
+            END,
+            LEN(name),
             name";
 
             var parameters = new Dictionary<string, object>
     {
-        { "@term", "%" + name + "%" },
-        { "@exact", name },
-        { "@startsWith", name }
+        { "@term", name }
     };
 
             var dt = _db.ExecuteQuery(sql, parameters);
@@ -98,4 +97,4 @@ namespace DataAccess.Repositories
             return items;
         }
     }
-}
+    }
