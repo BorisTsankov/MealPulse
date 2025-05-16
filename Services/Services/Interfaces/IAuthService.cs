@@ -11,6 +11,6 @@ namespace Services.Services.Interfaces
         DataTable AuthenticateUser(string email, string password);
         List<SelectListItem> GetSelectListData(string tableName, string valueField, string textField);
         string GetCurrentUserId();
-
+        bool ConfirmUserEmail(string token);
     }
 }

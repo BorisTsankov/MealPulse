@@ -9,10 +9,12 @@ namespace Web.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IEmailService _emailService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IEmailService emailService)
         {
             _authService = authService;
+            _emailService = emailService;
         }
 
         public IActionResult Register()
@@ -62,28 +64,37 @@ namespace Web.Controllers
                 return RedirectToAction("Login");
             }
 
+            var token = Guid.NewGuid().ToString();
             var parameters = new Dictionary<string, object>
-    {
-        { "@FirstName", FirstName },
-        { "@LastName", LastName },
-        { "@email", email },
-        { "@password", _authService.HashPassword(password) },
-        { "@date_of_birth", date_of_birth },
-        { "@height_cm", height_cm },
-        { "@weight_kg", weight_kg },
-        { "@role_id", 1 },
-        { "@gender_id", gender_id },
-        { "@activityLevel_id", activityLevel_id },
-        { "@metric_id", metric_id }
-    };
+            {
+                { "@FirstName", FirstName },
+                { "@LastName", LastName },
+                { "@email", email },
+                { "@password", _authService.HashPassword(password) },
+                { "@date_of_birth", date_of_birth },
+                { "@height_cm", height_cm },
+                { "@weight_kg", weight_kg },
+                { "@role_id", 1 },
+                { "@gender_id", gender_id },
+                { "@activityLevel_id", activityLevel_id },
+                { "@metric_id", metric_id },
+                { "@token", token }
+            };
 
-            if (_authService.RegisterUser(parameters) > 0)
+            int userId = _authService.RegisterUser(parameters);
+            if (userId > 0)
+            {
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+                string confirmLink = $"{baseUrl}/Auth/ConfirmEmail?token={token}";
+                _emailService.SendConfirmationEmail(email, confirmLink);
+
+                TempData["SuccessMessage"] = "Registration successful. Please check your email to confirm your account.";
                 return RedirectToAction("Login");
+            }
 
             ViewBag.ErrorMessage = "Registration failed.";
             return View();
         }
-
 
         public IActionResult Login()
         {
@@ -102,10 +113,10 @@ namespace Web.Controllers
                 var userId = Convert.ToInt32(user.Rows[0]["user_id"]);
 
                 var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Email, user.Rows[0]["email"].ToString())
-        };
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                    new Claim(ClaimTypes.Email, user.Rows[0]["email"].ToString())
+                };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
@@ -117,17 +128,23 @@ namespace Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Error = "Invalid login attempt.";
+            ViewBag.Error = "Invalid login attempt or unconfirmed email.";
             return View();
         }
 
-
         public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear(); 
+            HttpContext.Session.Clear();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
+        }
 
+        // ✅ Email confirmation endpoint
+        public IActionResult ConfirmEmail(string token)
+        {
+            bool confirmed = _authService.ConfirmUserEmail(token);
+            ViewBag.Confirmed = confirmed;
+            return View("ConfirmEmailResult");
         }
     }
 }

@@ -40,6 +40,8 @@ public class Program
         builder.Services.AddScoped<IMetricService, MetricService>();
         builder.Services.AddScoped<IGenderService, GenderService>();
         builder.Services.AddScoped<AiService>();
+        builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();

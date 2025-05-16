@@ -17,15 +17,18 @@ namespace Services.Services
         private readonly IAuthRepository _authRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGoalRepository _goalRepository;
+        private readonly IEmailService _emailService;
 
         public AuthService(
             IAuthRepository authRepository,
             IHttpContextAccessor httpContextAccessor,
-            IGoalRepository goalRepository)
+            IGoalRepository goalRepository,
+            IEmailService emailService)
         {
             _authRepository = authRepository;
             _httpContextAccessor = httpContextAccessor;
             _goalRepository = goalRepository;
+            _emailService = emailService;
         }
 
 
@@ -93,5 +96,11 @@ namespace Services.Services
 
             return string.Empty;
         }
+
+        public bool ConfirmUserEmail(string token)
+        {
+            return _authRepository.ConfirmEmail(token);
+        }
+
     }
 }
