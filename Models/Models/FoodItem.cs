@@ -4,11 +4,9 @@ namespace Models.Models
 {
     public class FoodItem
     {
-        [Key]
         public int FoodItemId { get; set; }
 
-        [Required]
-        [StringLength(255)]
+        [Required, StringLength(255)]
         public string Name { get; set; } = null!;
 
         [Required]
@@ -30,17 +28,20 @@ namespace Models.Models
         public decimal Fiber { get; set; }
 
         public decimal? Sodium { get; set; }
-
         public decimal? Potassium { get; set; }
-
         public decimal? Iron { get; set; }
-
         public decimal? Calcium { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Unit { get; set; } = "g";  // g, ml, piece etc.
+        public string Unit { get; set; } = "g";
 
-        public ICollection<FoodDiaryItem> FoodDiaryItems { get; set; } = new List<FoodDiaryItem>();
+        public string? Description { get; set; }
+        public string? Brand { get; set; }
+        public string? Barcode { get; set; }
+        public string? Source { get; set; } // e.g., "OpenFoodFacts"
+        public string? ImageUrl { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
+
 }

@@ -112,20 +112,28 @@ namespace DataAccess.Repositories
                     {
                         Name = row["FoodItemName"].ToString()!,
                         Unit = row["unit"].ToString()!,
-                        Calories = (decimal)row["calories"],
-                        Protein = (decimal)row["protein"],
-                        Fat = (decimal)row["fat"],
-                        Carbohydrates = (decimal)row["carbohydrates"],
-                        Sugars = (decimal)row["sugars"],
-                        Fiber = (decimal)row["fiber"],
-                        Sodium = (decimal)row["sodium"],
-                        Potassium = (decimal)row["potassium"],
-                        Iron = (decimal)row["iron"],
-                        Calcium = (decimal)row["calcium"]
+                        Calories = GetDecimal(row, "calories"),
+                        Protein = GetDecimal(row, "protein"),
+                        Fat = GetDecimal(row, "fat"),
+                        Carbohydrates = GetDecimal(row, "carbohydrates"),
+                        Sugars = GetDecimal(row, "sugars"),
+                        Fiber = GetDecimal(row, "fiber"),
+                        Sodium = GetNullableDecimal(row, "sodium"),
+                        Potassium = GetNullableDecimal(row, "potassium"),
+                        Iron = GetNullableDecimal(row, "iron"),
+                        Calcium = GetNullableDecimal(row, "calcium")
                     }
+
                 });
             }
             return items;
         }
+
+        private decimal GetDecimal(DataRow row, string column)
+    => row[column] != DBNull.Value ? (decimal)row[column] : 0;
+
+        private decimal? GetNullableDecimal(DataRow row, string column)
+            => row[column] != DBNull.Value ? (decimal?)row[column] : null;
+
     }
 }

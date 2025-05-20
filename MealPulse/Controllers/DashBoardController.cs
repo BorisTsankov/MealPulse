@@ -51,10 +51,11 @@ namespace Web.Controllers
 
                 sugars += food.Sugars * factor;
                 fiber += food.Fiber * factor;
-                sodium += (decimal)(food.Sodium * factor);
-                potassium += (decimal)(food.Potassium * factor);
-                iron += (decimal)(food.Iron * factor);
-                calcium += (decimal)(food.Calcium * factor);
+                sodium += food.Sodium.GetValueOrDefault() * factor;
+                potassium += food.Potassium.GetValueOrDefault() * factor;
+                iron += food.Iron.GetValueOrDefault() * factor;
+                calcium += food.Calcium.GetValueOrDefault() * factor;
+
             }
 
             var calorieGoal = _goalService.CalculateCalorieGoal(user, goal);

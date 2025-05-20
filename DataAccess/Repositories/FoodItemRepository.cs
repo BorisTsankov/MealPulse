@@ -96,5 +96,51 @@ namespace DataAccess.Repositories
 
             return items;
         }
+
+        public FoodItem? GetByBarcode(string barcode)
+        {
+            string sql = "SELECT * FROM FoodItem WHERE Barcode = @barcode";
+            var dt = _db.ExecuteQuery(sql, new() { { "@barcode", barcode } });
+
+            return dt.Rows.Count > 0 ? MapRow(dt.Rows[0]) : null;
+        }
+        public int Add(FoodItem item)
+        {
+            string sql = @"
+        INSERT INTO FoodItem 
+        (name, calories, protein, fat, carbohydrates, sugars, fiber, sodium, potassium, iron, calcium, unit, description, brand, barcode, source, image_url, created_at)
+        VALUES 
+        (@Name, @Calories, @Protein, @Fat, @Carbs, @Sugars, @Fiber, @Sodium, @Potassium, @Iron, @Calcium, @Unit, @Description, @Brand, @Barcode, @Source, @ImageUrl, @CreatedAt);
+        SELECT SCOPE_IDENTITY();";
+
+            var parameters = new Dictionary<string, object?>
+    {
+        { "@Name", item.Name },
+        { "@Calories", item.Calories },
+        { "@Protein", item.Protein },
+        { "@Fat", item.Fat },
+        { "@Carbs", item.Carbohydrates },
+        { "@Sugars", item.Sugars },
+        { "@Fiber", item.Fiber },
+        { "@Sodium", item.Sodium ?? (object)DBNull.Value },
+        { "@Potassium", item.Potassium ?? (object)DBNull.Value },
+        { "@Iron", item.Iron ?? (object)DBNull.Value },
+        { "@Calcium", item.Calcium ?? (object)DBNull.Value },
+        { "@Unit", item.Unit },
+        { "@Description", item.Description ?? (object)DBNull.Value },
+        { "@Brand", item.Brand ?? (object)DBNull.Value },
+        { "@Barcode", item.Barcode ?? (object)DBNull.Value },
+        { "@Source", item.Source ?? (object)DBNull.Value },
+        { "@ImageUrl", item.ImageUrl ?? (object)DBNull.Value },
+        { "@CreatedAt", item.CreatedAt }
+    };
+
+            var result = _db.ExecuteScalar<decimal>(sql, parameters);
+            return (int)result;
+        }
+
+
+
+
     }
-    }
+}

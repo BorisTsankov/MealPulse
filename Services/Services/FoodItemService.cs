@@ -8,11 +8,13 @@ namespace Services.Services
 {
     public class FoodItemService : IFoodItemService
     {
+        private readonly OpenFoodFactsService _openFoodFactsService;
         private readonly IFoodItemRepository _repo;
 
-        public FoodItemService(IFoodItemRepository repo)
+        public FoodItemService(IFoodItemRepository repo, OpenFoodFactsService openFoodFactsService)
         {
             _repo = repo;
+            _openFoodFactsService = openFoodFactsService;
         }
 
         public List<FoodItemDto> GetAll()
@@ -32,6 +34,64 @@ namespace Services.Services
             var items = _repo.SearchByName(name);
             return items.Select(FoodItemMapper.ToDto).ToList();
         }
+
+        public async Task<FoodItemDto?> GetByBarcodeOrFetchAsync(string barcode)
+        {
+            var local = _repo.GetByBarcode(barcode);
+            if (local != null)
+                return FoodItemMapper.ToDto(local);
+
+            var external = await _openFoodFactsService.GetFoodItemByBarcodeAsync(barcode);
+            if (external != null)
+            {
+                var newId = _repo.Add(external); // ✅ Save and get ID
+                external.FoodItemId = newId;     // ✅ Set ID for later use
+
+                return FoodItemMapper.ToDto(external);
+            }
+
+
+            return null;
+        }
+
+        public async Task<List<FoodItemDto>> SearchByNameOrFetchAsync(string term)
+        {
+            var localMatches = _repo.SearchByName(term);
+
+            // ✅ If local results exist, return them
+            if (localMatches.Any())
+                return localMatches.Select(FoodItemMapper.ToDto).ToList();
+
+            // ❌ Nothing found locally, fetch from API
+            var apiResult = await _openFoodFactsService.SearchByNameAsync(term);
+            if (apiResult != null && apiResult.Any())
+            {
+                foreach (var item in apiResult)
+                {
+                    // ⚠️ Skip incomplete items
+                    if (item.Calories == 0 || item.Protein == 0 || item.Fat == 0)
+                        continue;
+
+                    // ✅ Check for duplicates by barcode or name
+                    var existing = !string.IsNullOrWhiteSpace(item.Barcode)
+                        ? _repo.GetByBarcode(item.Barcode)
+                        : _repo.SearchByName(item.Name).FirstOrDefault();
+
+                    if (existing == null)
+                    {
+                        // 🔥 INSERT AND GET ID BACK
+                        int newId = _repo.Add(item);
+                        item.FoodItemId = newId;
+                    }
+                }
+
+                return apiResult.Select(FoodItemMapper.ToDto).ToList();
+            }
+
+            return new List<FoodItemDto>();
+        }
+
+
 
     }
 }

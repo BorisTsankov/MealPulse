@@ -131,14 +131,14 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult SearchFoodItems(string term)
+        public async Task<IActionResult> SearchFoodItems(string term)
         {
-            var allItems = _foodItemService.SearchByName(term ?? "");
+            var allItems = await _foodItemService.SearchByNameOrFetchAsync(term ?? "");
 
             var distinctItems = allItems
                 .GroupBy(f => f.Name.Trim().ToLower())
-                .Select(g => g.First()) // pick the first unique name
-                .Take(20) // optional: limit results
+                .Select(g => g.First())
+                .Take(20)
                 .ToList();
 
             var results = distinctItems.Select(f => new
@@ -148,6 +148,20 @@ namespace Web.Controllers
             });
 
             return Json(new { results });
+        }
+
+
+          
+        
+
+        [HttpGet]
+        public async Task<IActionResult> GetFoodByBarcode(string barcode)
+        {
+            var item = await _foodItemService.GetByBarcodeOrFetchAsync(barcode);
+            if (item == null)
+                return NotFound();
+
+            return Json(item);
         }
 
 
