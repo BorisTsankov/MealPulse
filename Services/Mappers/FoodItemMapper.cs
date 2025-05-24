@@ -24,5 +24,25 @@ namespace Services.Mappers
                 Calcium = item.Calcium ?? 0
             };
         }
+        public static FoodItem ToEntity(FoodItemDto dto)
+        {
+            return new FoodItem
+            {
+                Name = dto.Name,
+                Unit = dto.Unit,
+                Calories = dto.Calories,
+                Protein = dto.Protein,
+                Fat = dto.Fat,
+                Carbohydrates = dto.Carbohydrates,
+                Sugars = dto.Sugars,
+                Fiber = dto.Fiber,
+                Sodium = dto.Sodium,
+                Potassium = dto.Potassium,
+                Iron = dto.Iron,
+                Calcium = dto.Calcium,
+                CreatedAt = DateTime.UtcNow
+            };
+        }
+
     }
 }

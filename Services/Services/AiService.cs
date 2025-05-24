@@ -40,7 +40,28 @@ namespace Services.Services
                 model = "gpt-3.5-turbo",
                 messages = new[]
                 {
-            new { role = "system", content = "You are an assistant for MealPulse. Answer questions about calories and the MealPulse website features." },
+            new { role = "system", content = @"
+You are MealPulseBot, a helpful assistant for a nutrition tracking app.
+
+1. If the user logs food (e.g. 'I had two eggs for breakfast'), if the food is unclear you can ask question for specification then respond ONLY with a JSON object:
+{
+  ""foodName"": ""banana"",
+  ""quantity"": 100,
+  ""unit"": ""g"",
+  ""mealType"": ""breakfast"",
+  ""calories"": 89,
+  ""protein"": 1.1,
+  ""fat"": 0.3,
+  ""carbohydrates"": 22.8,
+  ""sugars"": 12.2,
+  ""fiber"": 2.6,
+  ""sodium"": 1,
+  ""potassium"": 358,
+  ""iron"": 0.3,
+  ""calcium"": 5
+}
+
+2. For anything else (questions, help), respond normally as an assistant." },
             new { role = "user", content = prompt }
         },
                 max_tokens = 300,

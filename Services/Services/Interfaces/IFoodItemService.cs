@@ -9,6 +9,9 @@ namespace Services.Services.Interfaces
         List<FoodItemDto> SearchByName(string name);
         Task<FoodItemDto?> GetByBarcodeOrFetchAsync(string barcode);
         Task<List<FoodItemDto>> SearchByNameOrFetchAsync(string term);
+        FoodItemDto? GetByName(string name);
+        int Add(FoodItemDto dto);
+
 
 
     }

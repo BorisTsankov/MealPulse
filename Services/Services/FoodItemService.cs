@@ -91,6 +91,20 @@ namespace Services.Services
             return new List<FoodItemDto>();
         }
 
+        public FoodItemDto? GetByName(string name)
+        {
+            var match = _repo.SearchByName(name)
+                .FirstOrDefault(f => f.Calories > 0); // ✅ Ensure not a dummy
+            return match != null ? FoodItemMapper.ToDto(match) : null;
+        }
+
+
+        public int Add(FoodItemDto dto)
+        {
+            var entity = FoodItemMapper.ToEntity(dto);
+            return _repo.Add(entity); // This is already implemented and returns the new ID
+        }
+
 
 
     }

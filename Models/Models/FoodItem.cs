@@ -39,7 +39,7 @@ namespace Models.Models
         public string? Description { get; set; }
         public string? Brand { get; set; }
         public string? Barcode { get; set; }
-        public string? Source { get; set; } // e.g., "OpenFoodFacts"
+        public string? Source { get; set; } 
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

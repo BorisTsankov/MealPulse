@@ -110,6 +110,7 @@ namespace DataAccess.Repositories
                     DateTime = (DateTime)row["date_time"],
                     FoodItem = new FoodItem
                     {
+                        FoodItemId = (int)row["food_id"],
                         Name = row["FoodItemName"].ToString()!,
                         Unit = row["unit"].ToString()!,
                         Calories = GetDecimal(row, "calories"),
