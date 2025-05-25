@@ -54,10 +54,10 @@ namespace DataAccess.Repositories
                 Carbohydrates = (decimal)row["Carbohydrates"],
                 Sugars = (decimal)row["Sugars"],
                 Fiber = (decimal)row["Fiber"],
-                Sodium = (decimal)row["Sodium"],
-                Potassium = (decimal)row["Potassium"],
-                Iron = (decimal)row["Iron"],
-                Calcium = (decimal)row["Calcium"]
+                Sodium = GetNullableDecimal(row, "Sodium"),
+                Potassium = GetNullableDecimal(row, "Potassium"),
+                Iron = GetNullableDecimal(row, "Iron"),
+                Calcium = GetNullableDecimal(row, "Calcium")
             };
         }
 
@@ -139,6 +139,10 @@ namespace DataAccess.Repositories
             return (int)result;
         }
 
+        private decimal? GetNullableDecimal(DataRow row, string column)
+        {
+            return row[column] == DBNull.Value ? null : (decimal?)row[column];
+        }
 
 
 

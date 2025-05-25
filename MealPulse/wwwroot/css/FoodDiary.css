@@ -115,7 +115,6 @@ button[title="Delete"] {
         background-color: #8f6bb5;
     }
 
-
 /* Modal Styling */
 .modal-dialog {
     max-width: 500px;
@@ -123,8 +122,6 @@ button[title="Delete"] {
 }
 
 .modal-content {
-    margin-top: 0; /* remove default spacing */
-    padding-top: 0; /* remove padding above header */
     border: none;
     border-radius: 18px;
     background-color: #fefaff;
@@ -135,12 +132,10 @@ button[title="Delete"] {
     background-color: #6f42c1;
     color: white;
     padding: 1rem 1.25rem;
-    margin: 0;
     border-bottom: 1px solid #e3d7f1;
     border-top-left-radius: 18px;
     border-top-right-radius: 18px;
 }
-
 
 .modal-title {
     font-weight: 600;
@@ -152,6 +147,59 @@ button[title="Delete"] {
     border-radius: 50%;
     opacity: 1;
     padding: 0.4rem;
+}
+
+/* Scanner Specific Styling */
+#barcode-scanner-wrapper {
+    width: 100%;
+    max-width: 600px;
+    height: 350px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #f8f4fd;
+    border-radius: 14px;
+    border: 2px dashed #a084ca;
+    box-shadow: inset 0 0 8px rgba(111, 66, 193, 0.15);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#barcode-scanner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+    #barcode-scanner video,
+    #barcode-scanner canvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+#barcode-scanner-wrapper::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #a084ca, #6f42c1);
+    animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+    0% {
+        top: 0;
+    }
+
+    100% {
+        top: 100%;
+    }
 }
 
 /* Form Inputs */
@@ -180,7 +228,6 @@ button[title="Delete"] {
         box-shadow: 0 0 0 0.15rem rgba(111, 66, 193, 0.25);
     }
 
-/* Submit Button */
 .modal-footer .btn-success {
     background-color: #6f42c1;
     color: white;
@@ -195,7 +242,6 @@ button[title="Delete"] {
         background-color: #5e2b91;
     }
 
-/* Nutrient Preview Box */
 .nutrient-preview {
     background-color: #f2e9fc;
     border: 1px solid #e3d7f1;
@@ -216,7 +262,6 @@ button[title="Delete"] {
         margin-bottom: 0.25rem;
     }
 
-/* Scroll Container */
 .food-item-scroll {
     max-height: 80px;
     overflow-y: auto;
@@ -236,7 +281,6 @@ button[title="Delete"] {
         background-color: #f8f4fd;
     }
 
-/* Grid Layout */
 .meal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -250,7 +294,6 @@ button[title="Delete"] {
     }
 }
 
-/* Badges */
 .badge-consumed {
     background-color: #8c5edc;
     color: #fff;
@@ -290,7 +333,6 @@ button[title="Delete"] {
     border-radius: 0.75rem;
 }
 
-/* Select2 Overrides */
 .select2-container--default .select2-selection--single {
     border: 1px solid #cdb9e9;
     border-radius: 10px;
