@@ -164,6 +164,21 @@ namespace Web.Controllers
             return Json(item);
         }
 
+        [HttpGet]
+        public IActionResult GetFoodItemById(int id)
+        {
+            var item =  _foodItemService.GetById(id);
+            if (item == null)
+                return NotFound();
+
+            return Json(new
+            {
+                calories = item.Calories,
+                protein = item.Protein,
+                fat = item.Fat,
+                carbohydrates = item.Carbohydrates
+            });
+        }
 
 
     }

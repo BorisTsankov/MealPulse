@@ -1,119 +1,256 @@
-﻿.food-diary-page {
+﻿/* General Page Layout */
+.food-diary-page {
     background-color: #f8f4fd;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #2d1b46;
     padding: 2rem 1rem;
 }
 
-    .food-diary-page h2 {
+    .food-diary-page h2,
+    .food-diary-page h4 {
         color: #6f42c1;
+        text-align: center;
+    }
+
+    .food-diary-page h2 {
         font-weight: 700;
         font-size: 2rem;
-        text-align: center;
     }
 
     .food-diary-page h4 {
-        color: #6f42c1;
         font-size: 1.2rem;
         font-weight: 500;
-        text-align: center;
         margin-bottom: 1rem;
     }
 
-    .food-diary-page .summary-section {
-        background: #f2e9fc;
-        padding: 1.5rem 2rem;
-        border-radius: 20px;
-        margin-bottom: 2rem;
-        text-align: center;
-        box-shadow: 0 3px 10px rgba(111, 66, 193, 0.05);
+/* Daily Summary */
+.summary-section {
+    background: #f2e9fc;
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(111, 66, 193, 0.05);
+}
+
+/* Meal Cards */
+.card {
+    background-color: white;
+    border: 1px solid #e3d7f1;
+    border-radius: 18px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 6px rgba(111, 66, 193, 0.1);
+}
+
+.custom-card-header {
+    background-color: #6f42c1;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 18px 18px 0 0;
+    padding: 0.8rem 1.2rem;
+}
+
+.card-body {
+    padding: 1rem 1.5rem;
+}
+
+/* Food Item List */
+.list-group-item {
+    border: 1px solid #e0d6f6;
+    background: #fdfaff;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Delete Button */
+button[title="Delete"] {
+    background: transparent;
+    border: none;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    cursor: pointer;
+}
+
+    button[title="Delete"]:hover img {
+        filter: brightness(0.85);
+        transform: scale(1.1);
+        transition: 0.2s ease;
     }
 
-    .food-diary-page .card {
-        background-color: white;
-        border: 1px solid #e3d7f1;
-        border-radius: 18px;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 6px rgba(111, 66, 193, 0.1);
+.btn-add-food,
+.btn-scan-food {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+}
+
+.btn-add-food {
+    background-color: #6f42c1;
+}
+
+    .btn-add-food:hover {
+        background-color: #5e2b91;
     }
 
-    .food-diary-page .custom-card-header {
-        background-color: #6f42c1;
-        color: white;
-        font-size: 1.1rem;
+.btn-scan-food {
+    background-color: #a084ca;
+}
+
+    .btn-scan-food:hover {
+        background-color: #8f6bb5;
+    }
+
+
+/* Modal Styling */
+.modal-dialog {
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-content {
+    margin-top: 0; /* remove default spacing */
+    padding-top: 0; /* remove padding above header */
+    border: none;
+    border-radius: 18px;
+    background-color: #fefaff;
+    box-shadow: 0 6px 20px rgba(111, 66, 193, 0.15);
+}
+
+.modal-header {
+    background-color: #6f42c1;
+    color: white;
+    padding: 1rem 1.25rem;
+    margin: 0;
+    border-bottom: 1px solid #e3d7f1;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+}
+
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.btn-close {
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 1;
+    padding: 0.4rem;
+}
+
+/* Form Inputs */
+.modal-body {
+    padding: 1.5rem;
+}
+
+.form-floating label {
+    padding-left: 0.75rem;
+    font-weight: 500;
+    color: #6f42c1;
+}
+
+.form-floating .form-control,
+.form-floating .form-select {
+    background-color: #fefaff;
+    border: 1px solid #cdb9e9;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #2d1b46;
+}
+
+    .form-floating .form-control:focus,
+    .form-floating .form-select:focus {
+        border-color: #6f42c1;
+        box-shadow: 0 0 0 0.15rem rgba(111, 66, 193, 0.25);
+    }
+
+/* Submit Button */
+.modal-footer .btn-success {
+    background-color: #6f42c1;
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 10px;
+    width: 100%;
+}
+
+    .modal-footer .btn-success:hover:not(:disabled) {
+        background-color: #5e2b91;
+    }
+
+/* Nutrient Preview Box */
+.nutrient-preview {
+    background-color: #f2e9fc;
+    border: 1px solid #e3d7f1;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: #2d1b46;
+    margin-top: 1rem;
+}
+
+    .nutrient-preview p {
         font-weight: 600;
-        border-radius: 18px 18px 0 0;
-        padding: 0.8rem 1.2rem;
-    }
-
-    .food-diary-page .card-body {
-        padding: 1rem 1.5rem;
-        background-color: #fff;
-        border-radius: 0 0 18px 18px;
-    }
-
-    .food-diary-page .list-group-item {
-        border: 1px solid #e0d6f6;
-        background: #fdfaff;
-        border-radius: 10px;
+        color: #6f42c1;
         margin-bottom: 0.5rem;
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: #2d1b46;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 1rem;
     }
 
-    .food-diary-page form {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid #e3d7f1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        align-items: flex-end;
+    .nutrient-preview li {
+        margin-bottom: 0.25rem;
     }
 
-        .food-diary-page form select,
-        .food-diary-page form input {
-            max-width: 220px;
-            border-radius: 10px;
-            border: 1px solid #cdb9e9;
-            padding: 8px 12px;
-            font-size: 0.95rem;
-            background-color: #fefaff;
-            color: #2d1b46;
-        }
+/* Scroll Container */
+.food-item-scroll {
+    max-height: 80px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
 
-            .food-diary-page form select:focus,
-            .food-diary-page form input:focus {
-                outline: none;
-                border-color: #6f42c1;
-                box-shadow: 0 0 0 0.15rem rgba(111, 66, 193, 0.25);
-            }
+    .food-item-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
 
-        .food-diary-page form button {
-            background-color: #6f42c1;
-            color: white;
-            border-radius: 10px;
-            font-weight: 500;
-            padding: 8px 20px;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
+    .food-item-scroll::-webkit-scrollbar-thumb {
+        background-color: #b49ae0;
+        border-radius: 3px;
+    }
 
-            .food-diary-page form button:hover:not(:disabled) {
-                background-color: #5e2b91;
-            }
+    .food-item-scroll::-webkit-scrollbar-track {
+        background-color: #f8f4fd;
+    }
 
-            .food-diary-page form button:disabled {
-                background-color: #ccc;
-                color: #666;
-                cursor: not-allowed;
-            }
+/* Grid Layout */
+.meal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
 
+@media (max-width: 768px) {
+    .meal-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Badges */
 .badge-consumed {
     background-color: #8c5edc;
     color: #fff;
@@ -134,14 +271,6 @@
     color: #fff;
 }
 
-.badge-exceeded-msg {
-    background-color: #fbe0ed;
-    color: #a31354;
-    font-weight: 500;
-    padding: 0.6rem 1rem;
-    border-radius: 0.75rem;
-}
-
 .badge-meal-total {
     background-color: #ede2ff;
     color: #5e2b91;
@@ -153,50 +282,32 @@
     color: white;
 }
 
-.food-diary-page button[title="Delete"]:hover img {
-    filter: brightness(0.85);
-    transform: scale(1.1);
-    transition: 0.2s ease;
+.badge-exceeded-msg {
+    background-color: #fbe0ed;
+    color: #a31354;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
 }
 
-
-.food-diary-page button[title="Delete"] {
-    padding: 0;
-    border: none;
-    background: transparent;
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
-}
-.meal-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 2rem;
+/* Select2 Overrides */
+.select2-container--default .select2-selection--single {
+    border: 1px solid #cdb9e9;
+    border-radius: 10px;
+    background-color: #fefaff;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+    font-size: 0.95rem;
+    color: #2d1b46;
 }
 
-/* Stack cards on mobile for responsiveness */
-@media (max-width: 768px) {
-    .meal-grid {
-        grid-template-columns: 1fr;
-    }
-}
-.food-item-scroll {
-    max-height: 80px;
-    overflow-y: auto;
-    padding-right: 6px; /* space for scrollbar */
-}
-
-    .food-item-scroll::-webkit-scrollbar {
-        width: 6px;
+    .select2-container--default .select2-selection--single:focus {
+        border-color: #6f42c1;
+        box-shadow: 0 0 0 0.15rem rgba(111, 66, 193, 0.25);
     }
 
-    .food-item-scroll::-webkit-scrollbar-thumb {
-        background-color: #b49ae0;
-        border-radius: 3px;
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 7px;
     }
-
-    .food-item-scroll::-webkit-scrollbar-track {
-        background-color: #f8f4fd;
-    }
-

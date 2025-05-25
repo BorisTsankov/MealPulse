@@ -3,6 +3,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/FoodDiary.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 }
 
 <div class="food-diary-page">
@@ -18,19 +19,18 @@
         <div class="alert alert-danger">@TempData["Error"]</div>
     }
 
-
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a class="btn btn-outline-secondary"
-        asp-action="Index"
-        asp-route-date="@selectedDate.AddDays(-1).ToString("yyyy-MM-dd")">
+           asp-action="Index"
+           asp-route-date="@selectedDate.AddDays(-1).ToString("yyyy-MM-dd")">
             ← Previous
         </a>
 
         <h4 class="mb-0">Diary for @selectedDate.ToString("D")</h4>
 
         <a class="btn btn-outline-secondary"
-        asp-action="Index"
-        asp-route-date="@selectedDate.AddDays(1).ToString("yyyy-MM-dd")">
+           asp-action="Index"
+           asp-route-date="@selectedDate.AddDays(1).ToString("yyyy-MM-dd")">
             Next →
         </a>
     </div>
@@ -59,7 +59,6 @@
             }
         </div>
     }
-
 
     <div class="meal-grid">
         @foreach (var meal in Model.Sections)
@@ -104,72 +103,142 @@
                             </ul>
                         </div>
                     }
-
                     else
                     {
                         <p class="text-muted fst-italic">No food added yet for @meal.MealName.</p>
                     }
 
-                    <form asp-action="AddItem"
-                          asp-route-date="@selectedDate.ToString("yyyy-MM-dd")"
-                          method="post"
-                          novalidate>
-                        <input type="hidden" name="MealTypeId" value="@meal.MealTypeId" />
-                        <input type="hidden" name="date" value="@selectedDate.ToString("yyyy-MM-dd")" />
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <!-- Add Food Button -->
+                        <button class="btn btn-add-food" data-bs-toggle="modal" data-bs-target="#addFoodModal-@meal.MealTypeId">
+                            <i class="bi bi-plus-circle-fill me-1"></i> Add Food
+                        </button>
 
-                        <select name="FoodItemId" class="form-select food-search" required></select>
-                        <input type="number" name="Quantity" class="form-control" placeholder="Amount (g/ml)" min="1" required />
-                        <button type="submit" class="btn">Add</button>
-                    </form>
+                        <!-- Scan QR Button -->
+                        <button class="btn btn-scan-food" onclick="startQrScan(@meal.MealTypeId)">
+                            <i class="bi bi-qr-code-scan me-1"></i> Scan
+                        </button>
+                    </div>
+
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="addFoodModal-@meal.MealTypeId" tabindex="-1"
+                         aria-labelledby="addFoodModalLabel-@meal.MealTypeId" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form asp-action="AddItem" asp-route-date="@selectedDate.ToString("yyyy-MM-dd")" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addFoodModalLabel-@meal.MealTypeId">Add Food to @meal.MealName</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="MealTypeId" value="@meal.MealTypeId" />
+                                        <input type="hidden" name="date" value="@selectedDate.ToString("yyyy-MM-dd")" />
+
+                                        <div class="mb-3">
+                                            <label for="foodSelect-@meal.MealTypeId" class="form-label">Food</label>
+                                            <select name="FoodItemId" class="form-select food-search" required id="foodSelect-@meal.MealTypeId"></select>
+                                        </div>
+
+
+                                        <div class="form-floating mb-3">
+                                            <input type="number" name="Quantity" class="form-control quantity-input" min="1" required id="quantityInput-@meal.MealTypeId" />
+                                            <label for="quantityInput-@meal.MealTypeId">Quantity (g/ml)</label>
+                                        </div>
+
+                                        <div class="nutrient-preview d-none">
+                                            <p class="fw-bold mb-1">Estimated Nutrition:</p>
+                                            <ul class="list-unstyled mb-0">
+                                                <li>Calories: <span class="calories">-</span> kcal</li>
+                                                <li>Protein: <span class="protein">-</span> g</li>
+                                                <li>Fats: <span class="fats">-</span> g</li>
+                                                <li>Carbs: <span class="carbs">-</span> g</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success w-100" disabled>Add to Diary</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         }
     </div>
-
+</div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Initial select2 for all .food-search elements
             $('.food-search').select2({
                 placeholder: "Search for food...",
                 width: '100%',
                 ajax: {
                     url: '@Url.Action("SearchFoodItems", "FoodDiary")',
                     dataType: 'json',
-                    minimumInputLength: 2,
                     delay: 300,
                     data: function (params) {
                         return { term: params.term };
                     },
                     processResults: function (data) {
-                        return {
-                            results: data.results
-                        };
-                    },
-                    cache: true
+                        return { results: data.results };
+                    }
                 }
             });
 
-            $('form').filter(function () {
-                return $(this).attr('action')?.toLowerCase().includes('additem');
-            }).each(function () {
-                const form = $(this);
-                const select = form.find('select[name="FoodItemId"]');
-                const input = form.find('input[name="Quantity"]');
-                const button = form.find('button[type="submit"]');
+            // When modal is shown, reinitialize select2 in its context
+            $('.modal').on('shown.bs.modal', function () {
+                $(this).find('.food-search').select2({
+                    dropdownParent: $(this),
+                    ajax: {
+                        url: '@Url.Action("SearchFoodItems", "FoodDiary")',
+                        dataType: 'json',
+                        delay: 300,
+                        data: function (params) {
+                            return { term: params.term };
+                        },
+                        processResults: function (data) {
+                            return { results: data.results };
+                        }
+                    }
+                });
+            });
 
-                function toggleButton() {
-                    const hasFood = select.val();
-                    const hasQuantity = input.val() > 0;
-                    button.prop('disabled', !(hasFood && hasQuantity));
+            // Handle nutrient preview and form enablement
+            $('.modal').on('input change', '.quantity-input, .food-search', function () {
+                const modal = $(this).closest('.modal');
+                const quantity = parseFloat(modal.find('.quantity-input').val());
+                const foodId = modal.find('.food-search').val();
+                const submitBtn = modal.find('button[type="submit"]');
+
+                if (foodId && quantity > 0) {
+                    fetch(`/FoodDiary/GetFoodItemById?id=${foodId}`)
+                        .then(response => response.json())
+                        .then(food => {
+                            const factor = quantity / 100;
+                            modal.find('.calories').text((food.calories * factor).toFixed(0));
+                            modal.find('.protein').text((food.protein * factor).toFixed(1));
+                            modal.find('.fats').text((food.fat * factor).toFixed(1));
+                            modal.find('.carbs').text((food.carbohydrates * factor).toFixed(1));
+                            modal.find('.nutrient-preview').removeClass('d-none');
+                            submitBtn.prop('disabled', false);
+                        })
+                        .catch(() => {
+                            modal.find('.nutrient-preview').addClass('d-none');
+                            submitBtn.prop('disabled', true);
+                        });
+                } else {
+                    modal.find('.nutrient-preview').addClass('d-none');
+                    submitBtn.prop('disabled', true);
                 }
-
-                select.on('change', toggleButton);
-                input.on('input', toggleButton);
-                toggleButton();
             });
         });
     </script>
 }
-
 
