@@ -6,15 +6,24 @@
         public string Name { get; set; } = string.Empty;
         public string Unit { get; set; } = "g";
 
+        public string? Description { get; set; }
+        public string? Brand { get; set; }
+        public string? Barcode { get; set; }
+        public string? Source { get; set; }
+        public string? ImageUrl { get; set; }
+
         public decimal Calories { get; set; }
         public decimal Protein { get; set; }
         public decimal Fat { get; set; }
         public decimal Carbohydrates { get; set; }
         public decimal Sugars { get; set; }
         public decimal Fiber { get; set; }
-        public decimal Sodium { get; set; }
-        public decimal Potassium { get; set; }
-        public decimal Iron { get; set; }
-        public decimal Calcium { get; set; }
+
+        public decimal? Sodium { get; set; }
+        public decimal? Potassium { get; set; }
+        public decimal? Iron { get; set; }
+        public decimal? Calcium { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -18,16 +18,23 @@ namespace Services.Mappers
                 Carbohydrates = item.Carbohydrates,
                 Sugars = item.Sugars,
                 Fiber = item.Fiber,
-                Sodium = item.Sodium ?? 0,
-                Potassium = item.Potassium ?? 0,
-                Iron = item.Iron ?? 0,
-                Calcium = item.Calcium ?? 0
+                Sodium = item.Sodium,   
+                Potassium = item.Potassium,
+                Iron = item.Iron,
+                Calcium = item.Calcium,
+                Description = item.Description,  
+                Brand = item.Brand,
+                Barcode = item.Barcode,
+                Source = item.Source,
+                ImageUrl = item.ImageUrl,
+                CreatedAt = item.CreatedAt
             };
         }
         public static FoodItem ToEntity(FoodItemDto dto)
         {
             return new FoodItem
             {
+                FoodItemId = dto.FoodItemId ?? 0,
                 Name = dto.Name,
                 Unit = dto.Unit,
                 Calories = dto.Calories,
@@ -40,7 +47,12 @@ namespace Services.Mappers
                 Potassium = dto.Potassium,
                 Iron = dto.Iron,
                 Calcium = dto.Calcium,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Description = dto.Description,
+                Brand = dto.Brand,
+                Barcode = dto.Barcode,
+                Source = dto.Source,
+                ImageUrl = dto.ImageUrl,
             };
         }
 

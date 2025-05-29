@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Services.Enums;
+using Common;
 using Services.Services.Interfaces;
 using System.Security.Claims;
 using Web.ViewModels;
@@ -44,9 +44,9 @@ namespace Web.Controllers
 
             var goal = _goalService.GetMostRecentGoalByUserId(user.UserId);
 
-            ViewBag.IntensityOptions = Enum.GetValues(typeof(GoalIntensityDto))
+            ViewBag.IntensityOptions = Enum.GetValues(typeof(GoalIntensity))
 
-                .Cast<GoalIntensityDto>()
+                .Cast<GoalIntensity>()
                 .Select(g => new SelectListItem
                 {
                     Value = ((int)g).ToString(),
@@ -69,7 +69,7 @@ namespace Web.Controllers
                 User = user,
                 Goal = goal,
                 GoalIntensityDisplay = goal != null
-                    ? SplitCamelCase(((GoalIntensityDto)goal.GoalIntensity).ToString())
+                    ? SplitCamelCase(((GoalIntensity)goal.GoalIntensity).ToString())
                     : "",
                 DailyCalories = dailyCalories
             };

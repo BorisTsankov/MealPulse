@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Models.Models;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
+using DTOs;
+using DTOs.DTOs;
 
 namespace Services.Services
 {
@@ -19,7 +21,7 @@ namespace Services.Services
             _httpClient = new HttpClient();
         }
 
-        public async Task<FoodItem?> GetFoodItemByBarcodeAsync(string barcode)
+        public async Task<FoodItemDto?> GetFoodItemByBarcodeAsync(string barcode)
         {
             var response = await _httpClient.GetAsync($"https://world.openfoodfacts.org/api/v0/product/{barcode}.json");
 
@@ -33,7 +35,7 @@ namespace Services.Services
                 return null;
 
             var product = json["product"]!;
-            return new FoodItem
+            return new FoodItemDto
             {
                 Name = product["product_name"]?.ToString() ?? "Unknown",
                 Brand = product["brands"]?.ToString(),
@@ -56,7 +58,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<List<FoodItem>> SearchByNameAsync(string term)
+        public async Task<List<FoodItemDto>> SearchByNameAsync(string term)
         {
             var url = $"https://world.openfoodfacts.org/cgi/search.pl?search_terms={Uri.EscapeDataString(term)}&search_simple=1&action=process&json=1&page_size=5";
             var response = await _httpClient.GetAsync(url);
@@ -70,7 +72,7 @@ namespace Services.Services
             if (products == null)
                 return new();
 
-            var results = new List<FoodItem>();
+            var results = new List<FoodItemDto>();
             foreach (var p in products)
             {
                 var nutriments = p["nutriments"];
@@ -84,7 +86,7 @@ namespace Services.Services
                     nutriments["fiber_100g"] == null)
                     continue;
 
-                results.Add(new FoodItem
+                results.Add(new FoodItemDto
                 {
                     Name = p["product_name"]?.ToString() ?? "Unknown",
                     Brand = p["brands"]?.ToString(),

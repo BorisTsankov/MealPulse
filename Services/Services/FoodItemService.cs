@@ -44,10 +44,11 @@ namespace Services.Services
             var external = await _openFoodFactsService.GetFoodItemByBarcodeAsync(barcode);
             if (external != null)
             {
-                var newId = _repo.Add(external); // ✅ Save and get ID
+                var entity = FoodItemMapper.ToEntity(external);
+                var newId = _repo.Add(entity); // ✅ Save and get ID
                 external.FoodItemId = newId;     // ✅ Set ID for later use
 
-                return FoodItemMapper.ToDto(external);
+                return external;
             }
 
 
@@ -80,12 +81,13 @@ namespace Services.Services
                     if (existing == null)
                     {
                         // 🔥 INSERT AND GET ID BACK
-                        int newId = _repo.Add(item);
+                        var entity = FoodItemMapper.ToEntity(item);
+                        int newId = _repo.Add(entity);
                         item.FoodItemId = newId;
                     }
                 }
 
-                return apiResult.Select(FoodItemMapper.ToDto).ToList();
+                return apiResult;
             }
 
             return new List<FoodItemDto>();
