@@ -3,91 +3,124 @@ using Models.Models;
 using Moq;
 using Services.Services;
 
-namespace Tests
+public class MetricServiceTests
 {
-    public class MetricServiceTests
+    private readonly Mock<IMetricRepository> _metricRepositoryMock;
+    private readonly MetricService _metricService;
+
+    public MetricServiceTests()
     {
-        private readonly Mock<IMetricRepository> _metricRepoMock;
-        private readonly MetricService _metricService;
+        _metricRepositoryMock = new Mock<IMetricRepository>();
+        _metricService = new MetricService(_metricRepositoryMock.Object);
+    }
 
-        public MetricServiceTests()
-        {
-            _metricRepoMock = new Mock<IMetricRepository>();
-            _metricService = new MetricService(_metricRepoMock.Object);
-        }
+    // ---------------------
+    // GetAllMetrics Tests
+    // ---------------------
 
-        [Fact]
-        public void GetAllMetrics_ShouldReturnList_WhenCalled()
+    [Fact]
+    public void GetAllMetrics_ReturnsAllMetrics()
+    {
+        var metrics = new List<Metric>
         {
-            // Arrange
-            var expected = new List<Metric>
-        {
-            new Metric { MetricId = 1, MetricName = "Metric 1" },
-            new Metric { MetricId = 2, MetricName = "Metric 2" }
+            new Metric { MetricId = 1, MetricName = "Kilogram" },
+            new Metric { MetricId = 2, MetricName = "Pound" }
         };
 
-            _metricRepoMock.Setup(r => r.GetAll()).Returns(expected);
+        _metricRepositoryMock.Setup(repo => repo.GetAll()).Returns(metrics);
 
-            // Act
-            var result = _metricService.GetAllMetrics();
+        var result = _metricService.GetAllMetrics();
 
-            // Assert
-            Assert.Equal(2, result.Count);
-            Assert.Equal("Metric 1", result[0].MetricName);
-        }
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, m => m.MetricName == "Kilogram");
+        Assert.Contains(result, m => m.MetricName == "Pound");
+    }
 
-        [Fact]
-        public void GetMetricById_ShouldReturnMetric_WhenExists()
-        {
-            // Arrange
-            var metric = new Metric { MetricId = 1, MetricName = "Metric A" };
-            _metricRepoMock.Setup(r => r.GetById(1)).Returns(metric);
+    [Fact]
+    public void GetAllMetrics_EmptyList_ReturnsEmptyList()
+    {
+        _metricRepositoryMock.Setup(repo => repo.GetAll()).Returns(new List<Metric>());
 
-            // Act
-            var result = _metricService.GetMetricById(1);
+        var result = _metricService.GetAllMetrics();
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Metric A", result!.MetricName);
-        }
+        Assert.Empty(result);
+    }
 
-        [Fact]
-        public void GetMetricById_ShouldReturnNull_WhenNotFound()
-        {
-            // Arrange
-            _metricRepoMock.Setup(r => r.GetById(It.IsAny<int>())).Returns((Metric?)null);
+    [Fact]
+    public void GetAllMetrics_RepositoryReturnsNull_Throws()
+    {
+        _metricRepositoryMock.Setup(repo => repo.GetAll()).Returns((List<Metric>)null!);
 
-            // Act
-            var result = _metricService.GetMetricById(999);
+        Assert.Throws<System.NullReferenceException>(() => _metricService.GetAllMetrics());
+    }
 
-            // Assert
-            Assert.Null(result);
-        }
+    // ---------------------
+    // GetMetricById Tests
+    // ---------------------
 
-        [Fact]
-        public void GetMetricNameById_ShouldReturnCorrectName()
-        {
-            // Arrange
-            _metricRepoMock.Setup(r => r.GetMetricNameById(1)).Returns("Grams");
+    [Fact]
+    public void GetMetricById_ValidId_ReturnsMetric()
+    {
+        var metric = new Metric {MetricId = 1, MetricName = "Kilogram" };
+        _metricRepositoryMock.Setup(repo => repo.GetById(1)).Returns(metric);
 
-            // Act
-            var name = _metricService.GetMetricNameById(1);
+        var result = _metricService.GetMetricById(1);
 
-            // Assert
-            Assert.Equal("Grams", name);
-        }
+        Assert.NotNull(result);
+        Assert.Equal("Kilogram", result!.MetricName);
+    }
 
-        [Fact]
-        public void GetMetricNameById_ShouldReturnEmpty_WhenUnknownId()
-        {
-            // Arrange
-            _metricRepoMock.Setup(r => r.GetMetricNameById(It.IsAny<int>())).Returns(string.Empty);
+    [Fact]
+    public void GetMetricById_InvalidId_ReturnsNull()
+    {
+        _metricRepositoryMock.Setup(repo => repo.GetById(999)).Returns((Metric?)null);
 
-            // Act
-            var name = _metricService.GetMetricNameById(999);
+        var result = _metricService.GetMetricById(999);
 
-            // Assert
-            Assert.Equal(string.Empty, name);
-        }
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetMetricById_NegativeId_ReturnsNull()
+    {
+        _metricRepositoryMock.Setup(repo => repo.GetById(-5)).Returns((Metric?)null);
+
+        var result = _metricService.GetMetricById(-5);
+
+        Assert.Null(result);
+    }
+
+    // ---------------------
+    // GetMetricNameById Tests
+    // ---------------------
+
+    [Fact]
+    public void GetMetricNameById_ValidId_ReturnsName()
+    {
+        _metricRepositoryMock.Setup(repo => repo.GetMetricNameById(1)).Returns("Gram");
+
+        var result = _metricService.GetMetricNameById(1);
+
+        Assert.Equal("Gram", result);
+    }
+
+    [Fact]
+    public void GetMetricNameById_InvalidId_ReturnsNullOrEmpty()
+    {
+        _metricRepositoryMock.Setup(repo => repo.GetMetricNameById(999)).Returns((string?)null);
+
+        var result = _metricService.GetMetricNameById(999);
+
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetMetricNameById_NegativeId_ReturnsNull()
+    {
+        _metricRepositoryMock.Setup(repo => repo.GetMetricNameById(-3)).Returns((string?)null);
+
+        var result = _metricService.GetMetricNameById(-3);
+
+        Assert.Null(result);
     }
 }

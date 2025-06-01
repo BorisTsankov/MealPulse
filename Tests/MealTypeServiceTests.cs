@@ -3,40 +3,70 @@ using Models.Models;
 using Moq;
 using Services.Services;
 
-namespace Tests
+public class MealTypeServiceTests
 {
-    public class MealTypeServiceTests
+    private readonly Mock<IMealTypeRepository> _repoMock;
+    private readonly MealTypeService _service;
+
+    public MealTypeServiceTests()
     {
-        private readonly Mock<IMealTypeRepository> _mockRepo;
-        private readonly MealTypeService _service;
+        _repoMock = new Mock<IMealTypeRepository>();
+        _service = new MealTypeService(_repoMock.Object);
+    }
 
-        public MealTypeServiceTests()
+    [Fact]
+    public void GetAll_ReturnsListOfMealTypes()
+    {
+        // Arrange
+        var mealTypes = new List<MealType>
         {
-            _mockRepo = new Mock<IMealTypeRepository>();
-            _service = new MealTypeService(_mockRepo.Object);
-        }
+            new MealType { MealTypeId = 1, MealTypeName = "Breakfast" },
+            new MealType { MealTypeId = 2, MealTypeName = "Lunch" }
+        };
+        _repoMock.Setup(r => r.GetAll()).Returns(mealTypes);
 
-        [Fact]
-        public void GetAll_ReturnsAllMealTypes()
-        {
-            // Arrange
-            var mealTypes = new List<MealType>
-            {
-                new MealType { MealTypeId = 1, MealTypeName = "Breakfast" },
-                new MealType { MealTypeId = 2, MealTypeName = "Lunch" },
-                new MealType { MealTypeId = 3, MealTypeName = "Dinner" },
-                new MealType { MealTypeId = 4, MealTypeName = "Snack" }
-            };
+        // Act
+        var result = _service.GetAll();
 
-            _mockRepo.Setup(r => r.GetAll()).Returns(mealTypes);
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, m => m.MealTypeName == "Breakfast");
+        Assert.Contains(result, m => m.MealTypeName == "Lunch");
+    }
 
-            // Act
-            var result = _service.GetAll();
+    [Fact]
+    public void GetAll_EmptyList_ReturnsEmptyList()
+    {
+        // Arrange
+        _repoMock.Setup(r => r.GetAll()).Returns(new List<MealType>());
 
-            // Assert
-            Assert.Equal(4, result.Count);
-            Assert.Contains(result, m => m.MealTypeName == "Lunch");
-            _mockRepo.Verify(r => r.GetAll(), Times.Once);
-        }
+        // Act
+        var result = _service.GetAll();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetAll_RepositoryReturnsNull_Throws()
+    {
+        // Arrange
+        _repoMock.Setup(r => r.GetAll()).Returns((List<MealType>)null!);
+
+        // Act & Assert
+        Assert.Throws<System.NullReferenceException>(() => _service.GetAll());
+    }
+
+    [Fact]
+    public void GetAll_RepositoryThrowsException_PropagatesException()
+    {
+        // Arrange
+        _repoMock.Setup(r => r.GetAll()).Throws(new System.Exception("DB error"));
+
+        // Act & Assert
+        var ex = Assert.Throws<System.Exception>(() => _service.GetAll());
+        Assert.Equal("DB error", ex.Message);
     }
 }

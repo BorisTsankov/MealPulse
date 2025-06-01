@@ -9,16 +9,17 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using DTOs;
 using DTOs.DTOs;
+using Services.Services.Interfaces;
 
 namespace Services.Services
 {
-    public class OpenFoodFactsService
+    public class OpenFoodFactsService : IOpenFoodFactsService
     {
         private readonly HttpClient _httpClient;
 
-        public OpenFoodFactsService()
+        public OpenFoodFactsService(HttpClient httpClient)
         {
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
         }
 
         public async Task<FoodItemDto?> GetFoodItemByBarcodeAsync(string barcode)

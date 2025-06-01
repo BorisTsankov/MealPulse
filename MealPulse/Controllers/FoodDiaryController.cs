@@ -45,7 +45,7 @@ namespace Web.Controllers
             var user = _userService.GetUserById(userId);
             DateTime selectedDate = date?.Date ?? DateTime.Today;
 
-            var foodItems = _foodDiaryService.GetItemsByUserAndDate(userId, selectedDate);
+            var foodItems = _foodDiaryService.GetItemsForGoalAndDate(userId, selectedDate);
 
             var mealTypes = _mealTypeService.GetAll();
 

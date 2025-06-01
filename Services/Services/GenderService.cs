@@ -15,7 +15,11 @@ namespace Services.Services
 
         public List<Gender> GetAll()
         {
-            return _genderRepository.GetAll();
+            var result = _genderRepository.GetAll();
+            if (result == null)
+                throw new NullReferenceException("Gender repository returned null");
+
+            return result;
         }
 
         public string GetGenderName(int id)
@@ -23,5 +27,4 @@ namespace Services.Services
             return _genderRepository.GetGenderNameById(id);
         }
     }
-
 }

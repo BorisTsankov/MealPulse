@@ -4,7 +4,6 @@ using Services.Services.Interfaces;
 
 namespace Services.Services
 {
-
     public class MetricService : IMetricService
     {
         private readonly IMetricRepository _metricRepository;
@@ -16,7 +15,11 @@ namespace Services.Services
 
         public List<Metric> GetAllMetrics()
         {
-            return _metricRepository.GetAll();
+            var result = _metricRepository.GetAll();
+            if (result == null)
+                throw new NullReferenceException("Metric repository returned null");
+
+            return result;
         }
 
         public Metric? GetMetricById(int id)
@@ -28,6 +31,5 @@ namespace Services.Services
         {
             return _metricRepository.GetMetricNameById(id);
         }
-
     }
 }

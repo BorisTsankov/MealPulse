@@ -1,89 +1,169 @@
 ﻿using Common;
 using DataAccess.Repositories.Interfaces;
 using DTOs.DTOs;
-using Models.Models;
 using Moq;
-using Services.Services;
 using Services.Services.Interfaces;
+using Services.Services;
+using Models.Models;
 
-namespace Tests
+public class GoalServiceTests
 {
-    public class GoalServiceTests
+    private readonly Mock<IGoalRepository> _goalRepoMock = new();
+    private readonly Mock<IGenderService> _genderServiceMock = new();
+    private readonly Mock<IActivityLevelService> _activityLevelServiceMock = new();
+    private readonly GoalService _goalService;
+
+    public GoalServiceTests()
     {
-        private readonly Mock<IGoalRepository> _goalRepoMock = new();
-        private readonly Mock<IGenderService> _genderServiceMock = new();
-        private readonly Mock<IActivityLevelService> _activityServiceMock = new();
-        private readonly GoalService _service;
+        _goalService = new GoalService(_goalRepoMock.Object, _genderServiceMock.Object, _activityLevelServiceMock.Object);
+    }
 
-        public GoalServiceTests()
+    [Fact]
+    public void GetMostRecentGoalByUserId_ValidUserId_ReturnsDto()
+    {
+        var goal = new Goal { goal_id = 1, user_id = 1, current_weight_kg = 70, target_weight_kg = 65 };
+        _goalRepoMock.Setup(r => r.GetMostRecentGoalByUserId(1)).Returns(goal);
+
+        var result = _goalService.GetMostRecentGoalByUserId(1);
+
+        Assert.NotNull(result);
+        Assert.Equal(70, result!.CurrentWeightKg);
+    }
+
+    [Fact]
+    public void GetMostRecentGoalByUserId_NoGoal_ReturnsNull()
+    {
+        _goalRepoMock.Setup(r => r.GetMostRecentGoalByUserId(2)).Returns((Goal?)null);
+
+        var result = _goalService.GetMostRecentGoalByUserId(2);
+
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void UpdateWeight_ValidInput_ReturnsTrue()
+    {
+        _goalRepoMock.Setup(r => r.UpdateWeight(1, 75)).Returns(true);
+
+        var result = _goalService.UpdateWeight(1, 75);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void UpdateWeight_UpdateFails_ReturnsFalse()
+    {
+        _goalRepoMock.Setup(r => r.UpdateWeight(1, 75)).Returns(false);
+
+        var result = _goalService.UpdateWeight(1, 75);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void CreateGoal_ValidInput_ReturnsTrue()
+    {
+        _goalRepoMock.Setup(r => r.CreateGoal(It.IsAny<Goal>())).Returns(true);
+
+        var result = _goalService.CreateGoal(1, 70, 60, "LoseHalfKgPerWeek");
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void CreateGoal_InvalidEnum_ThrowsException()
+    {
+        Assert.Throws<ArgumentException>(() => _goalService.CreateGoal(1, 70, 60, "INVALID_ENUM"));
+    }
+
+    [Fact]
+    public void CalculateCalorieGoal_ValidInput_ReturnsCorrectCalories()
+    {
+        var user = new UserDto
         {
-            _service = new GoalService(_goalRepoMock.Object, _genderServiceMock.Object, _activityServiceMock.Object);
+            HeightCm = 180,
+            GenderName = "Male",
+            ActivityLevelName = "Average",
+            DateOfBirth = new DateTime(2000, 1, 1)
+        };
 
-        }
-
-        [Fact]
-        public void GetMostRecentGoalByUserId_ReturnsDto()
+        var goal = new GoalDto
         {
-            _goalRepoMock.Setup(r => r.GetMostRecentGoalByUserId(1)).Returns(new Goal { goal_id = 123, user_id = 1 });
+            CurrentWeightKg = 70,
+            GoalIntensity = (int)GoalIntensity.LoseHalfKgPerWeek
+        };
 
-            var result = _service.GetMostRecentGoalByUserId(1);
+        var calories = _goalService.CalculateCalorieGoal(user, goal);
 
-            Assert.NotNull(result);
-            Assert.Equal(123, result.GoalId);
-        }
+        Assert.NotNull(calories);
+        Assert.InRange(calories!.Value, 1000, 4000); // Reasonable calorie range
+    }
 
-        [Fact]
-        public void UpdateWeight_CallsRepository()
+    [Theory]
+    [InlineData(0, 180)] // Weight = 0
+    [InlineData(70, 0)]  // Height = 0
+    public void CalculateCalorieGoal_ZeroInputs_ReturnsNull(decimal weight, int height)
+    {
+        var user = new UserDto
         {
-            _goalRepoMock.Setup(r => r.UpdateWeight(1, 75)).Returns(true);
+            HeightCm = height,
+            GenderName = "Male",
+            ActivityLevelName = "Average",
+            DateOfBirth = new DateTime(2000, 1, 1)
+        };
 
-            var result = _service.UpdateWeight(1, 75);
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void CreateGoal_ReturnsTrue_WhenValid()
+        var goal = new GoalDto
         {
-            _goalRepoMock.Setup(r => r.CreateGoal(It.IsAny<Goal>())).Returns(true);
+            CurrentWeightKg = weight,
+            GoalIntensity = (int)GoalIntensity.Maintain
+        };
 
-            var result = _service.CreateGoal(1, 80, 70, "LoseHalfKgPerWeek");
+        var result = _goalService.CalculateCalorieGoal(user, goal);
 
-            Assert.True(result);
-        }
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void CalculateCalorieGoal_ReturnsNull_WhenMissingValues()
+    [Fact]
+    public void CalculateCalorieGoal_NullDateOfBirth_ReturnsNull()
+    {
+        var user = new UserDto
         {
-            var user = new UserDto { HeightCm = 0, DateOfBirth = null };
-            var goal = new GoalDto { CurrentWeightKg = 0 };
+            HeightCm = 170,
+            GenderName = "Female",
+            ActivityLevelName = "Average",
+            DateOfBirth = null
+        };
 
-            var result = _service.CalculateCalorieGoal(user, goal);
-
-            Assert.Null(result);
-        }
-
-        [Fact]
-        public void CalculateCalorieGoal_ReturnsCalories()
+        var goal = new GoalDto
         {
-            var user = new UserDto
-            {
-                HeightCm = 180,
-                DateOfBirth = new DateTime(2000, 1, 1),
-                GenderName = "male",
-                ActivityLevelName = "average"
-            };
+            CurrentWeightKg = 60,
+            GoalIntensity = (int)GoalIntensity.LoseHalfKgPerWeek
+        };
 
-            var goal = new GoalDto
-            {
-                CurrentWeightKg = 75,
-                GoalIntensity = (int)GoalIntensity.LoseHalfKgPerWeek
-            };
+        var result = _goalService.CalculateCalorieGoal(user, goal);
 
-            var result = _service.CalculateCalorieGoal(user, goal);
+        Assert.Null(result);
+    }
 
-            Assert.NotNull(result);
-            Assert.InRange(result.Value, 1000, 5000);
-        }
+    [Fact]
+    public void CalculateCalorieGoal_UnknownActivityLevel_UsesDefaultMultiplier()
+    {
+        var user = new UserDto
+        {
+            HeightCm = 170,
+            GenderName = "Female",
+            ActivityLevelName = "unicorn mode",
+            DateOfBirth = new DateTime(1995, 1, 1)
+        };
+
+        var goal = new GoalDto
+        {
+            CurrentWeightKg = 60,
+            GoalIntensity = (int)GoalIntensity.Maintain
+        };
+
+        var result = _goalService.CalculateCalorieGoal(user, goal);
+
+        Assert.NotNull(result);
     }
 }

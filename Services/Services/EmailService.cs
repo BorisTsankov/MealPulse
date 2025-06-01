@@ -19,7 +19,7 @@ namespace Services.Services
             _config = config;
         }
 
-        public void SendEmail(string to, string subject, string body)
+        public virtual void SendEmail(string to, string subject, string body)
         {
             var smtp = new SmtpClient(_config["Smtp:Host"])
             {

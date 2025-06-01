@@ -58,6 +58,11 @@ public class Program
         builder.Services.AddScoped<IMealTypeService, MealTypeService>();
         builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
         builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+        builder.Services.AddHttpClient<IOpenFoodFactsService, OpenFoodFactsService>();
+        builder.Services.AddScoped<IAiHttpClient, AiHttpClient>();
+        builder.Services.AddScoped<IAiService, AiService>();
+        builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+
 
 
         var app = builder.Build();

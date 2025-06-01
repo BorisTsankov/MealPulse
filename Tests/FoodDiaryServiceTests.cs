@@ -1,98 +1,171 @@
 ﻿using DataAccess.Repositories.Interfaces;
+using DTOs.DTOs;
 using Models.Models;
 using Moq;
 using Services.Services;
 
-namespace Tests
+public class FoodDiaryServiceTests
 {
-    public class FoodDiaryServiceTests
+    private readonly Mock<IFoodDiaryRepository> _repoMock = new();
+    private readonly FoodDiaryService _service;
+
+    public FoodDiaryServiceTests()
     {
-        private readonly Mock<IFoodDiaryRepository> _mockRepo;
-        private readonly FoodDiaryService _service;
-
-        public FoodDiaryServiceTests()
-        {
-            _mockRepo = new Mock<IFoodDiaryRepository>();
-            _service = new FoodDiaryService(_mockRepo.Object);
-        }
-
-        [Fact]
-        public void GetItemsForGoal_ReturnsCorrectItems()
-        {
-            // Arrange
-            int goalId = 1;
-            var items = new List<FoodDiaryItem>
-            {
-                new FoodDiaryItem { FoodDiaryItemId = 1, GoalId = goalId, FoodId = 1 },
-                new FoodDiaryItem { FoodDiaryItemId = 2, GoalId = goalId, FoodId = 2 }
-            };
-
-            _mockRepo.Setup(r => r.GetItemsByGoalId(goalId)).Returns(items);
-
-            // Act
-            var result = _service.GetItemsForGoal(goalId);
-
-            // Assert
-            Assert.Equal(2, result.Count);
-            Assert.All(result, item => Assert.Equal(goalId, item.GoalId));
-            _mockRepo.Verify(r => r.GetItemsByGoalId(goalId), Times.Once);
-        }
-
-        //[Fact]
-        //public void AddFoodDiaryItem_ValidItem_ReturnsTrue()
-        //{
-        //    // Arrange
-        //    var item = new FoodDiaryItem { FoodDiaryItemId = 1, GoalId = 1, FoodId = 1 };
-        //    _mockRepo.Setup(r => r.Add(item)).Returns(true);
-
-        //    // Act
-        //    var result = _service.AddFoodDiaryItem(item);
-
-        //    // Assert
-        //    Assert.True(result);
-        //    _mockRepo.Verify(r => r.Add(item), Times.Once);
-        //}
-
-        [Fact]
-        public void GetItemsForGoalAndDate_ReturnsCorrectItems()
-        {
-            // Arrange
-            int goalId = 1;
-            DateTime date = new DateTime(2025, 5, 1);
-            var items = new List<FoodDiaryItem>
-            {
-                new FoodDiaryItem { FoodId = 1, GoalId = goalId, DateTime = date },
-                new FoodDiaryItem { FoodId = 2, GoalId = goalId, DateTime = date }
-            };
-
-            _mockRepo.Setup(r => r.GetItemsByGoalIdAndDate(goalId, date)).Returns(items);
-
-            // Act
-            var result = _service.GetItemsForGoalAndDate(goalId, date);
-
-            // Assert
-            Assert.Equal(2, result.Count);
-            Assert.All(result, item =>
-            {
-                Assert.Equal(goalId, item.GoalId);
-                Assert.Equal(date, item.DateTime);
-            });
-            _mockRepo.Verify(r => r.GetItemsByGoalIdAndDate(goalId, date), Times.Once);
-        }
-
-        [Fact]
-        public void DeleteFoodDiaryItem_ExistingId_ReturnsTrue()
-        {
-            // Arrange
-            int id = 42;
-            _mockRepo.Setup(r => r.Delete(id)).Returns(true);
-
-            // Act
-            var result = _service.DeleteFoodDiaryItem(id);
-
-            // Assert
-            Assert.True(result);
-            _mockRepo.Verify(r => r.Delete(id), Times.Once);
-        }
+        _service = new FoodDiaryService(_repoMock.Object);
     }
+
+    // -------------------------
+    // GetItemsForGoal
+    // -------------------------
+
+    [Fact]
+    public void GetItemsForGoal_ItemsExist_ReturnsList()
+    {
+        var goalId = 1;
+        var items = new List<FoodDiaryItem> { new() { GoalId = goalId, FoodId = 1 } };
+        _repoMock.Setup(r => r.GetItemsByGoalId(goalId)).Returns(items);
+
+        var result = _service.GetItemsForGoal(goalId);
+
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal(goalId, result[0].GoalId);
+    }
+
+    [Fact]
+    public void GetItemsForGoal_NoItems_ReturnsEmptyList()
+    {
+        _repoMock.Setup(r => r.GetItemsByGoalId(1)).Returns(new List<FoodDiaryItem>());
+
+        var result = _service.GetItemsForGoal(1);
+
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    // -------------------------
+    // AddFoodDiaryItem
+    // -------------------------
+
+    [Fact]
+    public void AddFoodDiaryItem_ValidDto_ReturnsTrue()
+    {
+        var dto = new FoodDiaryItemDto
+        {
+            GoalId = 1,
+            FoodId = 2,
+            Quantity = 100,
+            MealTypeId = 3,
+            DateTime = DateTime.Today
+        };
+
+        _repoMock.Setup(r => r.Add(It.IsAny<FoodDiaryItem>())).Returns(true);
+
+        var result = _service.AddFoodDiaryItem(dto);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void AddFoodDiaryItem_InsertFails_ReturnsFalse()
+    {
+        var dto = new FoodDiaryItemDto
+        {
+            GoalId = 1,
+            FoodId = 2,
+            Quantity = 100,
+            MealTypeId = 3,
+            DateTime = DateTime.Today
+        };
+
+        _repoMock.Setup(r => r.Add(It.IsAny<FoodDiaryItem>())).Returns(false);
+
+        var result = _service.AddFoodDiaryItem(dto);
+
+        Assert.False(result);
+    }
+
+    // -------------------------
+    // GetItemsForGoalAndDate
+    // -------------------------
+
+    [Fact]
+    public void GetItemsForGoalAndDate_ValidInputs_ReturnsItems()
+    {
+        var date = DateTime.Today;
+        var goalId = 1;
+        var items = new List<FoodDiaryItem> { new() { GoalId = goalId, DateTime = date } };
+        _repoMock.Setup(r => r.GetItemsByGoalIdAndDate(goalId, date)).Returns(items);
+
+        var result = _service.GetItemsForGoalAndDate(goalId, date);
+
+        Assert.Single(result);
+        Assert.Equal(goalId, result[0].GoalId);
+    }
+
+    [Fact]
+    public void GetItemsForGoalAndDate_NoResults_ReturnsEmpty()
+    {
+        var date = DateTime.Today;
+        _repoMock.Setup(r => r.GetItemsByGoalIdAndDate(5, date)).Returns(new List<FoodDiaryItem>());
+
+        var result = _service.GetItemsForGoalAndDate(5, date);
+
+        Assert.Empty(result);
+    }
+
+    // -------------------------
+    // DeleteFoodDiaryItem
+    // -------------------------
+
+    [Fact]
+    public void DeleteFoodDiaryItem_ValidId_ReturnsTrue()
+    {
+        _repoMock.Setup(r => r.Delete(10)).Returns(true);
+
+        var result = _service.DeleteFoodDiaryItem(10);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void DeleteFoodDiaryItem_Failure_ReturnsFalse()
+    {
+        _repoMock.Setup(r => r.Delete(10)).Returns(false);
+
+        var result = _service.DeleteFoodDiaryItem(10);
+
+        Assert.False(result);
+    }
+
+    // -------------------------
+    // GetItemsByUserAndDate
+    // -------------------------
+
+    //[Fact]
+    //public void GetItemsByUserAndDate_ValidInputs_ReturnsItems()
+    //{
+    //    var userId = 2;
+    //    var date = DateTime.Today;
+    //    var items = new List<FoodDiaryItem> { new() { UserId = userId, Date = date } };
+
+    //    _repoMock.Setup(r => r.GetItemsByUserIdAndDate(userId, date)).Returns(items);
+
+    //    var result = _service.GetItemsByUserAndDate(userId, date);
+
+    //    Assert.Single(result);
+    //    Assert.Equal(userId, result[0].UserId);
+    //}
+
+    //[Fact]
+    //public void GetItemsByUserAndDate_NoResults_ReturnsEmpty()
+    //{
+    //    var userId = 2;
+    //    var date = DateTime.Today;
+    //    _repoMock.Setup(r => r.GetItemsByUserIdAndDate(userId, date)).Returns(new List<FoodDiaryItem>());
+
+    //    var result = _service.GetItemsByUserAndDate(userId, date);
+
+    //    Assert.Empty(result);
+    //}
 }

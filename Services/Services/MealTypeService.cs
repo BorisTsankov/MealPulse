@@ -15,8 +15,11 @@ namespace Services.Services
 
         public List<MealType> GetAll()
         {
-            return _repo.GetAll();
+            var result = _repo.GetAll();
+            if (result == null)
+                throw new NullReferenceException("MealType repository returned null");
+
+            return result;
         }
     }
-
 }

@@ -33,7 +33,7 @@ namespace Web.Controllers
             if (user == null || goal == null)
                 return View("Error");
 
-            var items = _foodDiaryService.GetItemsByUserAndDate(userId, DateTime.Today);
+            var items = _foodDiaryService.GetItemsForGoalAndDate(userId, DateTime.Today);
 
             decimal totalCalories = 0;
             decimal protein = 0, carbs = 0, fat = 0;

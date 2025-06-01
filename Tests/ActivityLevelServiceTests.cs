@@ -3,55 +3,90 @@ using Models.Models;
 using Moq;
 using Services.Services;
 
-namespace Tests
+public class ActivityLevelServiceTests
 {
-    public class ActivityLevelServiceTests
+    private readonly Mock<IActivityLevelRepository> _repoMock;
+    private readonly ActivityLevelService _service;
+
+    public ActivityLevelServiceTests()
     {
-        private readonly Mock<IActivityLevelRepository> _mockRepo;
-        private readonly ActivityLevelService _service;
+        _repoMock = new Mock<IActivityLevelRepository>();
+        _service = new ActivityLevelService(_repoMock.Object);
+    }
 
-        public ActivityLevelServiceTests()
+    // ---------------------------
+    // GetAll Tests
+    // ---------------------------
+
+    [Fact]
+    public void GetAll_ReturnsListOfActivityLevels()
+    {
+        var levels = new List<ActivityLevel>
         {
-            _mockRepo = new Mock<IActivityLevelRepository>();
-            _service = new ActivityLevelService(_mockRepo.Object);
-        }
+            new() { ActivityLevelId = 1, ActivityLevelName = "Not Active" },
+            new() { ActivityLevelId = 2, ActivityLevelName = "Slightly Active" }
+        };
 
-        [Fact]
-        public void GetAll_ReturnsListOfActivityLevels()
-        {
-            // Arrange
-            var levels = new List<ActivityLevel>
-            {
-                new ActivityLevel { ActivityLevelId = 1, ActivityLevelName = "Low" },
-                new ActivityLevel { ActivityLevelId = 2, ActivityLevelName = "High" }
-            };
+        _repoMock.Setup(r => r.GetAll()).Returns(levels);
 
-            _mockRepo.Setup(r => r.GetAll()).Returns(levels);
+        var result = _service.GetAll();
 
-            // Act
-            var result = _service.GetAll();
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, l => l.ActivityLevelName == "Not Active");
+    }
 
-            // Assert
-            Assert.Equal(2, result.Count);
-            Assert.Contains(result, l => l.ActivityLevelName == "Low");
-            _mockRepo.Verify(r => r.GetAll(), Times.Once);
-        }
+    [Fact]
+    public void GetAll_EmptyList_ReturnsEmpty()
+    {
+        _repoMock.Setup(r => r.GetAll()).Returns(new List<ActivityLevel>());
 
-        [Fact]
-        public void GetActivityLevelName_ValidId_ReturnsCorrectName()
-        {
-            // Arrange
-            int id = 1;
-            string expectedName = "Moderate";
+        var result = _service.GetAll();
 
-            _mockRepo.Setup(r => r.GetActivityLevelNameById(id)).Returns(expectedName);
+        Assert.Empty(result);
+    }
 
-            // Act
-            var result = _service.GetActivityLevelName(id);
+    [Fact]
+    public void GetAll_RepositoryReturnsNull_ReturnsNull()
+    {
+        _repoMock.Setup(r => r.GetAll()).Returns((List<ActivityLevel>?)null);
 
-            // Assert
-            Assert.Equal(expectedName, result);
-            _mockRepo.Verify(r => r.GetActivityLevelNameById(id), Times.Once);
-        }
+        var result = _service.GetAll();
+
+        Assert.Null(result);
+    }
+
+
+    // ---------------------------
+    // GetActivityLevelName Tests
+    // ---------------------------
+
+    [Fact]
+    public void GetActivityLevelName_ValidId_ReturnsName()
+    {
+        _repoMock.Setup(r => r.GetActivityLevelNameById(1)).Returns("Average");
+
+        var result = _service.GetActivityLevelName(1);
+
+        Assert.Equal("Average", result);
+    }
+
+    [Fact]
+    public void GetActivityLevelName_InvalidId_ReturnsUnknown()
+    {
+        _repoMock.Setup(r => r.GetActivityLevelNameById(999)).Returns("Unknown");
+
+        var result = _service.GetActivityLevelName(999);
+
+        Assert.Equal("Unknown", result);
+    }
+
+    [Fact]
+    public void GetActivityLevelName_RepositoryReturnsNull_ReturnsNull()
+    {
+        _repoMock.Setup(r => r.GetActivityLevelNameById(It.IsAny<int>())).Returns((string?)null);
+
+        var result = _service.GetActivityLevelName(123);
+
+        Assert.Null(result);
     }
 }
