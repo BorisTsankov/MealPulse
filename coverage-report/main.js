@@ -211,54 +211,17 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
-    "name": "DataAccess",
-    "classes": [
-      { "name": "DataAccess.Data.DbHelper", "rp": "DataAccess_DbHelper.html", "cl": 0, "ucl": 61, "cal": 61, "tl": 96, "cb": 0, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.ActivityLevelRepository", "rp": "DataAccess_ActivityLevelRepository.html", "cl": 0, "ucl": 33, "cal": 33, "tl": 56, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.AuthRepository", "rp": "DataAccess_AuthRepository.html", "cl": 0, "ucl": 59, "cal": 59, "tl": 92, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.FoodDiaryRepository", "rp": "DataAccess_FoodDiaryRepository.html", "cl": 0, "ucl": 103, "cal": 103, "tl": 140, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.FoodItemRepository", "rp": "DataAccess_FoodItemRepository.html", "cl": 0, "ucl": 108, "cal": 108, "tl": 150, "cb": 0, "tb": 28, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.GenderRepository", "rp": "DataAccess_GenderRepository.html", "cl": 0, "ucl": 33, "cal": 33, "tl": 58, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.GoalRepository", "rp": "DataAccess_GoalRepository.html", "cl": 0, "ucl": 68, "cal": 68, "tl": 102, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.MealTypeRepository", "rp": "DataAccess_MealTypeRepository.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 35, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.MetricRepository", "rp": "DataAccess_MetricRepository.html", "cl": 0, "ucl": 33, "cal": 33, "tl": 56, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DataAccess.Repositories.UserRepository", "rp": "DataAccess_UserRepository.html", "cl": 0, "ucl": 69, "cal": 69, "tl": 91, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-    ]},
-  {
-    "name": "DTOs",
-    "classes": [
-      { "name": "DTOs.DTOs.ChatFoodLog", "rp": "DTOs_ChatFoodLog.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DTOs.DTOs.FoodDiaryItemDto", "rp": "DTOs_FoodDiaryItemDto.html", "cl": 6, "ucl": 3, "cal": 9, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DTOs.DTOs.FoodItemDto", "rp": "DTOs_FoodItemDto.html", "cl": 19, "ucl": 0, "cal": 19, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DTOs.DTOs.GoalDto", "rp": "DTOs_GoalDto.html", "cl": 8, "ucl": 1, "cal": 9, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "DTOs.DTOs.UserDto", "rp": "DTOs_UserDto.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-    ]},
-  {
-    "name": "Models",
-    "classes": [
-      { "name": "Models.Models.ActivityLevel", "rp": "Models_ActivityLevel.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.FoodDiaryItem", "rp": "Models_FoodDiaryItem.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.FoodItem", "rp": "Models_FoodItem.html", "cl": 19, "ucl": 0, "cal": 19, "tl": 47, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.Gender", "rp": "Models_Gender.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 18, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.Goal", "rp": "Models_Goal.html", "cl": 10, "ucl": 1, "cal": 11, "tl": 35, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.LoginViewModel", "rp": "Models_LoginViewModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.MealType", "rp": "Models_MealType.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.Metric", "rp": "Models_Metric.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.Role", "rp": "Models_Role.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Models.Models.User", "rp": "Models_User.html", "cl": 12, "ucl": 4, "cal": 16, "tl": 66, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-    ]},
-  {
     "name": "Services",
     "classes": [
-      { "name": "Services.Helpers.FoodLoggingHelper", "rp": "Services_FoodLoggingHelper.html", "cl": 0, "ucl": 35, "cal": 35, "tl": 51, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Services.Helpers.FoodNameHelper", "rp": "Services_FoodNameHelper.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 20, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Services.Mappers.FoodDiaryItemMapper", "rp": "Services_FoodDiaryItemMapper.html", "cl": 11, "ucl": 15, "cal": 26, "tl": 38, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Services.Helpers.FoodLoggingHelper", "rp": "Services_FoodLoggingHelper.html", "cl": 35, "ucl": 0, "cal": 35, "tl": 51, "cb": 8, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Services.Helpers.FoodNameHelper", "rp": "Services_FoodNameHelper.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 20, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Services.Mappers.FoodDiaryItemMapper", "rp": "Services_FoodDiaryItemMapper.html", "cl": 26, "ucl": 0, "cal": 26, "tl": 38, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Services.Mappers.FoodItemMapper", "rp": "Services_FoodItemMapper.html", "cl": 48, "ucl": 0, "cal": 48, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Services.Mappers.GoalMapper", "rp": "Services_GoalMapper.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 23, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Services.Mappers.UserMapper", "rp": "Services_UserMapper.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 24, "cb": 9, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Services.Services.ActivityLevelService", "rp": "Services_ActivityLevelService.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 26, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Services.Services.AiHttpClient", "rp": "Services_AiHttpClient.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Services.Services.AiService", "rp": "Services_AiService.html", "cl": 57, "ucl": 0, "cal": 57, "tl": 86, "cb": 19, "tb": 24, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Services.Services.AiHttpClient", "rp": "Services_AiHttpClient.html", "cl": 1, "ucl": 3, "cal": 4, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Services.Services.AiService", "rp": "Services_AiService.html", "cl": 64, "ucl": 0, "cal": 64, "tl": 93, "cb": 19, "tb": 24, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Services.Services.AuthService", "rp": "Services_AuthService.html", "cl": 76, "ucl": 0, "cal": 76, "tl": 126, "cb": 15, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Services.Services.EmailService", "rp": "Services_EmailService.html", "cl": 152, "ucl": 15, "cal": 167, "tl": 210, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Services.Services.FoodDiaryService", "rp": "Services_FoodDiaryService.html", "cl": 17, "ucl": 3, "cal": 20, "tl": 45, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -283,24 +246,6 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
-    "assembly": "DataAccess", "class": "DataAccess.Repositories.FoodItemRepository", "reportPath": "DataAccess_FoodItemRepository.html", "methodName": "Add(Models.Models.FoodItem)", "methodShortName": "Add(...)", "fileIndex": 0, "line": 108,
-    "metrics": [
-      { "value": 342, "exceeded": true },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "DataAccess", "class": "DataAccess.Data.DbHelper", "reportPath": "DataAccess_DbHelper.html", "methodName": "ExecuteScalar(System.String,System.Collections.Generic.Dictionary`2<System.String,System.Object>)", "methodShortName": "ExecuteScalar(...)", "fileIndex": 0, "line": 70,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Services", "class": "Services.Helpers.FoodLoggingHelper", "reportPath": "Services_FoodLoggingHelper.html", "methodName": "GetMealTypeId(System.String)", "methodShortName": "GetMealTypeId(...)", "fileIndex": 0, "line": 40,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
     "assembly": "Services", "class": "Services.Services.OpenFoodFactsService", "reportPath": "Services_OpenFoodFactsService.html", "methodName": "GetFoodItemByBarcodeAsync()", "methodShortName": "GetFoodItemByBarcodeAsync()", "fileIndex": 0, "line": 26,
     "metrics": [
       { "value": 56, "exceeded": true },
@@ -311,24 +256,6 @@ var riskHotspots = [
     "metrics": [
       { "value": 49, "exceeded": true },
       { "value": 31, "exceeded": true },
-    ]},
-  {
-    "assembly": "DataAccess", "class": "DataAccess.Data.DbHelper", "reportPath": "DataAccess_DbHelper.html", "methodName": "ExecuteQuery(System.String,System.Collections.Generic.Dictionary`2<System.String,System.Object>)", "methodShortName": "ExecuteQuery(...)", "fileIndex": 0, "line": 18,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "DataAccess", "class": "DataAccess.Data.DbHelper", "reportPath": "DataAccess_DbHelper.html", "methodName": "ExecuteNonQuery(System.String,System.Collections.Generic.Dictionary`2<System.String,System.Object>)", "methodShortName": "ExecuteNonQuery(...)", "fileIndex": 0, "line": 46,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Services", "class": "Services.Mappers.FoodDiaryItemMapper", "reportPath": "Services_FoodDiaryItemMapper.html", "methodName": "ToDto(Models.Models.FoodDiaryItem)", "methodShortName": "ToDto(...)", "fileIndex": 0, "line": 9,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
     ]},
   {
     "assembly": "Services", "class": "Services.Services.OpenFoodFactsService", "reportPath": "Services_OpenFoodFactsService.html", "methodName": "SearchByNameAsync()", "methodShortName": "SearchByNameAsync()", "fileIndex": 0, "line": 63,

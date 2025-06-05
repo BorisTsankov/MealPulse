@@ -8,7 +8,7 @@ namespace Services.Services
     {
         private readonly RestClient _client = new();
 
-        public Task<RestResponse> ExecuteAsync(RestRequest request)
+        public virtual Task<RestResponse> ExecuteAsync(RestRequest request)
         {
             return _client.ExecuteAsync(request);
         }
