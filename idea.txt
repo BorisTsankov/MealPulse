@@ -1,0 +1,11 @@
+Look at my codebase and make the homepage look amazing.
+Make it dark theme and work with blue
+and purple (emphasis on the purple) to make it look proffesional. If needed
+you can change the html structure provided it is neccessary
+(changing/adding IDs to elements, general improvement of an exisiting
+element), I like to have the overall view and feel as my current version.
+Add animations but don't go overboard making the keyframes.
+Please do not use generic emojis for icons, if you find a good place for them,
+use online svgs and replace all emojis you see in my existing codebase with the svgs.
+Before you start, I really want you to look at the codebase and make smart decisions
+in terms of html edits so we keep our Views clean and readable.

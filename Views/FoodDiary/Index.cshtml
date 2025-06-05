@@ -1,0 +1,291 @@
+﻿@using Web.ViewModels
+@model FoodDiaryViewModel
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/FoodDiary.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+}
+
+<div class="food-diary-page">
+    @{
+        ViewData["Title"] = "Food Diary";
+        var selectedDate = (DateTime)ViewBag.SelectedDate;
+    }
+
+    <h2 class="text-center mt-4 mb-3">Food Diary</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a class="btn btn-outline-secondary"
+           asp-action="Index"
+           asp-route-date="@selectedDate.AddDays(-1).ToString("yyyy-MM-dd")">
+            ← Previous
+        </a>
+
+        <h4 class="mb-0">Diary for @selectedDate.ToString("D")</h4>
+
+        <a class="btn btn-outline-secondary"
+           asp-action="Index"
+           asp-route-date="@selectedDate.AddDays(1).ToString("yyyy-MM-dd")">
+            Next →
+        </a>
+    </div>
+
+    @if (ViewBag.TotalCaloriesForDay != null && ViewBag.CalorieGoal != null && ViewBag.RemainingCalories != null)
+    {
+        <div class="text-center mb-4 summary-section">
+            <h5 class="mb-2">Daily Summary</h5>
+            <div class="d-flex justify-content-center gap-4">
+                <span class="badge badge-consumed fs-6">
+                    Total Consumed: @ViewBag.TotalCaloriesForDay.ToString("N0") kcal
+                </span>
+                <span class="badge badge-goal fs-6">
+                    Goal: @ViewBag.CalorieGoal.ToString("N0") kcal
+                </span>
+                <span class="badge @(ViewBag.RemainingCalories >= 0 ? "badge-remaining" : "badge-exceeded") fs-6">
+                    Remaining: @ViewBag.RemainingCalories.ToString("N0") kcal
+                </span>
+            </div>
+
+            @if ((int)ViewBag.RemainingCalories < 0)
+            {
+                <p class="badge-exceeded-msg text-center mt-2">
+                    🔺 You have exceeded your daily calorie goal.
+                </p>
+            }
+        </div>
+    }
+
+    <div class="meal-grid">
+        @foreach (var meal in Model.Sections)
+        {
+            <div class="card shadow-sm">
+                <div class="custom-card-header d-flex justify-content-between align-items-center">
+                    <strong>@meal.MealName</strong>
+                    <span class="badge badge-meal-total">@meal.TotalCalories.ToString("N0") kcal</span>
+                </div>
+
+                <div class="card-body">
+                    @if (meal.Items != null && meal.Items.Any())
+                    {
+                        <div class="food-item-scroll mb-3">
+                            <ul class="list-group">
+                                @foreach (var item in meal.Items)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <form asp-action="DeleteItem" method="post" class="d-flex justify-content-between align-items-center w-100" style="margin: 0;">
+                                            <input type="hidden" name="id" value="@item.FoodDiaryItemId" />
+                                            <input type="hidden" name="date" value="@selectedDate.ToString("yyyy-MM-dd")" />
+                                            <span>@item.FoodName (@item.Quantity @item.Unit)</span>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <span class="badge badge-item-calories">@item.Calories.ToString("N0") kcal</span>
+                                                <button type="submit" class="btn p-0 border-0 bg-transparent" style="width: 28px; height: 28px; cursor: pointer;" title="Delete">
+                                                    <img src="~/images/bin_image.png" alt="Delete" style="width: 100%; height: 100%; object-fit: contain;" />
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic">No food added yet for @meal.MealName.</p>
+                    }
+
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <button class="btn btn-add-food" data-bs-toggle="modal" data-bs-target="#addFoodModal-@meal.MealTypeId">
+                            <i class="bi bi-plus-circle-fill me-1"></i> Add Food
+                        </button>
+                        <button class="btn btn-scan-food" onclick="startQrScan(@meal.MealTypeId)">
+                            <i class="bi bi-qr-code-scan me-1"></i> Scan
+                        </button>
+                    </div>
+
+                    <div class="modal fade" id="addFoodModal-@meal.MealTypeId" tabindex="-1" aria-labelledby="addFoodModalLabel-@meal.MealTypeId" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form asp-action="AddItem" asp-route-date="@selectedDate.ToString("yyyy-MM-dd")" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Add Food to @meal.MealName</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="MealTypeId" value="@meal.MealTypeId" />
+                                        <input type="hidden" name="date" value="@selectedDate.ToString("yyyy-MM-dd")" />
+                                        <div class="mb-3">
+                                            <label for="foodSelect-@meal.MealTypeId" class="form-label">Food</label>
+                                            <select name="FoodItemId" class="form-select food-search" required id="foodSelect-@meal.MealTypeId"></select>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="number" name="Quantity" class="form-control quantity-input" min="1" required id="quantityInput-@meal.MealTypeId" />
+                                            <label for="quantityInput-@meal.MealTypeId">Quantity (g/ml)</label>
+                                        </div>
+                                        <div class="nutrient-preview d-none">
+                                            <p class="fw-bold mb-1">Estimated Nutrition:</p>
+                                            <ul class="list-unstyled mb-0">
+                                                <li>Calories: <span class="calories">-</span> kcal</li>
+                                                <li>Protein: <span class="protein">-</span> g</li>
+                                                <li>Fats: <span class="fats">-</span> g</li>
+                                                <li>Carbs: <span class="carbs">-</span> g</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success w-100" disabled>Add to Diary</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Barcode Scanner Modal -->
+<div class="modal fade" id="barcodeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Scan Barcode</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="stopScanner()"></button>
+            </div>
+            <div class="modal-body">
+                <div id="barcode-scanner-wrapper">
+                    <div id="barcode-scanner"></div>
+                </div>
+                <p class="mt-2 text-center text-muted">Point your camera at a barcode</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        let currentMealTypeId = null;
+        let hasDetected = false;
+
+        function startQrScan(mealTypeId) {
+            currentMealTypeId = mealTypeId;
+            hasDetected = false;
+
+            const modal = new bootstrap.Modal(document.getElementById('barcodeModal'));
+            modal.show();
+
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#barcode-scanner'),
+                    constraints: {
+                        facingMode: "environment"
+                    }
+                },
+                decoder: {
+                    readers: ["ean_reader"]
+                }
+            }, function (err) {
+                if (err) {
+                    console.error("Quagga init error:", err);
+                    return;
+                }
+                Quagga.start();
+            });
+        }
+
+        Quagga.onDetected(async function (result) {
+            if (hasDetected) return;
+            hasDetected = true;
+
+            const barcode = result.codeResult.code;
+            Quagga.stop();
+            bootstrap.Modal.getInstance(document.getElementById('barcodeModal')).hide();
+
+            try {
+                const response = await fetch(`/FoodDiary/GetFoodByBarcode?barcode=${barcode}`);
+                const food = await response.json();
+
+                const modal = $(`#addFoodModal-${currentMealTypeId}`);
+                const select = modal.find('.food-search');
+                const newOption = new Option(food.name, food.foodItemId, true, true);
+                select.append(newOption).trigger('change');
+                modal.modal('show');
+            } catch (err) {
+                alert("Food not found or not scannable.");
+            }
+        });
+
+        function stopScanner() {
+            if (Quagga && Quagga.stop) {
+                Quagga.stop();
+            }
+        }
+
+        $(document).ready(function () {
+            $('.food-search').select2({
+                placeholder: "Search for food...",
+                width: '100%',
+                allowClear: true,
+                ajax: {
+                    url: '@Url.Action("SearchFoodItems", "FoodDiary")',
+                    dataType: 'json',
+                    delay: 300,
+                    data: params => ({ term: params.term }),
+                    processResults: data => ({ results: data.results })
+                }
+            });
+
+            $('.modal').on('shown.bs.modal', function () {
+                $(this).find('.food-search').select2({
+                    dropdownParent: $(this),
+                    allowClear: true,
+                    ajax: {
+                        url: '@Url.Action("SearchFoodItems", "FoodDiary")',
+                        dataType: 'json',
+                        delay: 300,
+                        data: params => ({ term: params.term }),
+                        processResults: data => ({ results: data.results })
+                    }
+                });
+            });
+
+            $('.modal').on('input change', '.quantity-input, .food-search', function () {
+                const modal = $(this).closest('.modal');
+                const quantity = parseFloat(modal.find('.quantity-input').val());
+                const foodId = modal.find('.food-search').val();
+                const submitBtn = modal.find('button[type="submit"]');
+
+                if (foodId && quantity > 0) {
+                    fetch(`/FoodDiary/GetFoodItemById?id=${foodId}`)
+                        .then(response => response.json())
+                        .then(food => {
+                            const factor = quantity / 100;
+                            modal.find('.calories').text((food.calories * factor).toFixed(0));
+                            modal.find('.protein').text((food.protein * factor).toFixed(1));
+                            modal.find('.fats').text((food.fat * factor).toFixed(1));
+                            modal.find('.carbs').text((food.carbohydrates * factor).toFixed(1));
+                            modal.find('.nutrient-preview').removeClass('d-none');
+                            submitBtn.prop('disabled', false);
+                        })
+                        .catch(() => {
+                            modal.find('.nutrient-preview').addClass('d-none');
+                            submitBtn.prop('disabled', true);
+                        });
+                } else {
+                    modal.find('.nutrient-preview').addClass('d-none');
+                    submitBtn.prop('disabled', true);
+                }
+            });
+        });
+    </script>
+}

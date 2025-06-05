@@ -33,6 +33,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Ask([FromBody] AiRequestDto input)
         {
             if (string.IsNullOrWhiteSpace(input?.Question))
+
                 return Json(new { answer = "⚠️ Please ask a non-empty question." });
 
             var response = await _aiService.AskAsync(input.Question);

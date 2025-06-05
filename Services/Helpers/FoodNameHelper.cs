@@ -11,7 +11,7 @@ namespace Services.Helpers
         public static string Normalize(string name)
         {
             return new string(name
-                .Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)) // ✅ call methods with (c)
+                .Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)) // call methods with (c)
                 .ToArray())
                 .Trim()
                 .ToLower();

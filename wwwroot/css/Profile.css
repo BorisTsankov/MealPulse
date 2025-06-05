@@ -1,0 +1,164 @@
+﻿.profile-page {
+    background-color: #f8f4fd;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2d1b46;
+    padding: 2rem;
+}
+
+.profile-page h1,
+.profile-page h2,
+.profile-page h4.section-header {
+    color: #6f42c1;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.profile-card {
+    background: #fff;
+    border: 1px solid #e3d7f1;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+    box-shadow: 0 6px 18px rgba(111, 66, 193, 0.12);
+}
+
+.profile-page dl {
+    margin-bottom: 0;
+}
+
+.profile-page dt {
+    font-weight: 600;
+    color: #5e2b91;
+}
+
+.profile-page dd {
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+.edit-icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+}
+
+.edit-icon:hover {
+    transform: scale(1.15);
+}
+
+.profile-page label {
+    color: #5e2b91;
+    font-weight: 500;
+}
+
+.profile-page input[type="number"],
+.profile-page select,
+.profile-page input[type="text"] {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 12px;
+    width: 100%;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    background-color: #fefaff;
+    color: #2d1b46;
+}
+
+.profile-page input:focus,
+.profile-page select:focus {
+    border-color: #6f42c1;
+    outline: none;
+    box-shadow: 0 0 0 0.15rem rgba(111, 66, 193, 0.25);
+}
+
+.profile-page form {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(111, 66, 193, 0.06);
+    margin-bottom: 1.5rem;
+}
+
+.profile-page .btn,
+.profile-page button,
+.profile-page .modal-footer .btn {
+    background-color: #7b4397;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.profile-page .btn:hover,
+.profile-page button:hover {
+    background-color: #5e2b91;
+}
+
+.profile-page .btn-secondary {
+    background-color: #dbc9ee;
+    color: #2d1b46;
+    border: none;
+}
+
+.profile-page .btn-secondary:hover {
+    background-color: #c2abd6;
+}
+
+.profile-page .text-warning {
+    background-color: #fff3cd;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #ffc107;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .profile-page dl.row > dt,
+    .profile-page dl.row > dd {
+        display: block;
+        width: 100%;
+    }
+
+    .profile-page h1 {
+        font-size: 1.8rem;
+    }
+}
+@media (min-width: 768px) {
+    .profile-page .row > div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-card {
+        flex-grow: 1;
+    }
+}
+
+.profile-card dl dt {
+    min-width: 120px;
+    font-weight: 600;
+}
+
+.profile-card dl dd {
+    color: #444;
+}
+
+.edit-icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+}
+
+    .edit-icon:hover {
+        transform: scale(1.15);
+    }

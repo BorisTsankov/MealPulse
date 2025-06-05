@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Chat with MealPulse AI";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/AskView.css" asp-append-version="true" />
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-body p-4">
+                    <h3 class="text-center mb-4" style="color: #7b2cbf;">🤖 MealPulse Assistant</h3>
+
+                    <div id="chat-box" class="border rounded p-3 mb-3 bg-light" style="height: 400px; overflow-y: auto;">
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="question" class="form-control" placeholder="Ask something..." onkeydown="if (event.key === 'Enter') askAi()" />
+                        <button class="btn btn-primary" style="background-color: #7b2cbf; border-color: #7b2cbf;" onclick="askAi()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+                function appendMessage(role, content) {
+            const chatBox = document.getElementById("chat-box");
+            const message = document.createElement("div");
+            message.classList.add("chat-message");
+
+            if (role === "user") {
+                message.classList.add("chat-user", "ms-auto");
+            } else {
+                message.classList.add("chat-ai");
+            }
+
+            message.innerText = content;
+
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("d-flex", role === "user" ? "justify-content-end" : "justify-content-start");
+            wrapper.appendChild(message);
+            chatBox.appendChild(wrapper);
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+
+        function askAi() {
+            const input = document.getElementById("question");
+            const question = input.value.trim();
+            if (!question) return;
+
+            appendMessage("user", question);
+            input.value = "";
+
+            appendMessage("ai", "🤔 Thinking...");
+
+            fetch('/Ai/Ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: question })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const chatBox = document.getElementById("chat-box");
+                chatBox.lastChild.remove();
+
+                appendMessage("ai", data.answer);
+            })
+            .catch(() => {
+                const chatBox = document.getElementById("chat-box");
+                chatBox.lastChild.remove();
+                appendMessage("ai", "⚠️ Something went wrong. Please try again.");
+            });
+        }
+    </script>
+}

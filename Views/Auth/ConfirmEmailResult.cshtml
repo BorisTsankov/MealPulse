@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Email Confirmed";
+    var confirmed = ViewBag.Confirmed as bool? ?? false;
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Auth.css" asp-append-version="true" />
+}
+
+<div class="auth-page">
+    <div class="auth-card shadow-lg text-center">
+        @if (confirmed)
+        {
+            <div class="checkmark mb-3"></div>
+            <h2 class="text-success mb-2">Email Confirmed!</h2>
+            <p>You're all set. Redirecting to login...</p>
+        }
+        else
+        {
+            <h2 class="text-danger mb-2">Invalid Link</h2>
+            <p class="text-muted">The confirmation link is invalid or expired.</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @if (confirmed)
+    {
+        <script>
+            setTimeout(() => window.location.href = "/Auth/Login", 4000);
+        </script>
+    }
+}

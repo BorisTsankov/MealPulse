@@ -36,10 +36,10 @@ namespace Services.Services
             return _foodDiaryRepository.Delete(foodDiaryItemId);
         }
 
-        //public List<FoodDiaryItem> GetItemsByUserAndDate(int userId, DateTime date)
-        //{
-        //    return _foodDiaryRepository.GetItemsByUserIdAndDate(userId, date);
-        //}
+        public List<FoodDiaryItem> GetItemsByUserAndDate(int userId, DateTime date)
+        {
+            return _foodDiaryRepository.GetItemsByUserIdAndDate(userId, date);
+        }
 
     }
 }

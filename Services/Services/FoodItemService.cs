@@ -46,8 +46,8 @@ namespace Services.Services
             if (external != null)
             {
                 var entity = FoodItemMapper.ToEntity(external);
-                var newId = _repo.Add(entity); // ✅ Save and get ID
-                external.FoodItemId = newId;     // ✅ Set ID for later use
+                var newId = _repo.Add(entity); //  Save and get ID
+                external.FoodItemId = newId;     //  Set ID for later use
 
                 return external;
             }
@@ -69,7 +69,7 @@ namespace Services.Services
 
                 foreach (var item in apiResult)
                 {
-                    // ✅ Smarter filter: allow water etc., skip fully empty
+                    //  Smarter filter: allow water etc., skip fully empty
                     if (string.IsNullOrWhiteSpace(item.Name) ||
                         (item.Calories == 0 && item.Protein == 0 && item.Fat == 0 && item.Carbohydrates == 0))
                         continue;
@@ -85,7 +85,7 @@ namespace Services.Services
                         item.FoodItemId = newId;
                     }
 
-                    validItems.Add(item); // ✅ Keep for returning
+                    validItems.Add(item); //  Keep for returning
                 }
 
                 return validItems;
@@ -98,7 +98,7 @@ namespace Services.Services
         public FoodItemDto? GetByName(string name)
         {
             var match = _repo.SearchByName(name)
-                .FirstOrDefault(f => f.Calories > 0); // ✅ Ensure not a dummy
+                .FirstOrDefault(f => f.Calories > 0); //  Ensure not a dummy
             return match != null ? FoodItemMapper.ToDto(match) : null;
         }
 

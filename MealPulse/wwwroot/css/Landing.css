@@ -1,4 +1,4 @@
-﻿/* ---- Landing Page Styles ---- */
+﻿
 
 :root {
     --purple: #7F56D9;
@@ -149,3 +149,5 @@ section {
     #quoteCarousel .carousel-control-next:hover {
         box-shadow: 0 0 15px rgba(127, 86, 217, 0.6);
     }
+
+

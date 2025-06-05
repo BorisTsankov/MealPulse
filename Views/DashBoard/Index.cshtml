@@ -1,0 +1,186 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    var consumed = (int?)ViewBag.ConsumedCalories ?? 0;
+    var goal = (int?)ViewBag.CalorieGoal ?? 0;
+    var remaining = (int?)ViewBag.RemainingCalories ?? 0;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Dashboard.css" asp-append-version="true" />
+}
+
+<h2 class="text-center mt-4 mb-3">DashBoard</h2>
+
+<div class="dashboard-page">
+    <div class="chart-row">
+
+        <div class="chart-col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="mb-4">Calories Consumed vs Goal</h5>
+                    <canvas id="calorieChart"></canvas>
+                    <p class="mt-4">
+                        <span class="badge badge-consumed fs-6">Consumed: @consumed kcal</span><br />
+                        <span class="badge badge-goal fs-6">Goal: @goal kcal</span><br />
+                        <span class="badge @(remaining >= 0 ? "badge-remaining" : "badge-exceeded") fs-6">
+                            Remaining: @(remaining >= 0 ? remaining : 0) kcal
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="mb-4">Macronutrient Intake vs Goal</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="macroChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="chart-col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="mb-4">Nutrients Consumed</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="nutrientChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const defaultPurple = '#6f42c1';
+
+
+        Chart.defaults.color = defaultPurple;
+        Chart.defaults.plugins.legend.labels.color = defaultPurple;
+        Chart.defaults.plugins.title.color = defaultPurple;
+
+        const calorieCtx = document.getElementById('calorieChart').getContext('2d');
+        new Chart(calorieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Consumed', 'Remaining'],
+                datasets: [{
+                    data: [@consumed, @remaining],
+                    backgroundColor: ['#9b59b6', '#ecf0f1']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        const macroCtx = document.getElementById('macroChart').getContext('2d');
+        new Chart(macroCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Protein', 'Carbs', 'Fat'],
+                datasets: [
+                    {
+                        label: 'Consumed',
+                        data: [
+        @ViewBag.ConsumedProtein,
+        @ViewBag.ConsumedCarbs,
+        @ViewBag.ConsumedFat
+                        ],
+                        backgroundColor: '#9b59b6'
+                    },
+                    {
+                        label: 'Goal',
+                        data: [
+        @ViewBag.GoalProtein,
+        @ViewBag.GoalCarbs,
+        @ViewBag.GoalFat
+                        ],
+                        backgroundColor: '#ecf0f1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Grams',
+                            color: defaultPurple
+                        },
+                        ticks: {
+                            color: defaultPurple
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: defaultPurple
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        const nutrientCtx = document.getElementById('nutrientChart').getContext('2d');
+        new Chart(nutrientCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Sugars', 'Fiber', 'Sodium', 'Potassium', 'Iron', 'Calcium'],
+                datasets: [{
+                    label: 'Consumed',
+                    data: [
+        @ViewBag.Sugars,
+        @ViewBag.Fiber,
+        @ViewBag.Sodium,
+        @ViewBag.Potassium,
+        @ViewBag.Iron,
+        @ViewBag.Calcium
+                    ],
+                    backgroundColor: '#9b59b6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount',
+                            color: defaultPurple
+                        },
+                        ticks: {
+                            color: defaultPurple
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: defaultPurple
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+}

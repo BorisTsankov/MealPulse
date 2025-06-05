@@ -67,7 +67,7 @@
     max-width: 400px;
 }
 .dashboard-page .chart-wrapper {
-    height: 300px; /* ✅ fixed container height */
+    height: 300px; /*  fixed container height */
     position: relative;
 }
 

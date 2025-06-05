@@ -28,21 +28,51 @@ namespace Services.Services
             request.AddHeader("Authorization", $"Bearer {_apiKey}");
             request.AddHeader("Content-Type", "application/json");
 
+            var systemMessage = @"
+You are MealPulseBot, a helpful assistant for a nutrition tracking app.
+
+Your job is to extract food log entries from user input.
+
+📌 If the user says they ate something (e.g. 'I had two eggs for breakfast'), you MUST reply ONLY with a JSON object in the exact format:
+
+{
+  ""foodName"": ""banana"",
+  ""quantity"": 100,
+  ""unit"": ""g"",
+  ""mealType"": ""breakfast"",
+  ""calories"": 89,
+  ""protein"": 1.1,
+  ""fat"": 0.3,
+  ""carbohydrates"": 22.8,
+  ""sugars"": 12.2,
+  ""fiber"": 2.6,
+  ""sodium"": 1,
+  ""potassium"": 358,
+  ""iron"": 0.3,
+  ""calcium"": 5
+}
+
+❗ ABSOLUTELY NO TEXT OUTSIDE THE JSON. NO EXPLANATIONS. JUST THE JSON BLOCK.
+
+📎 If you need clarification (e.g. vague food), ask a short follow-up question.
+
+💬 For general questions not related to food logging, reply as a normal assistant.";
+
             var body = new
             {
                 model = "gpt-3.5-turbo",
                 messages = new[]
                 {
-            new { role = "system", content = @"You are MealPulseBot, ..." },
-            new { role = "user", content = prompt }
-        },
+                    new { role = "system", content = systemMessage },
+                    new { role = "user", content = prompt }
+                },
                 max_tokens = 300,
-                temperature = 0.7
+                temperature = 0.3
             };
 
             request.AddJsonBody(body);
 
-            var response = await _client.ExecuteAsync(request); // ✅ USE THE MOCKABLE CLIENT
+            var response = await _client.ExecuteAsync(request); // USE THE MOCKABLE CLIENT
 
             if (!response.IsSuccessful)
             {
@@ -52,13 +82,12 @@ namespace Services.Services
             try
             {
                 dynamic result = JsonConvert.DeserializeObject(response.Content);
-                return result?.choices[0]?.message?.content ?? " No answer returned.";
+                return result?.choices[0]?.message?.content ?? "No answer returned.";
             }
             catch (Exception ex)
             {
                 return $"Error parsing response: {ex.Message}";
             }
         }
-
     }
 }

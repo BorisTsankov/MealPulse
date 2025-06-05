@@ -78,7 +78,7 @@ namespace Services.Services
             {
                 var nutriments = p["nutriments"];
 
-                // ❌ Skip if any required values are null or missing
+                //  Skip if any required values are null or missing
                 if (nutriments?["energy-kcal_100g"] == null ||
                     nutriments["proteins_100g"] == null ||
                     nutriments["fat_100g"] == null ||

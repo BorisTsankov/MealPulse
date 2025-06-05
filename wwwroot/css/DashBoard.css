@@ -1,0 +1,84 @@
+﻿.dashboard-page {
+    background-color: #f8f4fd;
+    color: #2d1b46;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem 1rem;
+}
+
+.dashboard-page h2 {
+    color: #6f42c1;
+    font-weight: 700;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.badge-consumed {
+    background-color: #8c5edc;
+    color: #fff;
+}
+
+.badge-goal {
+    background-color: #d6c7f0;
+    color: #2d1b46;
+}
+
+.badge-remaining {
+    background-color: #a084ca;
+    color: #fff;
+}
+
+.badge-exceeded {
+    background-color: #b23acf;
+    color: #fff;
+}
+.dashboard-page .card {
+    min-height: 100%;
+    padding: 1.5rem;
+    background-color: white;
+    border: 1px solid #e3d7f1;
+    border-radius: 18px;
+    box-shadow: 0 2px 6px rgba(111, 66, 193, 0.1);
+}
+
+.dashboard-page #calorieChart {
+    max-width: 280px;
+    max-height: 280px;
+    margin: 0 auto;
+}
+/*
+.dashboard-page #macroChart {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}*/
+
+
+
+.dashboard-page .chart-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.dashboard-page .chart-col {
+    flex: 1 1 350px;
+    max-width: 400px;
+}
+.dashboard-page .chart-wrapper {
+    height: 300px; /* ✅ fixed container height */
+    position: relative;
+}
+
+.dashboard-page #macroChart {
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+    left: 0;
+    top: 0;
+}
+.dashboard-page .card h5 {
+    color: #6f42c1;
+    font-weight: 600;
+}
