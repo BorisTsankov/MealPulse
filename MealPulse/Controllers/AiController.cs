@@ -33,10 +33,16 @@ namespace Web.Controllers
         public async Task<IActionResult> Ask([FromBody] AiRequestDto input)
         {
             if (string.IsNullOrWhiteSpace(input?.Question))
-
                 return Json(new { answer = "⚠️ Please ask a non-empty question." });
 
             var response = await _aiService.AskAsync(input.Question);
+
+            var history = HttpContext.Session.GetString("ChatHistory");
+            var messages = string.IsNullOrEmpty(history)
+                ? new List<ChatMessage>()
+                : JsonConvert.DeserializeObject<List<ChatMessage>>(history);
+
+            messages.Add(new ChatMessage { Role = "user", Content = input.Question });
 
             if (response.TrimStart().StartsWith("{"))
             {
@@ -44,25 +50,21 @@ namespace Web.Controllers
                 {
                     var parsed = JsonConvert.DeserializeObject<ChatFoodLog>(response);
 
-                    Console.WriteLine(JsonConvert.SerializeObject(parsed));
-
-
                     int userId = GetCurrentUserId();
                     var goal = _goalService.GetMostRecentGoalByUserId(userId);
                     if (goal == null)
-                        return Json(new { answer = "⚠️ You don't have a goal yet. Please set one in your profile." });
+                    {
+                        string msg = "⚠️ You don't have a goal yet. Please set one in your profile.";
+                        messages.Add(new ChatMessage { Role = "ai", Content = msg });
+                        HttpContext.Session.SetString("ChatHistory", JsonConvert.SerializeObject(messages));
+                        return Json(new { answer = msg });
+                    }
 
-                    // Check if the food exists
                     var normalizedName = FoodNameHelper.Normalize(parsed.foodName);
                     var existing = _foodItemService.GetByName(normalizedName);
 
-                    int foodItemId;
-
-                    if (existing != null)
-                    {
-                        foodItemId = existing.FoodItemId ?? 0;
-                    }
-                    else
+                    int foodItemId = existing?.FoodItemId ?? 0;
+                    if (existing == null)
                     {
                         decimal factor = (decimal)parsed.quantity / 100m;
                         if (factor == 0) factor = 1;
@@ -71,8 +73,6 @@ namespace Web.Controllers
                         {
                             Name = normalizedName,
                             Unit = parsed.unit,
-
-                            // Normalize to 100g/ml
                             Calories = parsed.calories / factor,
                             Protein = parsed.protein / factor,
                             Fat = parsed.fat / factor,
@@ -85,9 +85,7 @@ namespace Web.Controllers
                             Calcium = parsed.calcium / factor
                         };
 
-
-
-                        foodItemId = _foodItemService.Add(newItem); // Make sure this returns the ID
+                        foodItemId = _foodItemService.Add(newItem);
                     }
 
                     var diaryItem = new FoodDiaryItemDto
@@ -101,16 +99,46 @@ namespace Web.Controllers
                     };
 
                     bool success = _foodDiaryService.AddFoodDiaryItem(diaryItem);
-                    return Json(new { answer = success ? "✅ Food logged successfully!" : "❌ Failed to log food." });
+                    var resultMsg = success ? "✅ Food logged successfully!" : "❌ Failed to log food.";
+
+                    messages.Add(new ChatMessage { Role = "ai", Content = resultMsg });
+                    HttpContext.Session.SetString("ChatHistory", JsonConvert.SerializeObject(messages));
+                    return Json(new { answer = resultMsg });
                 }
                 catch (Exception ex)
                 {
-                    return Json(new { answer = $"⚠️ Couldn't process the food log. {ex.Message}" });
+                    string err = $"⚠️ Couldn't process the food log. {ex.Message}";
+                    messages.Add(new ChatMessage { Role = "ai", Content = err });
+                    HttpContext.Session.SetString("ChatHistory", JsonConvert.SerializeObject(messages));
+                    return Json(new { answer = err });
                 }
             }
 
-            // Non-food messages (like questions)
+            messages.Add(new ChatMessage { Role = "ai", Content = response });
+            HttpContext.Session.SetString("ChatHistory", JsonConvert.SerializeObject(messages));
             return Json(new { answer = response });
+        }
+
+
+        [HttpGet]
+        public IActionResult AskView()
+        {
+            var history = HttpContext.Session.GetString("ChatHistory");
+            var messages = string.IsNullOrEmpty(history)
+                ? new List<ChatMessage>()
+                : JsonConvert.DeserializeObject<List<ChatMessage>>(history);
+
+            ViewBag.ChatHistoryJson = JsonConvert.SerializeObject(messages);
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult ClearChat()
+        {
+            HttpContext.Session.Remove("ChatHistory");
+            return Ok();
         }
 
         private int GetCurrentUserId()
@@ -122,15 +150,16 @@ namespace Web.Controllers
             throw new Exception("User is not logged in.");
         }
 
-        [HttpGet]
-        public IActionResult AskView()
-        {
-            return View();
-        }
-
         public class AiRequestDto
         {
             public string Question { get; set; }
         }
+
+        public class ChatMessage
+        {
+            public string Role { get; set; }
+            public string Content { get; set; }
+        }
+
     }
 }
