@@ -1,14 +1,16 @@
-﻿
-
-:root {
+﻿:root {
     --purple: #7F56D9;
     --purple-hover: #6e48c4;
     --dark: #212529;
     --light-gray: #f8f9fa;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .text-purple {
@@ -19,24 +21,21 @@ body {
     background-color: var(--purple) !important;
     border: none;
     color: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
     .btn-primary:hover {
         background-color: var(--purple-hover) !important;
-        color: white;
-    }
-
-
-    .btn-primary:hover {
-        background-color: var(--purple-hover);
         border-color: var(--purple-hover);
+        color: white;
     }
 
 .btn-outline-secondary {
     border-color: white;
     color: white;
     background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
     .btn-outline-secondary:hover {
@@ -44,6 +43,14 @@ body {
         color: var(--purple);
     }
 
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn:hover {
+        transform: scale(1.05);
+        will-change: transform;
+    }
 
 section {
     padding-top: 4rem;
@@ -60,13 +67,12 @@ section {
     justify-content: center;
     text-align: center;
     position: relative;
+    background-color: var(--purple); /* fallback */
 }
 
     .hero-banner h1 {
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
-
-
 
 .card {
     border: none;
@@ -97,6 +103,7 @@ section {
         color: var(--purple);
     }
 
+/* Responsive tweaks */
 @media (max-width: 768px) {
     h1.display-4 {
         font-size: 2.2rem;
@@ -108,46 +115,60 @@ section {
     }
 }
 
-.btn {
-    transition: all 0.2s ease-in-out;
+/* Carousel container fix */
+#quoteCarousel {
+    position: relative;
+    padding: 2rem 0; /* Reduced vertical padding */
 }
 
-    .btn:hover {
-        transform: scale(1.05);
+    /* Reduced height for carousel content */
+    #quoteCarousel .carousel-inner {
+        min-height: 130px; /* Previously 200px */
     }
 
-/* Custom styles for quote carousel arrows */
-#quoteCarousel .carousel-control-prev,
-#quoteCarousel .carousel-control-next {
-    width: 60px;
-    height: 60px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--purple);
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-    opacity: 0.9;
-}
-
-    #quoteCarousel .carousel-control-prev:hover,
-    #quoteCarousel .carousel-control-next:hover {
-        background-color: var(--purple-hover);
+    /* Optional: Smaller text and padding inside items */
+    #quoteCarousel .carousel-item {
+        padding: 1rem 2rem;
+        font-size: 0.95rem;
     }
 
-#quoteCarousel .carousel-control-prev-icon,
-#quoteCarousel .carousel-control-next-icon {
-    filter: invert(1); /* make the arrows white */
-    width: 1.5rem;
-    height: 1.5rem;
-}
-#quoteCarousel .carousel-control-prev,
-#quoteCarousel .carousel-control-next {
-    box-shadow: 0 0 10px rgba(127, 86, 217, 0.4);
-}
-
-    #quoteCarousel .carousel-control-prev:hover,
-    #quoteCarousel .carousel-control-next:hover {
-        box-shadow: 0 0 15px rgba(127, 86, 217, 0.6);
+    /* Custom arrow positioning and styling */
+    #quoteCarousel .carousel-control-prev,
+    #quoteCarousel .carousel-control-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        border: none;
+        z-index: 10;
+        opacity: 1;
+        transition: transform 0.2s ease;
+        box-shadow: none;
     }
 
+    /* Arrow icons in purple */
+    #quoteCarousel .carousel-control-prev-icon,
+    #quoteCarousel .carousel-control-next-icon {
+        background-color: transparent;
+        background-size: 100% 100%;
+        filter: invert(18%) sepia(67%) saturate(5698%) hue-rotate(256deg) brightness(91%) contrast(96%);
+        width: 1.75rem;
+        height: 1.75rem;
+    }
 
+    /* Left/right arrow position */
+    #quoteCarousel .carousel-control-prev {
+        left: 1rem;
+    }
+
+    #quoteCarousel .carousel-control-next {
+        right: 1rem;
+    }
+
+        /* Subtle hover scale effect */
+        #quoteCarousel .carousel-control-prev:hover,
+        #quoteCarousel .carousel-control-next:hover {
+            transform: translateY(-50%) scale(1.2);
+        }

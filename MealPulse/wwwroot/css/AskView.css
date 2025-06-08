@@ -43,3 +43,40 @@
     border: 1px dashed red;
 }
 */
+/* Clear Chat button styling */
+.clear-chat-btn {
+    font-size: 0.875rem;
+    padding: 0.4rem 0.75rem;
+    color: #6c757d;
+    border: 1px solid #ced4da;
+    background-color: white;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+    .clear-chat-btn:hover {
+        background-color: #f8f9fa;
+        color: #343a40;
+        border-color: #adb5bd;
+    }
+
+@media (max-width: 600px) {
+    .clear-chat-btn {
+        width: 100%;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+}
+
+
+    #chat-box {
+        height: 300px;
+        padding: 0.75rem;
+    }
+
+    #question {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+}

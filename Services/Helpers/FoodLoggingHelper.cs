@@ -38,14 +38,18 @@ namespace Services.Helpers
 
         public static int GetMealTypeId(string mealType)
         {
+            if (string.IsNullOrWhiteSpace(mealType))
+                throw new ArgumentException("Meal type is required.");
+
             return mealType.ToLower() switch
             {
                 "breakfast" => 1,
                 "lunch" => 2,
                 "dinner" => 3,
                 "snack" => 4,
-                _ => 4
+                _ => throw new ArgumentException($"Invalid meal type: {mealType}")
             };
         }
+
     }
 }

@@ -165,3 +165,55 @@ select.form-control {
     width: 100%;
     box-shadow: 0 4px 16px rgba(111, 66, 193, 0.15);
 }
+
+@media (max-width: 576px) {
+    .auth-page {
+        padding: 1rem;
+        min-height: 100vh;
+        flex-direction: column;
+    }
+
+    .auth-card {
+        padding: 1.5rem 1.25rem;
+        max-width: 100%;
+        box-shadow: 0 2px 12px rgba(111, 66, 193, 0.1);
+        border-radius: 16px;
+    }
+
+        .auth-card h1 {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-card .form-control {
+            font-size: 0.95rem;
+            padding: 0.65rem 0.9rem;
+        }
+
+        .auth-card .btn-primary,
+        .btn-gradient-purple {
+            font-size: 1rem;
+            padding: 0.65rem;
+        }
+
+        .auth-card .alert-danger {
+            font-size: 0.9rem;
+            padding: 0.6rem 0.9rem;
+            margin-top: 1rem;
+        }
+
+    .form-floating > .form-control,
+    .form-floating > .form-select {
+        height: auto;
+        padding: 0.85rem 0.75rem 0.35rem;
+    }
+
+    .form-floating label {
+        font-size: 0.9rem;
+        padding: 0.35rem 0.75rem;
+    }
+
+    .password-rules li {
+        font-size: 0.85rem;
+    }
+}

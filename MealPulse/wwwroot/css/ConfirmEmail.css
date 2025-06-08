@@ -61,3 +61,36 @@
     font-size: 1.1rem;
     color: #555;
 }
+
+@media (max-width: 576px) {
+    .confirm-container {
+        padding: 1.5rem;
+        height: auto;
+        text-align: center;
+    }
+
+    .checkmark {
+        width: 70px;
+        height: 70px;
+        border-width: 3px;
+        margin-bottom: 1rem;
+    }
+
+        .checkmark::after {
+            left: 20px;
+            top: 35px;
+            width: 18px;
+            height: 30px;
+            border-width: 0 4px 4px 0;
+        }
+
+    .confirm-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .confirm-message {
+        font-size: 1rem;
+        padding: 0 0.5rem;
+    }
+}

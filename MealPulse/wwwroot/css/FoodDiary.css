@@ -353,3 +353,100 @@ button[title="Delete"] {
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         top: 7px;
     }
+
+
+@media (max-width: 576px) {
+    .food-diary-page {
+        padding: 1.25rem 0.75rem;
+    }
+
+        .food-diary-page h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .food-diary-page h4 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+    .summary-section {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+    }
+
+    .custom-card-header {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+    }
+
+    .card-body {
+        padding: 0.75rem 1rem;
+    }
+
+    .list-group-item {
+        font-size: 0.9rem;
+        padding: 0.65rem 0.9rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .btn-add-food,
+    .btn-scan-food {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .modal-dialog {
+        max-width: 100%;
+        margin: 1rem;
+    }
+
+    .modal-body {
+        padding: 1.25rem 1rem;
+    }
+
+    .modal-title {
+        font-size: 1rem;
+    }
+
+    .nutrient-preview {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.85rem;
+    }
+
+    .meal-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    #barcode-scanner-wrapper {
+        height: 250px;
+        padding: 0.75rem;
+    }
+
+    .modal-footer .btn-success {
+        font-size: 0.95rem;
+        padding: 0.6rem;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: 38px;
+        font-size: 0.9rem;
+    }
+    .summary-section .d-flex {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .summary-section .badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        min-width: 100px;
+    }
+
+}
