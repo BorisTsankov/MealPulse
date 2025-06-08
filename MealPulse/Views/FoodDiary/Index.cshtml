@@ -169,85 +169,83 @@
 
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        let currentMealTypeId = null;
-        let hasDetected = false;
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            let currentMealTypeId = null;
+            let hasDetected = false;
 
-        function startQrScan(mealTypeId) {
-            currentMealTypeId = mealTypeId;
-            hasDetected = false;
+            function startQrScan(mealTypeId) {
+                currentMealTypeId = mealTypeId;
+                hasDetected = false;
 
-            const modal = new bootstrap.Modal(document.getElementById('barcodeModal'));
-            modal.show();
+                const modal = new bootstrap.Modal(document.getElementById('barcodeModal'));
+                modal.show();
 
-            Quagga.init({
-                inputStream: {
-                    name: "Live",
-                    type: "LiveStream",
-                    target: document.querySelector('#barcode-scanner'),
-                    constraints: {
-                        facingMode: "environment"
-                    }
-                },
-                decoder: {
-                    readers: ["ean_reader"]
+                        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#barcode-scanner'),
+                constraints: {
+                    facingMode: { exact: "environment" }, // use "exact" to force back camera
+                    width: { min: 640, ideal: 720, max: 1280 },
+                    height: { min: 480, ideal: 720, max: 1280 },
+                    aspectRatio: { ideal: 1.333 }, // 4:3 for better stability
+                    frameRate: { ideal: 25 }
                 }
-            }, function (err) {
-                if (err) {
-                    console.error("Quagga init error:", err);
-                    return;
-                }
-                Quagga.start();
-            });
-        }
-
-        Quagga.onDetected(async function (result) {
-            if (hasDetected) return;
-            hasDetected = true;
-
-            const barcode = result.codeResult.code;
-            Quagga.stop();
-            bootstrap.Modal.getInstance(document.getElementById('barcodeModal')).hide();
-
-            try {
-                const response = await fetch(`/FoodDiary/GetFoodByBarcode?barcode=${barcode}`);
-                const food = await response.json();
-
-                const modal = $(`#addFoodModal-${currentMealTypeId}`);
-                const select = modal.find('.food-search');
-                const newOption = new Option(food.name, food.foodItemId, true, true);
-                select.append(newOption).trigger('change');
-                modal.modal('show');
-            } catch (err) {
-                alert("Food not found or not scannable.");
+            },
+            locator: {
+                patchSize: "medium",
+                halfSample: true
+            },
+            numOfWorkers: navigator.hardwareConcurrency || 4,
+            decoder: {
+                readers: ["ean_reader"]
+            },
+            locate: true
+        }, function (err) {
+            if (err) {
+                console.error("Quagga init error:", err);
+                return;
             }
+            Quagga.start();
         });
 
-        function stopScanner() {
-            if (Quagga && Quagga.stop) {
-                Quagga.stop();
             }
-        }
 
-        $(document).ready(function () {
-            $('.food-search').select2({
-                placeholder: "Search for food...",
-                width: '100%',
-                allowClear: true,
-                ajax: {
-                    url: '@Url.Action("SearchFoodItems", "FoodDiary")',
-                    dataType: 'json',
-                    delay: 300,
-                    data: params => ({ term: params.term }),
-                    processResults: data => ({ results: data.results })
+            Quagga.onDetected(async function (result) {
+                if (hasDetected) return;
+                hasDetected = true;
+
+                const barcode = result.codeResult.code;
+                Quagga.stop();
+                bootstrap.Modal.getInstance(document.getElementById('barcodeModal')).hide();
+
+                try {
+                    const response = await fetch(`/FoodDiary/GetFoodByBarcode?barcode=${barcode}`);
+                    const food = await response.json();
+
+                    const modal = $(`#addFoodModal-${currentMealTypeId}`);
+                    const select = modal.find('.food-search');
+                    const newOption = new Option(food.name, food.foodItemId, true, true);
+                    select.append(newOption).trigger('change');
+                    modal.modal('show');
+                } catch (err) {
+                    alert("Food not found or not scannable.");
                 }
             });
 
-            $('.modal').on('shown.bs.modal', function () {
-                $(this).find('.food-search').select2({
-                    dropdownParent: $(this),
+            function stopScanner() {
+                if (Quagga && Quagga.stop) {
+                    Quagga.stop();
+                }
+            }
+
+            $(document).ready(function () {
+                $('.food-search').select2({
+                    placeholder: "Search for food...",
+                    width: '100%',
                     allowClear: true,
                     ajax: {
                         url: '@Url.Action("SearchFoodItems", "FoodDiary")',
@@ -257,35 +255,50 @@
                         processResults: data => ({ results: data.results })
                     }
                 });
-            });
 
-            $('.modal').on('input change', '.quantity-input, .food-search', function () {
-                const modal = $(this).closest('.modal');
-                const quantity = parseFloat(modal.find('.quantity-input').val());
-                const foodId = modal.find('.food-search').val();
-                const submitBtn = modal.find('button[type="submit"]');
+                $('.modal').on('shown.bs.modal', function () {
+                    $(this).find('.food-search').select2({
+                        dropdownParent: $(this),
+                        allowClear: true,
+                        ajax: {
+                            url: '@Url.Action("SearchFoodItems", "FoodDiary")',
+                            dataType: 'json',
+                            delay: 300,
+                            data: params => ({ term: params.term }),
+                            processResults: data => ({ results: data.results })
+                        }
+                    });
+                });
 
-                if (foodId && quantity > 0) {
-                    fetch(`/FoodDiary/GetFoodItemById?id=${foodId}`)
-                        .then(response => response.json())
-                        .then(food => {
-                            const factor = quantity / 100;
-                            modal.find('.calories').text((food.calories * factor).toFixed(0));
-                            modal.find('.protein').text((food.protein * factor).toFixed(1));
-                            modal.find('.fats').text((food.fat * factor).toFixed(1));
-                            modal.find('.carbs').text((food.carbohydrates * factor).toFixed(1));
-                            modal.find('.nutrient-preview').removeClass('d-none');
-                            submitBtn.prop('disabled', false);
-                        })
-                        .catch(() => {
-                            modal.find('.nutrient-preview').addClass('d-none');
-                            submitBtn.prop('disabled', true);
-                        });
-                } else {
-                    modal.find('.nutrient-preview').addClass('d-none');
-                    submitBtn.prop('disabled', true);
-                }
+                $('.modal').on('input change', '.quantity-input, .food-search', function () {
+                    const modal = $(this).closest('.modal');
+                    const quantity = parseFloat(modal.find('.quantity-input').val());
+                    const foodId = modal.find('.food-search').val();
+                    const submitBtn = modal.find('button[type="submit"]');
+
+                    if (foodId && quantity > 0) {
+                        fetch(`/FoodDiary/GetFoodItemById?id=${foodId}`)
+                            .then(response => response.json())
+                            .then(food => {
+                                const factor = quantity / 100;
+                                modal.find('.calories').text((food.calories * factor).toFixed(0));
+                                modal.find('.protein').text((food.protein * factor).toFixed(1));
+                                modal.find('.fats').text((food.fat * factor).toFixed(1));
+                                modal.find('.carbs').text((food.carbohydrates * factor).toFixed(1));
+                                modal.find('.nutrient-preview').removeClass('d-none');
+                                submitBtn.prop('disabled', false);
+                            })
+                            .catch(() => {
+                                modal.find('.nutrient-preview').addClass('d-none');
+                                submitBtn.prop('disabled', true);
+                            });
+                    } else {
+                        modal.find('.nutrient-preview').addClass('d-none');
+                        submitBtn.prop('disabled', true);
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+}
+
 }
