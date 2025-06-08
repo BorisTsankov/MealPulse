@@ -19,11 +19,8 @@ namespace Services.Services
             _client = client;
         }
 
-        public async Task<string> AskAsync(string prompt)
+        public async Task<string> AskAsync(List<(string Role, string Content)> chatHistory)
         {
-            if (string.IsNullOrWhiteSpace(prompt))
-                return "Please ask a non-empty question.";
-
             var request = new RestRequest(_apiUrl, Method.Post);
             request.AddHeader("Authorization", $"Bearer {_apiKey}");
             request.AddHeader("Content-Type", "application/json");
@@ -56,30 +53,34 @@ You have 3 different purposes.
 
 ! If you need clarification (e.g. vague food), ask a short follow-up question.
 
-2. If a user ask you a nutrition, food or exercise related question, answer properly without returning a json format.
+2. If a user asks you a nutrition, food or exercise related question, answer properly without returning a json format.
 
 3. If a user asks you a non-related to food, exercise and nutrition question, tell them that you cannot assist.";
+
+            var messages = new List<object>
+            {
+                new { role = "system", content = systemMessage }
+            };
+
+            foreach (var (role, content) in chatHistory)
+            {
+                messages.Add(new { role, content });
+            }
 
             var body = new
             {
                 model = "gpt-3.5-turbo",
-                messages = new[]
-                {
-                    new { role = "system", content = systemMessage },
-                    new { role = "user", content = prompt }
-                },
+                messages = messages,
                 max_tokens = 300,
                 temperature = 0.3
             };
 
             request.AddJsonBody(body);
 
-            var response = await _client.ExecuteAsync(request); // USE THE MOCKABLE CLIENT
+            var response = await _client.ExecuteAsync(request);
 
             if (!response.IsSuccessful)
-            {
                 return $"API request failed: {response.StatusCode} - {response.ErrorMessage ?? "Unknown error"}";
-            }
 
             try
             {

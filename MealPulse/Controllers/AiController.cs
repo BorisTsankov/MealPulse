@@ -35,14 +35,16 @@ namespace Web.Controllers
             if (string.IsNullOrWhiteSpace(input?.Question))
                 return Json(new { answer = "⚠️ Please ask a non-empty question." });
 
-            var response = await _aiService.AskAsync(input.Question);
-
-            var history = HttpContext.Session.GetString("ChatHistory");
-            var messages = string.IsNullOrEmpty(history)
+            var historyJson = HttpContext.Session.GetString("ChatHistory");
+            var messages = string.IsNullOrEmpty(historyJson)
                 ? new List<ChatMessage>()
-                : JsonConvert.DeserializeObject<List<ChatMessage>>(history);
+                : JsonConvert.DeserializeObject<List<ChatMessage>>(historyJson);
 
             messages.Add(new ChatMessage { Role = "user", Content = input.Question });
+
+            var chatHistory = messages.Select(m => (m.Role, m.Content)).ToList();
+
+            var response = await _aiService.AskAsync(chatHistory);
 
             if (response.TrimStart().StartsWith("{"))
             {
@@ -101,7 +103,8 @@ namespace Web.Controllers
                     bool success = _foodDiaryService.AddFoodDiaryItem(diaryItem);
                     var resultMsg = success ? "✅ Food logged successfully!" : "❌ Failed to log food.";
 
-                    messages.Add(new ChatMessage { Role = "ai", Content = resultMsg });
+                    messages.Add(new ChatMessage { Role = "assistant", Content = resultMsg });
+
                     HttpContext.Session.SetString("ChatHistory", JsonConvert.SerializeObject(messages));
                     return Json(new { answer = resultMsg });
                 }
@@ -114,11 +117,10 @@ namespace Web.Controllers
                 }
             }
 
-            messages.Add(new ChatMessage { Role = "ai", Content = response });
+            messages.Add(new ChatMessage { Role = "assistant", Content = response });
             HttpContext.Session.SetString("ChatHistory", JsonConvert.SerializeObject(messages));
             return Json(new { answer = response });
         }
-
 
         [HttpGet]
         public IActionResult AskView()
@@ -129,10 +131,8 @@ namespace Web.Controllers
                 : JsonConvert.DeserializeObject<List<ChatMessage>>(history);
 
             ViewBag.ChatHistoryJson = JsonConvert.SerializeObject(messages);
-
             return View();
         }
-
 
         [HttpPost]
         public IActionResult ClearChat()
@@ -160,6 +160,5 @@ namespace Web.Controllers
             public string Role { get; set; }
             public string Content { get; set; }
         }
-
     }
 }

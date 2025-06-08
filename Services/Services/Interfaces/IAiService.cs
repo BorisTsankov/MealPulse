@@ -2,6 +2,6 @@
 {
     public interface IAiService
     {
-        Task<string> AskAsync(string prompt);
+        Task<string> AskAsync(List<(string Role, string Content)> chatHistory);
     }
 }
