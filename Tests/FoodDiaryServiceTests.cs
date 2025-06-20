@@ -138,34 +138,5 @@ public class FoodDiaryServiceTests
         Assert.False(result);
     }
 
-    // -------------------------
-    // GetItemsByUserAndDate
-    // -------------------------
 
-    //[Fact]
-    //public void GetItemsByUserAndDate_ValidInputs_ReturnsItems()
-    //{
-    //    var userId = 2;
-    //    var date = DateTime.Today;
-    //    var items = new List<FoodDiaryItem> { new() { UserId = userId, Date = date } };
-
-    //    _repoMock.Setup(r => r.GetItemsByUserIdAndDate(userId, date)).Returns(items);
-
-    //    var result = _service.GetItemsByUserAndDate(userId, date);
-
-    //    Assert.Single(result);
-    //    Assert.Equal(userId, result[0].UserId);
-    //}
-
-    //[Fact]
-    //public void GetItemsByUserAndDate_NoResults_ReturnsEmpty()
-    //{
-    //    var userId = 2;
-    //    var date = DateTime.Today;
-    //    _repoMock.Setup(r => r.GetItemsByUserIdAndDate(userId, date)).Returns(new List<FoodDiaryItem>());
-
-    //    var result = _service.GetItemsByUserAndDate(userId, date);
-
-    //    Assert.Empty(result);
-    //}
 }

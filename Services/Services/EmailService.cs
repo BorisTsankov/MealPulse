@@ -71,7 +71,7 @@ namespace Services.Services
         {
             string subject = "Reset Your MealPulse Password";
 
-            string logoBase64 = Convert.ToBase64String(File.ReadAllBytes("wwwroot/images/Clean_logo.png")); // your uploaded logo
+            string logoBase64 = Convert.ToBase64String(File.ReadAllBytes("wwwroot/images/Clean_logo.png"));
             string body = $@"
     <html>
     <head>

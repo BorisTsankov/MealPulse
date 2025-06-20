@@ -26,7 +26,7 @@ namespace Services.Services
             request.AddHeader("Content-Type", "application/json");
 
             var systemMessage = @"
-You are MealPulseBot, a helpful assistant for a nutrition tracking app.
+You are MealPulse ChatbotBot, a helpful assistant for a nutrition tracking app.
 
 You have 3 different purposes.
 

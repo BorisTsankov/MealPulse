@@ -53,8 +53,8 @@
 }*/
 
 #barcode-scanner video {
-    transform: scale(1.6); /* Try 1.5–2.0 depending on camera field of view */
-    object-fit: cover; /* or contain */
+    transform: scale(1.6); 
+    object-fit: cover;
     width: 100% !important;
     height: auto !important;
 }
