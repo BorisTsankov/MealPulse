@@ -1,82 +1,89 @@
-﻿@{
+﻿@model Web.ViewModels.RegisterViewModel
+
+@{
     ViewData["Title"] = "Register";
 }
+
 @section Styles {
     <link rel="stylesheet" href="~/css/Auth.css" asp-append-version="true" />
+    <style>
+        .text-danger {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+    </style>
 }
 
 <div class="auth-page">
     <div class="auth-card shadow-lg">
         <h1 class="mb-4">Create Your Account</h1>
-        <form asp-action="Register" method="post">
+        <form asp-action="Register" method="post" novalidate>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="form-floating">
-                        <input type="text" name="FirstName" class="form-control" id="FirstName" placeholder="First Name" required />
-                        <label for="FirstName">First Name</label>
+                        <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                        <label asp-for="FirstName"></label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="form-floating">
-                        <input type="text" name="LastName" class="form-control" id="LastName" placeholder="Last Name" required />
-                        <label for="LastName">Last Name</label>
+                        <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                        <label asp-for="LastName"></label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
             <div class="form-floating mb-3">
-                <input type="email" name="email" class="form-control" id="email" placeholder="Email" required />
-                <label for="email">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <label asp-for="Email"></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-1">
-                <input type="password" name="password" class="form-control" id="password" placeholder="Password" required autocomplete="new-password" />
-                <label for="password">Password</label>
-            </div>
-
-            <div class="password-rules mt-2 mb-3 small text-muted" id="passwordRules">
-                <ul class="list-unstyled">
-                    <li id="rule-length">• At least 8 characters</li>
-                    <li id="rule-uppercase">• One uppercase letter</li>
-                    <li id="rule-lowercase">• One lowercase letter</li>
-                    <li id="rule-digit">• One number</li>
-                    <li id="rule-special">• One special character (!&#64;#$%^&amp;*)</li>
-                </ul>
+                <input asp-for="Password" class="form-control" placeholder="Password" />
+                <label asp-for="Password"></label>
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <input type="date" name="date_of_birth" class="form-control" id="dob" required
+                <input asp-for="DateOfBirth" class="form-control" type="date"
                        max="@DateTime.Today.AddYears(-12).ToString("yyyy-MM-dd")" />
-                 <label for="dob">Date of Birth</label>
+                <label asp-for="DateOfBirth"></label>
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <input type="number" step="0.1" name="height_cm" class="form-control" id="height" required
-                       min="120" max="300" />
-
-                <label for="height">Height (cm)</label>
+                <input asp-for="HeightCm" class="form-control" />
+                <label asp-for="HeightCm"></label>
+                <span asp-validation-for="HeightCm" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <input type="number" step="0.1" name="weight_kg" class="form-control" id="weight" required
-                       min="40" max="300" />
-                <label for="weight">Weight (kg)</label>
+                <input asp-for="WeightKg" class="form-control" />
+                <label asp-for="WeightKg"></label>
+                <span asp-validation-for="WeightKg" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <select name="gender_id" class="form-control" id="gender" asp-items="@(new SelectList(ViewBag.GenderOptions, "Value", "Text"))"></select>
-                <label for="gender">Gender</label>
+                <select asp-for="GenderId" asp-items="@(new SelectList(ViewBag.GenderOptions, "Value", "Text"))" class="form-control"></select>
+                <label asp-for="GenderId"></label>
+                <span asp-validation-for="GenderId" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <select name="activityLevel_id" class="form-control" id="activityLevel" asp-items="@(new SelectList(ViewBag.ActivityLevelOptions, "Value", "Text"))"></select>
-                <label for="activityLevel">Activity Level</label>
+                <select asp-for="ActivityLevelId" asp-items="@(new SelectList(ViewBag.ActivityLevelOptions, "Value", "Text"))" class="form-control"></select>
+                <label asp-for="ActivityLevelId"></label>
+                <span asp-validation-for="ActivityLevelId" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <select name="metric_id" class="form-control" id="metric" asp-items="@(new SelectList(ViewBag.MetricOptions, "Value", "Text"))"></select>
-                <label for="metric">Measurement System</label>
+                <select asp-for="MetricId" asp-items="@(new SelectList(ViewBag.MetricOptions, "Value", "Text"))" class="form-control"></select>
+                <label asp-for="MetricId"></label>
+                <span asp-validation-for="MetricId" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-gradient-purple w-100">Create Account</button>
@@ -94,24 +101,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        const passwordInput = document.getElementById("password");
-        const rules = {
-            length: document.getElementById("rule-length"),
-            uppercase: document.getElementById("rule-uppercase"),
-            lowercase: document.getElementById("rule-lowercase"),
-            digit: document.getElementById("rule-digit"),
-            special: document.getElementById("rule-special")
-        };
-
-        passwordInput.addEventListener("input", () => {
-            const value = passwordInput.value;
-
-            rules.length.style.color = value.length >= 8 ? "green" : "gray";
-            rules.uppercase.style.color = /[A-Z]/.test(value) ? "green" : "gray";
-            rules.lowercase.style.color = /[a-z]/.test(value) ? "green" : "gray";
-            rules.digit.style.color = /\d/.test(value) ? "green" : "gray";
-            rules.special.style.color = /[!&#64;#$%^&amp;*]/.test(value) ? "green" : "gray";
-        });
-    </script>
+    <partial name="_ValidationScriptsPartial" />
 }

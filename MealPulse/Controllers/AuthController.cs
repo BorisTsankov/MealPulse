@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Interfaces;
 using System.Security.Claims;
+using Web.ViewModels;
 
 namespace Web.Controllers
 {
@@ -18,18 +19,14 @@ namespace Web.Controllers
             _emailService = emailService;
         }
 
+        [HttpGet]
         public IActionResult Register()
         {
-            if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
-
             ViewBag.GenderOptions = _authService.GetSelectListData("Gender", "gender_id", "gender");
             ViewBag.ActivityLevelOptions = _authService.GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
             ViewBag.MetricOptions = _authService.GetSelectListData("Metric", "metric_id", "metric");
 
-
-
-            return View();
+            return View(new RegisterViewModel());
         }
 
         private bool IsPasswordValid(string password)
@@ -42,78 +39,78 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string FirstName, string LastName, string email, string password,
-            DateTime date_of_birth, decimal height_cm, decimal weight_kg, int gender_id, int activityLevel_id, int metric_id)
+        public IActionResult Register(RegisterViewModel model)
         {
             ViewBag.GenderOptions = _authService.GetSelectListData("Gender", "gender_id", "gender");
             ViewBag.ActivityLevelOptions = _authService.GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
             ViewBag.MetricOptions = _authService.GetSelectListData("Metric", "metric_id", "metric");
 
-            if (date_of_birth < new DateTime(1753, 1, 1) || date_of_birth > DateTime.Now)
+            if (!IsPasswordValid(model.Password))
             {
-                ViewBag.ErrorMessage = "Please select a valid date of birth.";
-                return View();
+                ModelState.AddModelError(nameof(model.Password), "Password must include uppercase, lowercase, number, and special character.");
             }
 
-            if (!IsPasswordValid(password))
+            if (model.DateOfBirth < new DateTime(1753, 1, 1) || model.DateOfBirth > DateTime.Now)
             {
-                ViewBag.ErrorMessage = "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character (!@#$%^&*).";
-                return View();
+                ModelState.AddModelError(nameof(model.DateOfBirth), "Please select a valid date of birth.");
             }
 
-            int age = DateTime.Today.Year - date_of_birth.Year;
-            if (date_of_birth > DateTime.Today.AddYears(-age)) age--;
+            var age = DateTime.Today.Year - model.DateOfBirth?.Year;
+            if (model.DateOfBirth > DateTime.Today.AddYears(-age ?? 0)) age--;
 
-            if (age < ValidationConstraints.User.AgeMin + 12) // min 12 years old
+            if (age < ValidationConstraints.User.AgeMin + 12)
             {
-                ViewBag.ErrorMessage = "You must be at least 12 years old.";
-                return View();
+                ModelState.AddModelError(nameof(model.DateOfBirth), "You must be at least 12 years old.");
             }
 
-            if (height_cm < (decimal)ValidationConstraints.User.HeightMin || height_cm > (decimal)ValidationConstraints.User.HeightMax)
+            if (model.HeightCm < (decimal)ValidationConstraints.User.HeightMin || model.HeightCm > (decimal)ValidationConstraints.User.HeightMax)
             {
-                ViewBag.ErrorMessage = $"Height must be between {ValidationConstraints.User.HeightMin}cm and {ValidationConstraints.User.HeightMax}cm.";
-                return View();
+                ModelState.AddModelError(nameof(model.HeightCm), $"Height must be between {ValidationConstraints.User.HeightMin}cm and {ValidationConstraints.User.HeightMax}cm.");
             }
 
-
-            if (_authService.UserExists(email))
+            if (_authService.UserExists(model.Email))
             {
-                ViewBag.ErrorMessage = "Email already registered. Please login.";
-                return RedirectToAction("Login");
+                ModelState.AddModelError(nameof(model.Email), "Email is already registered. Please log in.");
             }
 
-            var token = Guid.NewGuid().ToString();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+\           var token = Guid.NewGuid().ToString();
             var parameters = new Dictionary<string, object>
-            {
-                { "@FirstName", FirstName },
-                { "@LastName", LastName },
-                { "@email", email },
-                { "@password", _authService.HashPassword(password) },
-                { "@date_of_birth", date_of_birth },
-                { "@height_cm", height_cm },
-                { "@weight_kg", weight_kg },
-                { "@role_id", 1 },
-                { "@gender_id", gender_id },
-                { "@activityLevel_id", activityLevel_id },
-                { "@metric_id", metric_id },
-                { "@token", token }
-            };
+    {
+        { "@FirstName", model.FirstName },
+        { "@LastName", model.LastName },
+        { "@email", model.Email },
+        { "@password", _authService.HashPassword(model.Password) },
+        { "@date_of_birth", model.DateOfBirth },
+        { "@height_cm", model.HeightCm },
+        { "@weight_kg", model.WeightKg },
+        { "@role_id", 1 },
+        { "@gender_id", model.GenderId },
+        { "@activityLevel_id", model.ActivityLevelId },
+        { "@metric_id", model.MetricId },
+        { "@token", token }
+    };
 
             int userId = _authService.RegisterUser(parameters);
             if (userId > 0)
             {
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
                 string confirmLink = $"{baseUrl}/Auth/ConfirmEmail?token={token}";
-                _emailService.SendConfirmationEmail(email, confirmLink);
+                _emailService.SendConfirmationEmail(model.Email, confirmLink);
 
                 TempData["SuccessMessage"] = "Registration successful. Please check your email to confirm your account.";
                 return RedirectToAction("Login");
             }
 
-            ViewBag.ErrorMessage = "Registration failed.";
-            return View();
+            ModelState.AddModelError(string.Empty, "Registration failed. Please try again.");
+            return View(model);
         }
+
+
 
         public IActionResult Login()
         {
