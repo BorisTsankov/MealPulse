@@ -56,8 +56,8 @@
 
         public static class Goal
         {
-            public const double WeightMin = 0;
-            public const double WeightMax = 500;
+            public const double WeightMin = 40.0;
+            public const double WeightMax = 300.0;
         }
 
         public static class MealType

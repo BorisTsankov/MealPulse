@@ -30,11 +30,21 @@ namespace Services.Services
 
         public bool UpdateWeight(int userId, decimal newWeight)
         {
+            if (newWeight < (decimal)ValidationConstraints.Goal.WeightMin || newWeight > (decimal)ValidationConstraints.Goal.WeightMax)
+                return false;
+
             return _goalRepository.UpdateWeight(userId, newWeight);
         }
 
+
         public bool CreateGoal(int userId, decimal currentWeight, decimal targetWeight, string intensity)
         {
+            if (currentWeight < (decimal)ValidationConstraints.Goal.WeightMin || currentWeight > (decimal)ValidationConstraints.Goal.WeightMax ||
+                targetWeight < (decimal)ValidationConstraints.Goal.WeightMin || targetWeight > (decimal)ValidationConstraints.Goal.WeightMax)
+            {
+                return false; // Invalid weight
+            }
+
             var newGoal = new Models.Models.Goal
             {
                 user_id = userId,
@@ -47,6 +57,7 @@ namespace Services.Services
 
             return _goalRepository.CreateGoal(newGoal);
         }
+
 
         public int? CalculateCalorieGoal(UserDto user, GoalDto goal)
         {

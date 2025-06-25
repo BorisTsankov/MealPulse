@@ -80,16 +80,28 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult UpdateHeight(int user_id, decimal newHeight)
         {
+            if (newHeight < (decimal)ValidationConstraints.User.HeightMin || newHeight > (decimal)ValidationConstraints.User.HeightMax)
+            {
+                TempData["ErrorMessage"] = "Height must be between 120 and 300 cm.";
+                return RedirectToAction("Index");
+            }
+
             _userService.UpdateHeight(user_id, newHeight);
             return RedirectToAction("Index");
         }
 
+
         [HttpPost]
         public IActionResult UpdateWeight(int user_id, decimal newWeight)
         {
-            _goalService.UpdateWeight(user_id, newWeight);
+            if (!_goalService.UpdateWeight(user_id, newWeight))
+            {
+                TempData["ErrorMessage"] = "Weight must be between 40 and 300 kg.";
+            }
+
             return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         public IActionResult CreateGoal(int user_id, decimal currentWeight, decimal targetWeight, string intensity)
@@ -98,7 +110,12 @@ namespace Web.Controllers
             if (user == null) return View("Error");
 
             var success = _goalService.CreateGoal(user_id, currentWeight, targetWeight, intensity);
-            if (!success) return View("Error");
+            if (!success)
+            {
+                TempData["ErrorMessage"] = "Weights must be between 40 and 300 kg.";
+                return RedirectToAction("Index");
+            }
+
 
             return RedirectToAction("Index");
         }

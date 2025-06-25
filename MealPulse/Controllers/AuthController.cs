@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Common;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Interfaces;
@@ -25,6 +26,8 @@ namespace Web.Controllers
             ViewBag.GenderOptions = _authService.GetSelectListData("Gender", "gender_id", "gender");
             ViewBag.ActivityLevelOptions = _authService.GetSelectListData("ActivityLevel", "activityLevel_id", "activityLevel");
             ViewBag.MetricOptions = _authService.GetSelectListData("Metric", "metric_id", "metric");
+
+
 
             return View();
         }
@@ -57,6 +60,22 @@ namespace Web.Controllers
                 ViewBag.ErrorMessage = "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character (!@#$%^&*).";
                 return View();
             }
+
+            int age = DateTime.Today.Year - date_of_birth.Year;
+            if (date_of_birth > DateTime.Today.AddYears(-age)) age--;
+
+            if (age < ValidationConstraints.User.AgeMin + 12) // min 12 years old
+            {
+                ViewBag.ErrorMessage = "You must be at least 12 years old.";
+                return View();
+            }
+
+            if (height_cm < (decimal)ValidationConstraints.User.HeightMin || height_cm > (decimal)ValidationConstraints.User.HeightMax)
+            {
+                ViewBag.ErrorMessage = $"Height must be between {ValidationConstraints.User.HeightMin}cm and {ValidationConstraints.User.HeightMax}cm.";
+                return View();
+            }
+
 
             if (_authService.UserExists(email))
             {
