@@ -78,7 +78,7 @@ namespace Web.Controllers
                 return View(model);
             }
 
-\           var token = Guid.NewGuid().ToString();
+           var token = Guid.NewGuid().ToString();
             var parameters = new Dictionary<string, object>
     {
         { "@FirstName", model.FirstName },
